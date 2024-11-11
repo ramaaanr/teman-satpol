@@ -18,14 +18,14 @@ class GiatServices
         $giat = Giat::findOrFail($id);
         if ($giat) {
             return response([
-                'Status' => true,
-                'Message' => 'Detail Data Giat',
+                'status' => true,
+                'message' => 'Detail Data Giat',
                 'Data' => $giat
             ]);
         }
         return response([
-            'Status' => false,
-            'Message' => "Data Gagal Ditampilkan!"
+            'status' => false,
+            'message' => "Data Gagal Ditampilkan!"
         ]);
     }
 
@@ -38,13 +38,13 @@ class GiatServices
         $giat = Giat::create($data);
         if ($giat) {
             return response()->json([
-                'Status' => true,
-                'Message' => "Data Berhasil Disimpan"
+                'status' => true,
+                'message' => "Data Berhasil Disimpan"
             ]);
         }
         return response()->json([
-            'Status' => false,
-            'Message' => "Data Gagal Disimpan!"
+            'status' => false,
+            'message' => "Data Gagal Disimpan!"
         ]);
     }
 
@@ -57,13 +57,13 @@ class GiatServices
             $data['akses_selesai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['akses_selesai'])->format('Y-m-d H:i:s');
             $giat->update($data);
             return response()->json([
-                'Status' => true,
-                'Message' => "Data Berhasil Disimpan"
+                'status' => true,
+                'message' => "Data Berhasil Disimpan"
             ]);
         }
         return response()->json([
-            'Status' => false,
-            'Message' => "Data Gagal Disimpan!"
+            'status' => false,
+            'message' => "Data Gagal Disimpan!"
         ]);
     }
 
@@ -72,13 +72,13 @@ class GiatServices
         if ($giat){
             $giat->destroy($id);
             return response()->json([
-                'Status' => true,
-                'Message' => "Data Berhasil Dihapus"
+                'status' => true,
+                'message' => "Data Berhasil Dihapus"
             ]);
         }
         return response()->json([
-            'Status' => false,
-            'Message' => "Data Gagal Dihapus!"
+            'status' => false,
+            'message' => "Data Gagal Dihapus!"
         ]);
     }
 }
