@@ -16,8 +16,8 @@ class GiatController extends Controller
     public function index(){
         $giat = $this->giatServices->getAll();
         return response()->json([
-            'Status' => true,
-            'Message' => "Semua Data Giat",
+            'status' => true,
+            'message' => "Semua Data Giat",
             'Data' => GiatResource::collection($giat)
         ]);
     }

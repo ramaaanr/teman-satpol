@@ -58,10 +58,10 @@ class UserController extends Controller
     }
 
     public function logout(Request $request){
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccesstoken()->delete();
         return response()->json([
-            'Status' => 200,
-            'Message' => 'Token Has Been Revoke'
+            'status' => 200,
+            'message' => 'token Has Been Revoke'
         ]);
     }
 

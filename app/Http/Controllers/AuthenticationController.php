@@ -18,17 +18,17 @@ class AuthenticationController extends Controller
         $user = User::where('email', $request->email)->first();
         
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
+            throw ValidationException::withmessages([
                 'email' => ['Email atau Password Salah!'],
             ]);
         }
 
-        return $user->createToken('Login User')->plainTextToken;
+        return $user->createtoken('Login User')->plainTexttoken;
     }
 
     public function logout(Request $request){
-        $request->user()->currentAccessToken()->delete();
-        return("Token has been revoke");
+        $request->user()->currentAccesstoken()->delete();
+        return("token has been revoke");
     }
 
     public function detailUser(Request $request){

@@ -20,16 +20,16 @@ class UserServices
     {
         $user = User::where('NIP', $NIP)->first();
         if (! $user || ! Hash::check($password, $user->password)) {
-            throw ValidationException::withMessages([
-                'Status' => false,
-                'Message' => 'NIP atau Password Salah!',
+            return ([
+                'status' => false,
+                'message' => 'NIP atau Password Salah!',
             ]);
         }
         $token = $user->createToken('Login User')->plainTextToken;
-        return response()->json([
-            'Status' => true,
-            'Message' => "Login Berhasil",
-            'Token' => $token
+        return ([
+            'status' => true,
+            'message' => "Login Berhasil",
+            'token' => $token
         ]);
     }
 
@@ -42,8 +42,8 @@ class UserServices
             // return $user;
             if ($user){
                 return ([
-                    'Status' => true,
-                    'Message' => 'Data Berhasil Disimpan!'
+                    'status' => true,
+                    'message' => 'Data Berhasil Disimpan!'
                 ]);
             }
         } catch (QueryException $th) {
@@ -68,21 +68,21 @@ class UserServices
                 if (isset($data['NIP']) && $data['NIP'] != $user->NIP) {
                     if (User::where('NIP', $data['NIP'])->where('id', '!=', $id)->exists()) {
                         return [
-                            'Status' => false,
-                            'Message' => 'NIP sudah digunakan oleh pengguna lain.'
+                            'status' => false,
+                            'message' => 'NIP sudah digunakan oleh pengguna lain.'
                         ];
                     }
                 }
                 $user->update($data);
                 return ([
-                    'Status' => true,
-                    'Message' => 'Data Berhasil Diubah!'
+                    'status' => true,
+                    'message' => 'Data Berhasil Diubah!'
                 ]);
             }
         } catch (ModelNotFoundException $th) {
             return ([
-                'Status' => false,
-                'Message' => 'Data Tidak Ditemukan!'
+                'status' => false,
+                'message' => 'Data Tidak Ditemukan!'
             ]);
         }
     }
@@ -94,14 +94,14 @@ class UserServices
             if ($user) {
                 $user->delete();
                 return ([
-                    'Status' => true,
-                    'Message' => "Data Berhasil Dihapus!"
+                    'status' => true,
+                    'message' => "Data Berhasil Dihapus!"
                 ]);
             }
         } catch (ModelNotFoundException $th) {
             return ([
-                'Status' => false,
-                'Message' => "Data Tidak Ditemukan!"
+                'status' => false,
+                'message' => "Data Tidak Ditemukan!"
             ]);
         }
     }
