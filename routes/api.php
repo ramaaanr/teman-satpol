@@ -19,18 +19,6 @@ use Illuminate\Routing\RouteGroup;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function () { //grouping untuk middleware autentikasi wajib login
-    Route::get('/logout', [AuthenticationController::class, 'logout']);
-    Route::get('/user-details', [AuthenticationController::class, 'detailUser']);
-    Route::post('/posts', [PostController::class, 'store']);
-    Route::patch('/posts/{id}', [PostController::class, 'update'])->middleware('author-post');
-    Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('author-post');
-});
-Route::get('/posts', [PostController::class, 'index']); //menampilkan semua
-Route::get('/posts/{id}', [PostController::class, 'show']); //menampilkan berita berdasarkan id
-Route::post('/login', [AuthenticationController::class, 'login']);
-
-
 Route::post('/users/login', [UserController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
