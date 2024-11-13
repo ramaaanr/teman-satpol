@@ -1,5 +1,5 @@
 <!-- resources/views/home.blade.php -->
-@extends('layouts.app')
+@extends('layouts.guest-app')
 
 @section('title', 'Selamat Datang Teman Satpol')
 
