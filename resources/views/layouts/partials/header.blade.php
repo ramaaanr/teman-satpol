@@ -1,6 +1,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  console.log(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('user'))
+  $('#user-nama').text(user.nama);
+  $('#user-jabatan').text(user.role);
   const navLinks = document.querySelectorAll('nav a');
 
   navLinks.forEach(link => {
@@ -32,12 +34,11 @@ document.addEventListener("DOMContentLoaded", function() {
     class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-[#07243F] lg:translate-x-0 lg:static lg:inset-0">
     <div class="flex items-center justify-center mt-8">
       <div class="flex items-center justify-center w-full">
-        <img width="70" height="70" src="https://img.icons8.com/color/100/ramadan.png" alt="ramadan" />
-        <span class="mx-2  text-2xl font-semibold text-white">LOREM IPSUM</span>
+        <img width="180" src="/logo.png" alt="ramadan" />
       </div>
     </div>
-
-    <nav class="mt-10">
+    <hr class="border border-gray-600 mt-6 mx-4">
+    <nav class="mt-6">
       <a class="flex items-center px-6 py-2 mt-4 text-lime-50 bg-gray-700 bg-opacity-25" href="/dashboard">
         <span class="material-symbols-outlined">
           home
@@ -111,8 +112,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 </path>
               </svg>
             </div>
-            <div class="font-medium dark:text-white">
-              <div id="user-name">Jese Leos</div>
+            <div class="font-medium w-36 dark:text-white">
+              <div id="user-nama">Jese Leos</div>
               <div id="user-jabatan" class="text-sm text-gray-200 dark:text-gray-200">Joined in August 2014</div>
             </div>
           </div>
