@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Services\UserServices;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -55,11 +57,15 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+        // Validasi input
         $request->validate([
             'NIP' => 'required',
             'password' => 'required',
         ]);
-        $result = $this->userServices->doLogin($request->NIP, $request->password);
+
+        $result = $this->userServices->doLogin($request->NIP, $request->password);        // Coba autentikasi dengan sesi
+        $request->session()->regenerate();  // Regenerasi sesi untuk keamanan
+
         return response()->json($result);
     }
 
