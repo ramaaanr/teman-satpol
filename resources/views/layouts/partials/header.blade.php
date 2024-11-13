@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </a>
 
       <a class="flex items-center px-6 py-2 mt-4 text-lime-50 font-semibold hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
-        href="/giat/show">
+        href="/data-giat">
         <span class="material-symbols-outlined">
           event
         </span>

@@ -13,3 +13,6 @@ Route::get('/', function () {
 Route::middleware('auth')->get('/dashboard', function () {
     return view('dashboard.index');
 })->name('dashboard');
+Route::middleware('auth')->get('/data-giat', function () {
+    return view('data-giat.index');
+})->name('data-giat');
