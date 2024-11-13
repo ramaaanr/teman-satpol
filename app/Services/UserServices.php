@@ -35,7 +35,13 @@ class UserServices
         return [
             'status' => true,
             'message' => 'Login Berhasil',
-            'token' => $token,
+            'data' => [
+                'NIP' => "198765432101",
+                "jabatan" => "Manager IT",
+                "nama" => "Budi Santoso",
+                "role" => "super-admin",
+                'token' => $token
+            ],
         ];
     }
 

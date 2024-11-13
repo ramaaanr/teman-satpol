@@ -87,20 +87,17 @@ $(document).ready(function() {
         NIP: nip,
         password: password
       }),
-      success: function(data) {
+      success: function(response) {
         // Cek apakah login berhasil atau gagal
-        if (data.status) {
+        if (response.status) {
           // Jika berhasil
           Swal.fire({
             icon: 'success',
             title: 'Login Berhasil',
-            text: data.message,
+            text: response.message,
             confirmButtonText: 'OK'
           }).then(() => {
-            // Menyimpan data user di local storage
-            localStorage.setItem('user', JSON.stringify(data));
-
-            // Tunggu 2 detik sebelum redirect ke halaman dashboard
+            localStorage.setItem('user', JSON.stringify(response.data));
             window.location.href = '/dashboard';
           });
         } else {
