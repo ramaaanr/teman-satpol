@@ -1,0 +1,62 @@
+[
+  {
+    "nama": "Ahmad Fauzi",
+    "nip": "1982010512345678",
+    "jabatan": "Staf Administrasi",
+    "status": "ditugaskan"
+  },
+  {
+    "nama": "Budi Santoso",
+    "nip": "1983071212345678",
+    "jabatan": "Kepala Bagian Keuangan",
+    "status": "bertugas"
+  },
+  {
+    "nama": "Citra Permata",
+    "nip": "1984050912345678",
+    "jabatan": "Staf IT",
+    "status": "disetujui"
+  },
+  {
+    "nama": "Dewi Lestari",
+    "nip": "1985121012345678",
+    "jabatan": "Manager HR",
+    "status": "ditolak"
+  },
+  {
+    "nama": "Eko Prasetyo",
+    "nip": "1986101412345678",
+    "jabatan": "Staf Marketing",
+    "status": "ditugaskan"
+  },
+  {
+    "nama": "Fajar Hidayat",
+    "nip": "1987121212345678",
+    "jabatan": "Manager Operasional",
+    "status": "bertugas"
+  },
+  {
+    "nama": "Gita Putri",
+    "nip": "1988010512345678",
+    "jabatan": "Staf Keuangan",
+    "status": "disetujui"
+  },
+  {
+    "nama": "Hendra Saputra",
+    "nip": "1989030912345678",
+    "jabatan": "Supervisor Produksi",
+    "status": "ditugaskan"
+  },
+  {
+    "nama": "Indra Wijaya",
+    "nip": "1990050112345678",
+    "jabatan": "Analisis Data",
+    "status": "ditolak"
+  },
+  {
+    "nama": "Joko Susilo",
+    "nip": "1991101212345678",
+    "jabatan": "Manager IT",
+    "status": "bertugas"
+  }
+]

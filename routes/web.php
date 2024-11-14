@@ -25,3 +25,6 @@ Route::middleware('auth')->get('/tambah-giat', function () {
 Route::middleware('auth')->get('/review-kegiatan', function () {
     return view('review-kegiatan.index');
 })->name('review-kegiatan');
+Route::middleware('auth')->get('/review-kegiatan/1', function () {
+    return view('review-kegiatan.detail');
+})->name('detail-review-kegiatan');
