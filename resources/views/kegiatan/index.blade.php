@@ -42,22 +42,40 @@
 <script>
 $(document).ready(function() {
   // Fungsi untuk mengambil data JSON dan menampilkannya
+  const userData = localStorage.getItem('user');
+  // Pastikan userData ada dan di-parse menjadi objek
+  const user = userData ? JSON.parse(userData) : null;
+  console.log(user);
+  const token = user ? user.token : null;
+  const idUser = user.id;
+
   $.ajax({
-    url: '/samples/data-kegiatan.json', // Sesuaikan URL JSON
+    url: `/api/penugasan?id_user=${idUser}`, // Sesuaikan URL JSON
     method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
     dataType: 'json',
-    success: function(data) {
+    success: function({
+      data
+    }) {
+      console.log(data);
       // Loop untuk menampilkan data kegiatan
       data.forEach(function({
-        kegiatan,
-        detail_kegiatan,
-        tempat,
-        tanggal,
-        jumlah_petugas,
-        kendaraan,
+        giats: {
+          kegiatan,
+          detail_kegiatan,
+          tempat,
+          tanggal_mulai,
+          tanggal_selesai,
+          // jumlah_petugas,
+          kendaraan,
+        }
       }) {
         let kegiatanItem =
-          `<x-card-kegiatan-item kegiatan="${kegiatan}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
+          `<x-card-kegiatan-item kegiatan="${kegiatan}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="12" kendaraan="${kendaraan}" />`
         $('#card-kegiatan-container').append(kegiatanItem);
       });
     },

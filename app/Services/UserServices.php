@@ -36,10 +36,11 @@ class UserServices
             'status' => true,
             'message' => 'Login Berhasil',
             'data' => [
-                'NIP' => "198765432101",
-                "jabatan" => "Manager IT",
-                "nama" => "Budi Santoso",
-                "role" => "super-admin",
+                'id' => $user->id,
+                'NIP' => $user->NIP,
+                "jabatan" => $user->jabatan,
+                "nama" => $user->nama,
+                "role" => $user->role,
                 'token' => $token
             ],
         ];
