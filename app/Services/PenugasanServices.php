@@ -56,7 +56,7 @@ class PenugasanServices
             if ($penugasan) {
                 return ([
                     'status' => true,
-                    'message' => 'Detail Data Giat',
+                    'message' => 'Detail Data Penugasan',
                     'data' => new PenugasanDetailResource($penugasan)
                 ]);
             }
