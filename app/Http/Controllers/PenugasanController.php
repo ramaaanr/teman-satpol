@@ -24,7 +24,7 @@ class PenugasanController extends Controller
         return $results;
     }
 
-    public function store (Request $request){
+    public function update (Request $request, $id){
         $request->validate([
             'durasi' => 'required',
             'detail' => 'required',
@@ -34,7 +34,7 @@ class PenugasanController extends Controller
             'id_user' => 'required',
         ]);
         $file = $request->file('dokumen_lapangan');
-        $results = $this->penugasanServices->doStore($request->all(), $file);
+        $results = $this->penugasanServices->doUpdate($request->all(), $id, $file);
         return $results;
     }
 

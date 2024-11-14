@@ -39,5 +39,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::get('/penugasan', [PenugasanController::class, 'index']);
 Route::get('/penugasan/{id}', [PenugasanController::class, 'show']);
-Route::post('/penugasan', [PenugasanController::class, 'store']);
+Route::patch('/penugasan/{id}', [PenugasanController::class, 'update']);
 Route::delete('/penugasan/{id}', [PenugasanController::class, 'destroy']);
