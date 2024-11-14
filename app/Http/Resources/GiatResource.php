@@ -25,7 +25,9 @@ class GiatResource extends JsonResource
             'tanggal_selesai' => $this->tanggal_selesai ? \Carbon\Carbon::parse($this->tanggal_selesai)->format("d-m-Y H:i:s") : null,
             'akses_mulai' => $this->akses_mulai ? \Carbon\Carbon::parse($this->akses_mulai)->format("d-m-Y H:i:s") : null,
             'akses_selesai' => $this->akses_selesai ? \Carbon\Carbon::parse($this->akses_selesai)->format("d-m-Y H:i:s") : null,
-            'created_at' => $this->created_at
+            'deleted_at' => $this->deleted_at,
+            'jumlah_ditugaskan' => $this->jumlah_ditugaskan,
+            'jumlah_selesai' => $this->jumlah_selesai
         ];
     }
 }
