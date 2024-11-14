@@ -3,8 +3,8 @@
 
   <div class="detail-1 flex">
     <div class="header-detail w-full">
-      <p class="font-bold text-3xl">Kegiatan Memilanduk</p>
-      <p class=" text-md text-zinc-500">memilanduk dengan sahabat</p>
+      <p class="font-bold text-3xl">{{$kegiatan}}</p>
+      <p class=" text-md text-zinc-500">{{$detailKegiatan}}</p>
     </div>
     <div class="actions-detail flex items-center space-x-4">
       <p class="flex space-x-1">
@@ -32,17 +32,18 @@
       <span class="material-symbols-outlined mr-1 text-gray-300">
         location_on
       </span>
-      <p class="text-sm text-gray-700">Jl. Veteran Gang Kelurahan blbladpiadoiah</p>
+      <p class="text-sm text-gray-700">{{$tempat}}</p>
     </div>
     <div class="detail-content flex items-start w-full">
       <span class="material-symbols-outlined mr-1 text-gray-300">
         calendar_month
       </span>
-      <p class="text-sm text-gray-700">19 September 2024, 08:00 WITA - 19 September 2024 24:00 WITA</p>
+      <p class="text-sm text-gray-700">{{$tanggal}}</p>
     </div>
   </div>
-  <button type="button"
-    class="text-white w-full bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 mt-4">Review
-    Kegiatan</button>
-
+  <a href="/review-kegiatan/detail/{{$id}}" class="w-full">
+    <button type="button"
+      class="text-white w-full bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 mt-4">Review
+      Kegiatan</button>
+  </a>
 </div>

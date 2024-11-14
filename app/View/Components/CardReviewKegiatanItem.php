@@ -11,8 +11,13 @@ class CardReviewKegiatanItem extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
-    {
+    public function __construct(
+        public string $id,
+        public string $kegiatan,
+        public string $detailKegiatan,
+        public string $tanggal,
+        public string $tempat,
+    ) {
         //
     }
 
