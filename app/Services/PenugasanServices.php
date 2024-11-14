@@ -126,10 +126,7 @@ class PenugasanServices
                 $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
                 $results = $penugasan->update($insertData);
                 if ($results) {
-                    return ([
-                        'status' => true,
-                        'message' => 'Data Berhasil Diubah'
-                    ]);
+                    return $results;
                 }
             }
             return ([
