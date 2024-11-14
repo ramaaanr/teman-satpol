@@ -13,7 +13,11 @@
         <p class="text-4xl font-bold total-target text-yellow-300 mr-1">{{$jumlahDitugaskan}}</p>
         <p class="text-sm font-semibold  leading-none">Mengisi Giat</p>
       </div>
-      <x-button text="Detail" color='gray' />
+      <a href="/data-giat/{{$id}}" class="mr-2">
+        <x-button text="Detail" color='gray' />
+      </a><a href="/data-giat/edit/{{$id}}">
+        <x-button text="Edit" color='light' />
+      </a>
     </div>
   </div>
 

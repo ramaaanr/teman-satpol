@@ -19,10 +19,10 @@ Route::middleware('auth')->get('/data-giat', function () {
 Route::middleware('auth')->get('/kegiatan', function () {
     return view('kegiatan.index');
 })->name('kegiatan');
-Route::middleware('auth')->get('/kegiatan/1', function () {
+Route::middleware('auth')->get('/kegiatan/{id}', function () {
     return view('kegiatan.detail');
 })->name('detail-kegiatan');
-Route::middleware('auth')->get('/data-giat/1', function () {
+Route::middleware('auth')->get('/data-giat/{id}', function () {
     return view('data-giat.detail');
 })->name('detail-data-giat');
 Route::middleware('auth')->get('/tambah-giat', function () {
