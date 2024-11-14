@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="detail-3 mt-2 flex items-center">
-    <a href="/kegiatan/edit/{{$id}}" class="w-1/2">
+    <a href="/kegiatan/edit/{{$id}}" class="w-1/2 pr-4">
       <x-button text="Isi Kegiatan" color='gray' width="full" />
     </a>
     <div class="detail-content flex items-start w-1/4">

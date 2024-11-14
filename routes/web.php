@@ -19,9 +19,9 @@ Route::middleware('auth')->get('/data-giat', function () {
 Route::middleware('auth')->get('/kegiatan', function () {
     return view('kegiatan.index');
 })->name('kegiatan');
-Route::middleware('auth')->get('/kegiatan/{id}', function () {
-    return view('kegiatan.detail');
-})->name('detail-kegiatan');
+Route::middleware('auth')->get('/kegiatan/edit/{id}', function () {
+    return view('kegiatan.edit');
+})->name('edit-kegiatan');
 Route::middleware('auth')->get('/data-giat/{id}', function () {
     return view('data-giat.detail');
 })->name('detail-data-giat');
