@@ -64,18 +64,19 @@ $(document).ready(function() {
       console.log(data);
       // Loop untuk menampilkan data kegiatan
       data.forEach(function({
+        id_penugasan,
         giats: {
           kegiatan,
           detail_kegiatan,
           tempat,
           tanggal_mulai,
           tanggal_selesai,
-          // jumlah_petugas,
+          jumlah_petugas,
           kendaraan,
         }
       }) {
         let kegiatanItem =
-          `<x-card-kegiatan-item kegiatan="${kegiatan}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="12" kendaraan="${kendaraan}" />`
+          `<x-card-kegiatan-item id="${id_penugasan}" kegiatan="${kegiatan}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
         $('#card-kegiatan-container').append(kegiatanItem);
       });
     },

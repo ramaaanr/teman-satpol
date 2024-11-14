@@ -24,7 +24,9 @@
     </div>
   </div>
   <div class="detail-3 mt-2 flex items-center">
-    <x-button text="Isi Kegiatan" color='gray' width="1/2" />
+    <a href="/kegiatan/edit/{{$id}}" class="w-1/2">
+      <x-button text="Isi Kegiatan" color='gray' width="full" />
+    </a>
     <div class="detail-content flex items-start w-1/4">
       <span class="material-symbols-outlined mr-1 text-gray-300">
         groups

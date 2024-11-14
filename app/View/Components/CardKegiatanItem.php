@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class CardKegiatanItem extends Component
 {
+    public $id;
     public $kegiatan;
     public $detail;
     public $tempat;
@@ -23,8 +24,9 @@ class CardKegiatanItem extends Component
      * @param int $petugas
      * @param string $kendaraan
      */
-    public function __construct($kegiatan, $detail, $tempat, $tanggal, $petugas, $kendaraan)
+    public function __construct($id, $kegiatan, $detail, $tempat, $tanggal, $petugas, $kendaraan)
     {
+        $this->id = $id;
         $this->kegiatan = $kegiatan;
         $this->detail = $detail;
         $this->tempat = $tempat;
