@@ -28,7 +28,7 @@
       <span class="material-symbols-outlined mr-1 text-gray-300">
         calendar_month
       </span>
-      <p class="text-sm text-gray-700">{{$tanggalMulai}}</p>
+      <p class="text-sm text-gray-700">{{$tanggalMulai}} - {{$tanggalSelesai}}</p>
     </div>
   </div>
   <div class="detail-3 mt-2 flex">
@@ -36,7 +36,7 @@
       <span class="material-symbols-outlined mr-1 text-gray-300">
         lock_clock
       </span>
-      <p class="text-sm text-gray-700">{{$aksesMulai}}</p>
+      <p class="text-sm text-gray-700">{{$aksesMulai}} - {{$aksesSelesai}}</p>
     </div>
     <div class="detail-content flex items-start w-1/4">
       <span class="material-symbols-outlined mr-1 text-gray-300">
