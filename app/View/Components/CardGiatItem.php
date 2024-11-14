@@ -11,8 +11,20 @@ class CardGiatItem extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
-    {
+
+    public function __construct(
+        public string $id,
+        public string $kegiatan,
+        public string $detailKegiatan,
+        public string $tempat,
+        public string $kendaraan,
+        public string $tanggalMulai,
+        public string $tanggalSelesai,
+        public string $aksesMulai,
+        public string $aksesSelesai,
+        public string $jumlahDitugaskan,
+        public string $jumlahSelesai,
+    ) {
         //
     }
 
