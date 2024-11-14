@@ -58,10 +58,10 @@ $(document).ready(function() {
         $("#detail_kegiatan").val(data.Data.detail_kegiatan);
         $("#kendaraan").val(data.Data.kendaraan);
         $("#beban_biaya").val(data.Data.beban_biaya);
-        $("#tanggal_mulai").val(data.Data.tanggal_mulai);
-        $("#tanggal_selesai").val(data.Data.tanggal_selesai);
-        $("#akses_mulai").val(data.Data.akses_mulai);
-        $("#akses_selesai").val(data.Data.akses_selesai);
+        $("#tanggal_mulai").val(data.Data.tanggal_mulai_raw);
+        $("#tanggal_selesai").val(data.Data.tanggal_selesai_raw);
+        $("#akses_mulai").val(data.Data.akses_mulai_raw);
+        $("#akses_selesai").val(data.Data.akses_selesai_raw);
 
         const penugasans = data.Data.penugasans;
         penugasans.forEach(({
@@ -105,7 +105,7 @@ $(document).ready(function() {
 
     $.ajax({
       url: `/api/giat/${id}`, // Update URL
-      method: 'PUT', // Update method
+      method: 'PATCH', // Update method
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
@@ -117,6 +117,8 @@ $(document).ready(function() {
           title: 'Berhasil!',
           text: 'Data giat berhasil diperbarui.',
           confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = '/data-giat/'
         });
         console.log("Response:", response);
       },
