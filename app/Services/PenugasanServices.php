@@ -13,68 +13,44 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PenugasanServices
 {
-        public function getAll($idGiat = null, $idUser = null)
-        {
-            $query = Penugasan::with([
-                'giats' => function ($query) {
-                    $query->select([
-                        'id',
-                        'kegiatan',
-                        'detail_kegiatan',
-                        'tempat',
-                        'kendaraan',
-                        'beban_biaya',
-                        'tanggal_mulai',
-                        'tanggal_selesai',
-                        'akses_mulai',
-                        'akses_selesai',
-                        'deleted_at',
-                    ]);
-                }
-            ]);
-        
-            // Filter berdasarkan $idGiat dan $idUser jika ada
-            if ($idGiat) {
-                $query->where('id_giat', $idGiat);
-            }
-            if ($idUser) {
-                $query->where('id_user', $idUser);
-            }
-        
-            $penugasan = $query->get();
-            if ($penugasan->isNotEmpty()){
-                $totalUsers = Penugasan::where('id_giat', $idGiat)->distinct('id_user')->count();
-                return ([
-                    'status' => true,
-                    'message' => 'Berhasil Mengambil Data',
-                    'total_petugas' => $totalUsers,
-                    'data' => PenugasanAllResource::collection($penugasan)
-                ]);
-            }
+    public function getAll($idGiat = null, $idUser = null)
+    {
+        $query = Penugasan::with(['giats' => function ($query) {
+            $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
+                $q->where('status', 'ditugaskan');
+            }]);
+        }]);
+
+        // Filter berdasarkan $idGiat dan $idUser jika ada
+        if ($idGiat) {
+            $query->where('id_giat', $idGiat);
+        }
+        if ($idUser) {
+            $query->where('id_user', $idUser);
+        }
+
+        $penugasan = $query->get();
+        if ($penugasan->isNotEmpty()) {
             return ([
-                'status' => false,
-                'message' => 'Data Tidak Ditemukan'
+                'status' => true,
+                'message' => 'Berhasil Mengambil Data',
+                'data' => PenugasanAllResource::collection($penugasan)
             ]);
         }
+        return ([
+            'status' => false,
+            'message' => 'Data Tidak Ditemukan'
+        ]);
+    }
 
     public function doShow($id)
     {
         try {
             $penugasan = Penugasan::with([
                 'giats' => function ($query) {
-                    $query->select([
-                        'id',
-                        'kegiatan',
-                        'detail_kegiatan',
-                        'tempat',
-                        'kendaraan',
-                        'beban_biaya',
-                        'tanggal_mulai',
-                        'tanggal_selesai',
-                        'akses_mulai',
-                        'akses_selesai',
-                        'deleted_at',
-                    ]);
+                    $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
+                        $q->where('status', 'ditugaskan');
+                    }]);
                 }
             ])->findOrFail($id);
             if ($penugasan) {
@@ -91,7 +67,35 @@ class PenugasanServices
             ]);
         }
     }
-    public function doAdd($id, $userId){
+
+    public function doDestroy($id)
+    {
+        try {
+            $penugasan = Penugasan::findOrFail($id);
+            if ($penugasan) {
+                $penugasan->destroy($id);
+                $relativePath = str_replace('public/storage/', '', $penugasan['dokumen_lapangan']);
+                $fullPath = public_path("storage/{$relativePath}");
+                File::delete($fullPath);
+                return ([
+                    'status' => true,
+                    'message' => "Data Berhasil Dihapus!"
+                ]);
+            }
+        } catch (ModelNotFoundException $th) {
+            return ([
+                'status' => false,
+                'message' => 'Data Tidak Ditemukan!'
+            ]);
+        }
+        return ([
+            'status' => false,
+            'message' => "Data Gagal Dihapus!"
+        ]);
+    }
+
+    public function doAdd($id, $userId)
+    {
         $dataPenugasan = [
             'id_giat' => $id,
             'id_user' => $userId,
@@ -99,7 +103,7 @@ class PenugasanServices
             'created_at' => now(),
         ];
         $penugasan = Penugasan::create($dataPenugasan);
-        if ($penugasan){
+        if ($penugasan) {
             return ([
                 'status' => true,
                 'message' => "Data Berhasil Disimpan!"
@@ -110,32 +114,42 @@ class PenugasanServices
             'message' => "Data Gagal Disimpan!"
         ]);
     }
-    // public function doStore($data, $file)
-    // {
-    //     $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
-    //     $destinationPath = public_path() . '/storage/images/';
-    //     $file->move($destinationPath, $fileName);
-    //     $insertData = $data;
-    //     $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
-    //     $penugasan = Penugasan::create($insertData);
-    //     if ($penugasan) {
-    //         return ([
-    //             'status' => true,
-    //             'message' => 'Data Berhasil Ditambahkan!'
-    //         ]);
-    //     }
-    //     return ([
-    //         'status' => false,
-    //         'message' => 'Data Gagal Ditambahkan!'
-    //     ]);
-    // }
+    public function doUpdate($data, $id, $file)
+    {
+        try {
+            $penugasan = Penugasan::findOrFail($id);
+            if ($penugasan) {
+                $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
+                $destinationPath = public_path() . '/storage/images/';
+                $file->move($destinationPath, $fileName);
+                $insertData = $data;
+                $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+                $results = $penugasan->update($insertData);
+                if ($results) {
+                    return ([
+                        'status' => true,
+                        'message' => 'Data Berhasil Diubah'
+                    ]);
+                }
+            }
+            return ([
+                'status' => false,
+                'message' => 'Data Gagal Ditambahkan!'
+            ]);
+        } catch (ModelNotFoundException $th) {
+            return ([
+                'status' => false,
+                'message' => 'Data Tidak Ditemukan!'
+            ]);
+        }
+    }
 
     public function doDelete($giatId, $userId)
     {
         try {
             $penugasan = Penugasan::where('id_giat', $giatId)
-                          ->where('id_user', $userId)
-                          ->first();
+                ->where('id_user', $userId)
+                ->first();
             if ($penugasan) {
                 // $relativePath = str_replace('public/storage/', '', $penugasan['dokumen_lapangan']);
                 // $fullPath = public_path("storage/{$relativePath}");

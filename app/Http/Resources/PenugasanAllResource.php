@@ -23,7 +23,22 @@ class PenugasanAllResource extends JsonResource
             'id_giat' => $this->id_giat,
             'id_user' => $this->id_user,
             'deleted_at' => $this->deleted_at,
-            'giats' => $this->whenLoaded('giats'),
+            'giats' => $this->whenLoaded('giats', function () {
+                return [
+                    'id_giat' => $this->giats->id,
+                    'kegiatan' => $this->giats->kegiatan,
+                    'detail_kegiatan' => $this->giats->detail_kegiatan,
+                    'tempat' => $this->giats->tempat,
+                    'kendaraan' => $this->giats->kendaraan,
+                    'beban_biaya' => $this->giats->beban_biaya,
+                    'tanggal_mulai' => $this->giats->tanggal_mulai,
+                    'tanggal_selesai' => $this->giats->tanggal_selesai,
+                    'akses_mulai' => $this->giats->akses_mulai,
+                    'akses_selesai' => $this->giats->akses_selesai,
+                    'deleted_at' => $this->giats->deleted_at,
+                    'jumlah_petugas' => $this->giats->jumlah_petugas, // Menampilkan jumlah petugas
+                ];
+            }),
         ];
     }
 }
