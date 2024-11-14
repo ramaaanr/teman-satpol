@@ -6,16 +6,13 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class DetailItem extends Component
+class CardKegiatan extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(
-        public string $id,
-        public string $label,
-        public string $value
-    ) {
+    public function __construct()
+    {
         //
     }
 
@@ -24,6 +21,6 @@ class DetailItem extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.detail-item');
+        return view('components.card-kegiatan');
     }
 }

@@ -1,7 +1,7 @@
 <!-- resources/views/home.blade.php -->
 @extends('layouts.user-app')
 
-@section('title', 'Pengelolaan Data Giat')
+@section('title', 'Kegiatan Pegawai')
 
 @section('content')
 <div class="w-full min-h-[550px]  bg-white rounded-md p-4 flex flex-col items-center">
@@ -36,66 +36,54 @@
     </form>
 
   </div>
-  <div class="card-giat-container w-full p-2 space-y-4">
+  <div id="card-kegiatan-container" class=" w-full p-2 space-y-4">
   </div>
-  <script>
-  $(document).ready(function() {
-    // Ambil data user dari localStorage
-    const userData = localStorage.getItem('user');
+</div>
+<script>
+$(document).ready(function() {
+  // Fungsi untuk mengambil data JSON dan menampilkannya
+  const userData = localStorage.getItem('user');
+  // Pastikan userData ada dan di-parse menjadi objek
+  const user = userData ? JSON.parse(userData) : null;
+  console.log(user);
+  const token = user ? user.token : null;
+  const idUser = user.id;
 
-    // Pastikan userData ada dan di-parse menjadi objek
-    const user = userData ? JSON.parse(userData) : null;
-    const token = user ? user.token : null;
-
-    $.ajax({
-      url: '/api/giat',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      success: function({
-        data
-      }) {
-        data.forEach(({
-          id,
+  $.ajax({
+    url: `/api/penugasan?id_user=${idUser}`, // Sesuaikan URL JSON
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    dataType: 'json',
+    success: function({
+      data
+    }) {
+      console.log(data);
+      // Loop untuk menampilkan data kegiatan
+      data.forEach(function({
+        id_penugasan,
+        giats: {
           kegiatan,
           detail_kegiatan,
           tempat,
-          kendaraan,
-          beban_biaya,
           tanggal_mulai,
           tanggal_selesai,
-          akses_mulai,
-          akses_selesai,
-          jumlah_ditugaskan,
-          jumlah_selesai,
-        }) => {
-          const item = `
-            <x-card-giat-item 
-id="${id}"
-kegiatan="${kegiatan}"
-detailKegiatan="${detail_kegiatan}"
-tempat="${tempat}"
-kendaraan="${kendaraan}"
-bebanBiaya="${beban_biaya}"
-tanggalMulai="${tanggal_mulai}"
-tanggalSelesai="${tanggal_selesai}"
-aksesMulai="${akses_mulai}"
-aksesSelesai="${akses_selesai}"
-jumlahDitugaskan="${jumlah_ditugaskan}"
-jumlahSelesai="${jumlah_selesai}"
-            />
-            `
-          $('.card-giat-container').append(item);
-        });
-      },
-      error: function(xhr, status, error) {
-        console.error('Error:', error);
-      }
-    });
+          jumlah_petugas,
+          kendaraan,
+        }
+      }) {
+        let kegiatanItem =
+          `<x-card-kegiatan-item id="${id_penugasan}" kegiatan="${kegiatan}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
+        $('#card-kegiatan-container').append(kegiatanItem);
+      });
+    },
+    error: function() {
+      console.error('Gagal mengambil data kegiatan.');
+    }
   });
-  </script>
-</div>
+});
+</script>
 @endsection

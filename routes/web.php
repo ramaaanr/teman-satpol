@@ -16,9 +16,18 @@ Route::middleware('auth')->get('/dashboard', function () {
 Route::middleware('auth')->get('/data-giat', function () {
     return view('data-giat.index');
 })->name('data-giat');
-Route::middleware('auth')->get('/data-giat/1', function () {
+Route::middleware('auth')->get('/kegiatan', function () {
+    return view('kegiatan.index');
+})->name('kegiatan');
+Route::middleware('auth')->get('/kegiatan/edit/{id}', function () {
+    return view('kegiatan.edit');
+})->name('edit-kegiatan');
+Route::middleware('auth')->get('/data-giat/{id}', function () {
     return view('data-giat.detail');
 })->name('detail-data-giat');
+Route::middleware('auth')->get('/data-giat/edit/{id}', function () {
+    return view('data-giat.edit');
+})->name('edit-data-giat');
 Route::middleware('auth')->get('/tambah-giat', function () {
     return view('tambah-giat.index');
 })->name('tambah-giat');
