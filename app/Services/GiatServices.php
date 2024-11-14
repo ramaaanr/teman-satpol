@@ -79,10 +79,10 @@ class GiatServices
             $data['tanggal_selesai'] = Carbon::parse($data['tanggal_selesai'])->format('Y-m-d H:i:s');
             $data['akses_mulai'] = Carbon::parse($data['akses_mulai'])->format('Y-m-d H:i:s');
             $data['akses_selesai'] = Carbon::parse($data['akses_selesai'])->format('Y-m-d H:i:s');
-            $giat->update($data);
+            $results = $giat->update($data);
             return $giat;
         }
-        return response()->json([
+        return ([
             'status' => false,
             'message' => "Data Gagal Disimpan!"
         ]);
