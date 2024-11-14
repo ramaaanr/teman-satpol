@@ -1,0 +1,42 @@
+[
+  {
+    "kegiatan": "Pelatihan Dasar Keamanan Data",
+    "detail_kegiatan": "Pelatihan dasar bagi seluruh staf untuk memahami keamanan data dan prosedur terkait.",
+    "tempat": "Aula Utama Gedung Pusat, Jl. Pahlawan No. 25, Banjarmasin",
+    "tanggal": "19 September 2024 08:00 WITA - 20 September 2024 08:00 WITA",
+    "jumlah_petugas": 10,
+    "kendaraan": "Minibus"
+  },
+  {
+    "kegiatan": "Inspeksi Fasilitas Kesehatan",
+    "detail_kegiatan": "Pemeriksaan fasilitas kesehatan di kecamatan untuk memastikan kesiapan dan kelengkapan alat medis.",
+    "tempat": "Puskesmas Kecamatan Selatan, Jl. Merdeka No. 17, Banjarmasin",
+    "tanggal": "22 September 2024 09:00 WITA - 22 September 2024 16:00 WITA",
+    "jumlah_petugas": 6,
+    "kendaraan": "SUV"
+  },
+  {
+    "kegiatan": "Sosialisasi Pemanfaatan Teknologi Pertanian",
+    "detail_kegiatan": "Edukasi kepada petani lokal mengenai penggunaan teknologi terbaru untuk peningkatan hasil panen.",
+    "tempat": "Balai Pertemuan Desa Mekar Sari, Jl. Raya Pertanian No. 5, Hulu Sungai Selatan",
+    "tanggal": "25 September 2024 07:00 WITA - 26 September 2024 17:00 WITA",
+    "jumlah_petugas": 8,
+    "kendaraan": "Pick-up"
+  },
+  {
+    "kegiatan": "Monitoring Kebersihan Lingkungan",
+    "detail_kegiatan": "Peninjauan kebersihan dan pengelolaan sampah di lingkungan permukiman perkotaan.",
+    "tempat": "Kecamatan Banjarmasin Timur, Jl. Kebersihan No. 20, Banjarmasin",
+    "tanggal": "28 September 2024 08:30 WITA - 29 September 2024 15:00 WITA",
+    "jumlah_petugas": 5,
+    "kendaraan": "Motor"
+  },
+  {
+    "kegiatan": "Workshop Pemulihan Ekonomi Pasca Pandemi",
+    "detail_kegiatan": "Workshop untuk membahas langkah-langkah pemulihan ekonomi di sektor UMKM.",
+    "tempat": "Gedung Serbaguna Kota Banjarmasin, Jl. Ahmad Yani Km. 5, Banjarmasin",
+    "tanggal": "30 September 2024 09:00 WITA - 30 September 2024 17:00 WITA",
+    "jumlah_petugas": 12,
+    "kendaraan": "Bus"
+  }
+]
