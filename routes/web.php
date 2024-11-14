@@ -34,6 +34,9 @@ Route::middleware('auth')->get('/tambah-giat', function () {
 Route::middleware('auth')->get('/review-kegiatan', function () {
     return view('review-kegiatan.index');
 })->name('review-kegiatan');
-Route::middleware('auth')->get('/review-kegiatan/1', function () {
+Route::middleware('auth')->get('/review-kegiatan/detail/{id}', function () {
+    return view('review-kegiatan.detail');
+})->name('detail-review-kegiatan');
+Route::middleware('auth')->get('/review-kegiatan/detail/{id_giat}/{id_penugasan}', function () {
     return view('review-kegiatan.detail');
 })->name('detail-review-kegiatan');
