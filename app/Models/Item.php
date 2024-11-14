@@ -9,5 +9,8 @@ class Item extends Model
 {
     use HasFactory;
 
-    
+    public function detailItems()
+    {
+        return $this->hasMany(DetailItem::class, 'id_item', 'id');
+    }
 }
