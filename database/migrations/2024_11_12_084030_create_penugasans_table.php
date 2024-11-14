@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('penugasans', function (Blueprint $table) {
             $table->id();
-            $table->time('durasi');
-            $table->longText('detail');
-            $table->string('dokumen_lapangan', 255);
+            $table->time('durasi')->nullable();
+            $table->longText('detail')->nullable();
+            $table->string('dokumen_lapangan', 255)->nullable();
             $table->string('status', 50);
             $table->unsignedBigInteger('id_giat');
             $table->unsignedBigInteger('id_user');

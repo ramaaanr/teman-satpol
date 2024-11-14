@@ -91,36 +91,56 @@ class PenugasanServices
             ]);
         }
     }
-
-    public function doStore($data, $file)
-    {
-        $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
-        $destinationPath = public_path() . '/storage/images/';
-        $file->move($destinationPath, $fileName);
-        $insertData = $data;
-        $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
-        $penugasan = Penugasan::create($insertData);
-        if ($penugasan) {
+    public function doAdd($id, $userId){
+        $dataPenugasan = [
+            'id_giat' => $id,
+            'id_user' => $userId,
+            'status' => 'Ditugaskan',
+            'created_at' => now(),
+        ];
+        $penugasan = Penugasan::create($dataPenugasan);
+        if ($penugasan){
             return ([
                 'status' => true,
-                'message' => 'Data Berhasil Ditambahkan!'
+                'message' => "Data Berhasil Disimpan!"
             ]);
         }
         return ([
             'status' => false,
-            'message' => 'Data Gagal Ditambahkan!'
+            'message' => "Data Gagal Disimpan!"
         ]);
     }
+    // public function doStore($data, $file)
+    // {
+    //     $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
+    //     $destinationPath = public_path() . '/storage/images/';
+    //     $file->move($destinationPath, $fileName);
+    //     $insertData = $data;
+    //     $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+    //     $penugasan = Penugasan::create($insertData);
+    //     if ($penugasan) {
+    //         return ([
+    //             'status' => true,
+    //             'message' => 'Data Berhasil Ditambahkan!'
+    //         ]);
+    //     }
+    //     return ([
+    //         'status' => false,
+    //         'message' => 'Data Gagal Ditambahkan!'
+    //     ]);
+    // }
 
-    public function doDestroy($id)
+    public function doDelete($giatId, $userId)
     {
         try {
-            $penugasan = Penugasan::findOrFail($id);
+            $penugasan = Penugasan::where('id_giat', $giatId)
+                          ->where('id_user', $userId)
+                          ->first();
             if ($penugasan) {
-                $relativePath = str_replace('public/storage/', '', $penugasan['dokumen_lapangan']);
-                $fullPath = public_path("storage/{$relativePath}");
-                File::delete($fullPath);
-                $penugasan->destroy($id);
+                // $relativePath = str_replace('public/storage/', '', $penugasan['dokumen_lapangan']);
+                // $fullPath = public_path("storage/{$relativePath}");
+                // File::delete($fullPath);
+                $penugasan->delete();
                 return ([
                     'status' => true,
                     'message' => 'Data Berhasil Dihapus!'

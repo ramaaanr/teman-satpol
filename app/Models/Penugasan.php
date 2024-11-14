@@ -20,7 +20,7 @@ class Penugasan extends Model
         'id_user'
     ];
 
-    public function users(): BelongsTo {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
     public function giats(): BelongsTo {

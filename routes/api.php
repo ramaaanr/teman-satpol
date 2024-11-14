@@ -41,13 +41,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/giat', [GiatController::class, 'index']);
     Route::get('/giat/{id}', [GiatController::class, 'show']);
     Route::post('/giat', [GiatController::class, 'store']);
     Route::patch('/giat/{id}', [GiatController::class, 'update']);
     Route::delete('/giat/{id}', [GiatController::class, 'destroy']);
-});
+// });
 
 Route::get('/penugasan', [PenugasanController::class, 'index']);
 Route::get('/penugasan/{id}', [PenugasanController::class, 'show']);

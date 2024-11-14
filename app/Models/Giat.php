@@ -21,4 +21,9 @@ class Giat extends Model
         'akses_mulai',
         'akses_selesai' 
     ];
+
+    public function penugasans()
+    {
+        return $this->hasMany(Penugasan::class, 'id_giat');
+    }
 }
