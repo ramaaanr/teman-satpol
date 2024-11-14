@@ -80,7 +80,10 @@ class GiatController extends Controller
             foreach ($usersToRemove as $userId) {
                 $this->penugasanServices->doDelete($giat->id, $userId);
             }
-            return $giat;
+            return ([
+                'status' => true,
+                'message' => "Data Berhasil Diubah!"
+            ]);
         }
         // $results = $this->giatServices->doUpdate($request->all(), $id);
         // return $results;
