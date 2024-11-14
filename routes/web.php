@@ -25,6 +25,9 @@ Route::middleware('auth')->get('/kegiatan/{id}', function () {
 Route::middleware('auth')->get('/data-giat/{id}', function () {
     return view('data-giat.detail');
 })->name('detail-data-giat');
+Route::middleware('auth')->get('/data-giat/edit/{id}', function () {
+    return view('data-giat.edit');
+})->name('edit-data-giat');
 Route::middleware('auth')->get('/tambah-giat', function () {
     return view('tambah-giat.index');
 })->name('tambah-giat');
