@@ -21,18 +21,6 @@ use App\Http\Controllers\AuthenticationController;
 |
 */
 
-// Route::middleware(['auth:sanctum'])->group(function () { //grouping untuk middleware autentikasi wajib login
-//     Route::get('/logout', [AuthenticationController::class, 'logout']);
-//     Route::get('/user-details', [AuthenticationController::class, 'detailUser']);
-//     Route::post('/posts', [PostController::class, 'store']);
-//     Route::patch('/posts/{id}', [PostController::class, 'update'])->middleware('author-post');
-//     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('author-post');
-// });
-// Route::get('/posts', [PostController::class, 'index']); //menampilkan semua
-// Route::get('/posts/{id}', [PostController::class, 'show']); //menampilkan berita berdasarkan id
-// Route::post('/login', [AuthenticationController::class, 'login']);
-
-
 Route::post('/users/login', [UserController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
@@ -42,13 +30,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 });
 
-// Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/giat', [GiatController::class, 'index']);
     Route::get('/giat/{id}', [GiatController::class, 'show']);
     Route::post('/giat', [GiatController::class, 'store']);
     Route::patch('/giat/{id}', [GiatController::class, 'update']);
     Route::delete('/giat/{id}', [GiatController::class, 'destroy']);
-// });
+});
 
 Route::get('/penugasan', [PenugasanController::class, 'index']);
 Route::get('/penugasan/{id}', [PenugasanController::class, 'show']);
