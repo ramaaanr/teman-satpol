@@ -28,7 +28,7 @@ class PenugasanController extends Controller
         $request->validate([
             'durasi' => 'required',
             'detail' => 'required',
-            'dokumen_lapangan' => 'required|file|mimes:jpg,jpeg,png',
+            'dokumen_lapangan' => 'file|mimes:jpg,jpeg,png',
             'status' => 'required',
             'id_giat' => 'required',
             'id_user' => 'required',
