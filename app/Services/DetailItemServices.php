@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Models\DetailItem;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DetailItemServices {
     public function doAdd($idPenugasan, $itemId){
@@ -15,6 +16,30 @@ class DetailItemServices {
             return ([
                 'status' => true,
                 'message' => "Data Berhasil Disimpan!"
+            ]);
+        }
+    }
+
+    public function doDelete($penugasanId, $itemId){
+        try {
+            $detailItem = DetailItem::where('id_penugasan', $penugasanId)
+            ->where('id_item', $itemId)
+            ->first();
+            if ($detailItem){
+                $detailItem->delete($itemId);
+                return ([
+                    'status' => true,
+                    'message' => "Data Berhasil Dihapus!"
+                ]);
+            }
+            return ([
+                'status' => false,
+                'message' => "Data Gagal Dihapus!"
+            ]);
+        } catch (ModelNotFoundException $th) {
+            return ([
+                'status' => false,
+                'message' => "Data Tidak Ditemukan!"
             ]);
         }
     }

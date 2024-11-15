@@ -46,8 +46,20 @@ class PenugasanController extends Controller
         $file = $request->file('dokumen_lapangan');
         $penugasan = $this->penugasanServices->doUpdate($dataPenugasan, $id, $file);
         if ($penugasan) {
-            foreach ($dataItem as $itemId) {
+            $existingItems = $penugasan->detailItems()->pluck('id_item')->toArray();
+
+            // Bandingkan dengan daftar baru dari input
+            $itemsToAdd = array_diff($dataItem, $existingItems); // Item baru yang perlu ditambahkan
+            $itemsToRemove = array_diff($existingItems, $dataItem); // Item lama yang perlu dihapus
+
+            // Tambahkan item baru ke tabel detail_item
+            foreach ($itemsToAdd as $itemId) {
                 $this->detailItemServices->doAdd($penugasan->id, $itemId);
+            }
+
+            // Hapus item yang tidak lagi ada pada input
+            foreach ($itemsToRemove as $itemId) {
+                $this->detailItemServices->doDelete($penugasan->id, $itemId);
             }
             return ([
                 'status' => true,
@@ -65,4 +77,5 @@ class PenugasanController extends Controller
         $results = $this->penugasanServices->doDestroy($id);
         return $results;
     }
+
 }
