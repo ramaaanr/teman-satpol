@@ -1,15 +1,15 @@
 <!-- resources/views/home.blade.php -->
 @extends('layouts.user-app')
 
-@section('title', 'Pengelolaan Giat')
+@section('title', 'Review Kegiatan')
 
 @section('content')
 <div class="w-full text-zinc-700 bg-white rounded-lg shadow-md border border-gray-100 p-6  ">
 
   <div class="detail-1 flex">
     <div class="header-detail w-full">
-      <p class="font-bold text-3xl">Kegiatan Memilanduk</p>
-      <p class=" text-md text-zinc-500">memilanduk dengan sahabat</p>
+      <p id="kegiatan" class="font-bold text-3xl"></p>
+      <p id="detail" class=" text-md text-zinc-500"></p>
     </div>
     <div class="actions-detail flex items-center space-x-4">
       <p class="flex space-x-1">
@@ -37,17 +37,114 @@
       <span class="material-symbols-outlined mr-1 text-gray-300">
         location_on
       </span>
-      <p class="text-sm text-gray-700">Jl. Veteran Gang Kelurahan blbladpiadoiah</p>
+      <p id="tempat" class="text-sm text-gray-700"></p>
     </div>
     <div class="detail-content flex items-start w-full">
       <span class="material-symbols-outlined mr-1 text-gray-300">
         calendar_month
       </span>
-      <p class="text-sm text-gray-700">19 September 2024, 08:00 WITA - 19 September 2024 24:00 WITA</p>
+      <p class="text-sm text-gray-700" id="tanggal"></p>
     </div>
   </div>
   <hr class="border border-gray-300 my-4">
   <p class="text-sm text-zinc-400">Diperintahkan Kepada</p>
   <x-review-kegiatan-user-table />
 </div>
+<script>
+$(document).ready(function() {
+  // Ambil data user dari localStorage
+  // Pastikan userData ada dan di-parse menjadi objek
+  const url = window.location.href;
+  const id = url.split("/").pop();
+  const userData = localStorage.getItem('user');
+  const user = userData ? JSON.parse(userData) : null;
+  const token = user ? user.token : null;
+
+  $.ajax({
+    url: `/api/giat/${id}`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    success: function({
+      Data: {
+        kegiatan,
+        detail_kegiatan,
+        tempat,
+        tanggal_mulai,
+        tanggal_selesai,
+        jumlah_petugas,
+        kendaraan,
+        penugasans,
+      }
+    }) {
+      $('#kegiatan').text(kegiatan);
+      $('#detail').text(detail_kegiatan);
+      $('#tempat').text(tempat);
+      $('#tanggal').text(`${tanggal_mulai} - ${tanggal_selesai}`);
+      $('#petugas').text(jumlah_petugas);
+      $('#kendaraan').text(kendaraan);
+
+      $('#pegawaiTable').DataTable({
+        data: penugasans,
+        columns: [{
+            data: 'user.nama'
+          },
+          {
+            data: 'user.NIP'
+          },
+          {
+            data: 'user.jabatan'
+          },
+          {
+            data: 'status',
+            render: function(data) {
+              let badgeClass = '';
+              switch (data) {
+                case 'Ditugaskan':
+                  badgeClass = 'bg-yellow-300 md';
+                  break;
+                case 'Bertugas':
+                  badgeClass = 'bg-blue-300 md';
+                  break;
+                case 'Disetujui':
+                  badgeClass = 'bg-green-300 md';
+                  break;
+                case 'Ditolak':
+                  badgeClass = 'bg-red-300 md';
+                  break;
+              }
+              return `<span class="px-2 text-white text-xs rounded-lg py-1 ${badgeClass}">${data}</span>`;
+            }
+          },
+          {
+            data: 'status',
+            render: function(data, type, row) {
+              let buttons =
+                `<button class="bg-gray-700 text-white px-2 py-1 rounded mr-1">Detail</button>`;
+              if (data === 'Bertugas') {
+                buttons += `
+                                <button class="bg-green-500 text-white px-2 py-1 rounded mr-1">Disetujui</button>
+                                <button class="bg-red-500 text-white px-2 py-1 rounded">Ditolak</button>
+                            `;
+              } else if (data === 'Disetujui') {
+                buttons += `<button class="bg-red-500 text-white px-2 py-1 rounded">Ditolak</button>`;
+              } else if (data === 'Ditolak') {
+                buttons +=
+                  `<button class="bg-green-500 text-white px-2 py-1 rounded">Disetujui</button>`;
+              }
+              return buttons;
+            }
+          }
+        ]
+      });
+    },
+    error: function(xhr, status, error) {
+      console.error('Error:', error);
+    }
+  });
+});
+</script>
 @endsection

@@ -34,11 +34,59 @@
     </form>
 
   </div>
-  <div class="card-giat-container w-full p-2 space-y-4">
-    <x-card-review-kegiatan-item></x-card-review-kegiatan-item>
-    <x-card-review-kegiatan-item></x-card-review-kegiatan-item>
-    <x-card-review-kegiatan-item></x-card-review-kegiatan-item>
-    <x-card-review-kegiatan-item></x-card-review-kegiatan-item>
+  <div class="card-review-kegiatan-container w-full p-2 space-y-4">
   </div>
+  <script>
+  $(document).ready(function() {
+    // Ambil data user dari localStorage
+    const userData = localStorage.getItem('user');
+
+    // Pastikan userData ada dan di-parse menjadi objek
+    const user = userData ? JSON.parse(userData) : null;
+    const token = user ? user.token : null;
+
+    $.ajax({
+      url: '/api/giat',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      success: function({
+        data
+      }) {
+        data.forEach(({
+          id,
+          kegiatan,
+          detail_kegiatan,
+          tempat,
+          kendaraan,
+          beban_biaya,
+          tanggal_mulai,
+          tanggal_selesai,
+          akses_mulai,
+          akses_selesai,
+          jumlah_ditugaskan,
+          jumlah_selesai,
+        }) => {
+          const item = `
+            <x-card-review-kegiatan-item 
+id="${id}"
+kegiatan="${kegiatan}"
+detailKegiatan="${detail_kegiatan}"
+tempat="${tempat}"
+tanggal="${tanggal_mulai} - ${tanggal_selesai}"
+            />
+            `
+          $('.card-review-kegiatan-container').append(item);
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+      }
+    });
+  });
+  </script>
 </div>
 @endsection
