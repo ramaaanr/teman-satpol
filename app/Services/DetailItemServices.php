@@ -2,9 +2,27 @@
 
 namespace App\Services;
 use App\Models\DetailItem;
+use App\Http\Resources\DetailItemByPenugasanResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DetailItemServices {
+    public function getAll($idPenugasan){
+        $detailItem = DetailItem::with(['penugasan', 'item'])
+        ->where('id_penugasan', $idPenugasan)
+        ->get();
+        if ($detailItem->isNotEmpty()){
+            return ([
+                'status' => true,
+                'message' => "Data Berhasil Ditampilkan!",
+                'data' => DetailItemByPenugasanResource::collection($detailItem)
+            ]);
+        }
+        return ([
+            'status' => true,
+            'message' => "Data Kosong!"
+        ]);
+    }
+
     public function doAdd($idPenugasan, $itemId){
         $dataDetailItem = [
             'id_item' => $itemId,
