@@ -8,6 +8,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenugasanController;
+use App\Http\Controllers\DetailItemController;
 use App\Http\Controllers\AuthenticationController;
 
 /*
@@ -56,3 +57,5 @@ Route::patch('/penugasan/{id}', [PenugasanController::class, 'update']);
 Route::delete('/penugasan/{id}', [PenugasanController::class, 'destroy']);
 
 Route::get('/items', [ItemController::class, 'index']);
+
+Route::get('/detail_items', [DetailItemController::class, 'index']);
