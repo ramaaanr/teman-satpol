@@ -1,13 +1,15 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\GiatController;
-use App\Http\Controllers\PenugasanController;
-use App\Http\Controllers\UserController;
 use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GiatController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PenugasanController;
+use App\Http\Controllers\DetailItemController;
+use App\Http\Controllers\AuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +43,7 @@ Route::get('/penugasan', [PenugasanController::class, 'index']);
 Route::get('/penugasan/{id}', [PenugasanController::class, 'show']);
 Route::patch('/penugasan/{id}', [PenugasanController::class, 'update']);
 Route::delete('/penugasan/{id}', [PenugasanController::class, 'destroy']);
+
+Route::get('/items', [ItemController::class, 'index']);
+
+Route::get('/detail_items', [DetailItemController::class, 'index']);

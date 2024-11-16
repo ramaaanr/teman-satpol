@@ -26,4 +26,8 @@ class Penugasan extends Model
     public function giats(): BelongsTo {
         return $this->belongsTo(Giat::class, 'id_giat', 'id');
     }
+    public function detailItems()
+{
+    return $this->hasMany(DetailItem::class, 'id_penugasan', 'id');
+}
 }

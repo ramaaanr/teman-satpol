@@ -13,6 +13,7 @@ class CheckItem extends Component
      */
     public function __construct(
         public string $id,
+        public string $checked,
         public string $deskripsi
     ) {
         //

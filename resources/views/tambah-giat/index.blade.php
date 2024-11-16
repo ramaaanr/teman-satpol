@@ -10,7 +10,7 @@ $(document).ready(function() {
     event.preventDefault(); // Mencegah form dari pengiriman langsung
 
     // Mengambil semua nilai dari input dengan name dalam bentuk array
-    let formDataArray = $(this).serializeArray();
+    let formDataArray = $(this).serializeAarray();
 
     // Konversi array menjadi objek untuk payload
     let payload = {};

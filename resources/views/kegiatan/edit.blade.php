@@ -1,15 +1,15 @@
-<!-- resources/views/home.blade.php -->
 @extends('layouts.user-app')
 
 @section('title', 'Pengelolaan Kegiatan')
 
 @section('content')
-<div class="w-full text-zinc-700 bg-white rounded-lg shadow-md border border-gray-100 p-6  ">
+<form id="form-kegiatan" enctype="multipart/form-data"
+  class="w-full text-zinc-700 bg-white rounded-lg shadow-md border border-gray-100 p-6  ">
 
   <div class="detail-1 flex">
     <div class="header-detail w-full">
       <p id="kegiatan" class="font-bold text-3xl"></p>
-      <p id="detail" class=" text-md text-zinc-500"></p>
+      <p id="detail_giat" class=" text-md text-zinc-500"></p>
     </div>
   </div>
 
@@ -72,7 +72,7 @@
                 dokumentasi lapangan</span> atau tarik dan taruh</p>
             <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, JPEG (MAX. 800x400px)</p>
           </div>
-          <input id="dropzone-file" type="file" class="hidden" accept="image/*" />
+          <input name="dokumen_lapangan" id="dropzone-file" type="file" class="hidden" accept="image/*" />
         </label>
       </div>
       <div id="image-preview"
@@ -82,83 +82,149 @@
 
     </div>
   </div>
+  <input type="hidden" id="id_user" name="id_user">
+  <input type="hidden" id="id_giat" name="id_giat">
+  <input type="hidden" id="status" value="Bertugas" name="status">
   <div class="action-container w-full flex mt-4 space-x-4">
     <div class="button-container w-1/4">
-      <x-button color="gray" text="Ajukan" />
+      <x-button color="gray" text="Ajukan" type="submit" />
     </div>
-    <div class="button-container w-1/4">
+    <a href="/kegiatan" class="button-container w-1/4">
       <x-button color="light" text="Batal" />
-    </div>
+    </a>
   </div>
-</div>
-<script>
-$(document).ready(function() {
-  // Ambil data user dari localStorage
-  // Pastikan userData ada dan di-parse menjadi objek
-  const url = window.location.href;
-  const id = url.split("/").pop();
-  const userData = localStorage.getItem('user');
-  const user = userData ? JSON.parse(userData) : null;
-  const token = user ? user.token : null;
+</form>
 
-  $.ajax({
-    url: `/api/penugasan/${id}`,
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    success: function({
-      data: {
-        giats: {
-          kegiatan,
-          detail_kegiatan,
-          tempat,
-          tanggal_mulai,
-          tanggal_selesai,
-          jumlah_petugas,
-          kendaraan,
-        }
+<script>
+const baseUrl = `${window.location.protocol}//${window.location.host}`;
+const fileInput = document.getElementById('dropzone-file');
+const previewContainer = document.getElementById('image-preview');
+const previewImg = document.getElementById('preview-img');
+const url = window.location.href;
+const id = url.split("/").pop();
+const userData = localStorage.getItem('user');
+const user = userData ? JSON.parse(userData) : null;
+const token = user ? user.token : null;
+let imagePreview;
+
+$.ajax({
+  url: `/api/penugasan/${id}`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  success: function({
+    data: {
+      id_user,
+      id_giat,
+      durasi,
+      detail,
+      status,
+      dokumen_lapangan,
+      giats: {
+        kegiatan,
+        detail_kegiatan,
+        tempat,
+        tanggal_mulai,
+        tanggal_selesai,
+        jumlah_petugas,
+        kendaraan,
       }
-    }) {
-      $('#kegiatan').text(kegiatan);
-      $('#detail').text(detail_kegiatan);
-      $('#tempat').text(tempat);
-      $('#tanggal').text(`${tanggal_mulai} - ${tanggal_selesai}`);
-      $('#petugas').text(jumlah_petugas);
-      $('#kendaraan').text(kendaraan);
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
+    }
+  }) {
+    imagePreview = `${baseUrl}/${dokumen_lapangan.replace("public/", "")}`;
+    console.log(imagePreview);
+    if (imagePreview) {
+      previewImg.src = imagePreview // Set image source to the selected file
+      previewContainer.classList.remove('hidden'); // Show the preview container
+    }
+    $('#durasi').val(durasi);
+    $('#detail').val(detail);
+    $('#kegiatan').text(kegiatan);
+    $('#id_user').val(id_user);
+    $('#id_giat').val(id_giat);
+    $('#detail_giat').text(detail_kegiatan);
+    $('#tempat').text(tempat);
+    $('#tanggal').text(`${tanggal_mulai} - ${tanggal_selesai}`);
+    $('#petugas').text(jumlah_petugas);
+    $('#kendaraan').text(kendaraan);
+  },
+  error: function(xhr, status, error) {
+    console.error('Error:', error);
+  }
+});
+
+
+
+// When a file is selected
+fileInput.addEventListener('change', function(event) {
+  const file = event.target.files[0];
+
+  // Check if the file is an image
+  if (file && file.type.startsWith('image')) {
+    const reader = new FileReader();
+
+    // Set up the file reader to display the image
+    reader.onload = function(e) {
+      previewImg.src = e.target.result; // Set image source to the selected file
+      previewContainer.classList.remove('hidden'); // Show the preview container
+    };
+
+    // Read the file as a data URL
+    reader.readAsDataURL(file);
+  } else {
+    // If the file is not an image, hide the preview container
+    previewContainer.classList.add('hidden');
+    alert("Please select a valid image file.");
+  }
+});
+$('#form-kegiatan').submit(function(event) {
+  event.preventDefault();
+
+  const form = $('#form-kegiatan')[0]; // Ambil elemen form
+  const formData = new FormData(form); // Buat FormData dari form
+
+  // Buat array untuk item
+  let index = 0;
+  $('.checkbox-item').each(function() {
+    if ($(this).is(':checked')) {
+      formData.append(`item[${index}]`, $(this).val());
+      index++;
     }
   });
-  const fileInput = document.getElementById('dropzone-file');
-  const previewContainer = document.getElementById('image-preview');
-  const previewImg = document.getElementById('preview-img');
 
-  // When a file is selected
-  fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
+  // Debugging untuk memastikan format data benar
+  for (let pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+  }
 
-    // Check if the file is an image
-    if (file && file.type.startsWith('image')) {
-      const reader = new FileReader();
-
-      // Set up the file reader to display the image
-      reader.onload = function(e) {
-        previewImg.src = e.target.result; // Set image source to the selected file
-        previewContainer.classList.remove('hidden'); // Show the preview container
-      };
-
-      // Read the file as a data URL
-      reader.readAsDataURL(file);
-    } else {
-      // If the file is not an image, hide the preview container
-      previewContainer.classList.add('hidden');
-      alert("Please select a valid image file.");
+  // Kirim data menggunakan AJAX
+  $.ajax({
+    url: '/api/penugasan/' + id + '?_method=PATCH',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      Swal.fire({
+        icon: response.status ? 'success' : 'error',
+        title: response.status ? 'Berhasil' : 'Gagal',
+        text: response.message,
+      }).then(() => {
+        window.location.href = '/kegiatan'
+      });
+    },
+    error: function(xhr) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Kesalahan',
+        text: 'Terjadi kesalahan saat mengunggah data.',
+      });
     }
   });
 });
 </script>
+
 @endsection
