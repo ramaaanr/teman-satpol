@@ -3,10 +3,12 @@
 
   <div class="detail-1 flex">
     <div class="header-detail w-full">
-      <p class="font-bold text-3xl">{{ $kegiatan }}</p>
+      <div class="flex items-center">
+        <p class="font-bold text-3xl mr-2 ">{{ $kegiatan }}</p>
+        <x-badge size="sm" color="{{$status}}">{{$status}}</x-badge>
+      </div>
       <p class=" text-md text-zinc-500">{{ $detail }}</p>
     </div>
-
   </div>
 
   <div class="detail-2 mt-2 flex">

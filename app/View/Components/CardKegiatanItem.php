@@ -10,24 +10,16 @@ class CardKegiatanItem extends Component
     public $kegiatan;
     public $detail;
     public $tempat;
+    public $status;
     public $tanggal;
     public $petugas;
     public $kendaraan;
 
-    /**
-     * Create a new component instance.
-     *
-     * @param string $kegiatan
-     * @param string $detail
-     * @param string $tempat
-     * @param string $tanggal
-     * @param int $petugas
-     * @param string $kendaraan
-     */
-    public function __construct($id, $kegiatan, $detail, $tempat, $tanggal, $petugas, $kendaraan)
+    public function __construct($id, $kegiatan, $detail, $tempat, $tanggal, $status, $petugas, $kendaraan)
     {
         $this->id = $id;
         $this->kegiatan = $kegiatan;
+        $this->status = $status;
         $this->detail = $detail;
         $this->tempat = $tempat;
         $this->tanggal = $tanggal;
@@ -35,11 +27,6 @@ class CardKegiatanItem extends Component
         $this->kendaraan = $kendaraan;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\View\View|string
-     */
     public function render()
     {
         return view('components.card-kegiatan-item');

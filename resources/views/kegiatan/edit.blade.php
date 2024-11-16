@@ -9,7 +9,7 @@
   <div class="detail-1 flex">
     <div class="header-detail w-full">
       <p id="kegiatan" class="font-bold text-3xl"></p>
-      <p id="detail" class=" text-md text-zinc-500"></p>
+      <p id="detail_giat" class=" text-md text-zinc-500"></p>
     </div>
   </div>
 
@@ -89,18 +89,23 @@
     <div class="button-container w-1/4">
       <x-button color="gray" text="Ajukan" type="submit" />
     </div>
-    <div class="button-container w-1/4">
+    <a href="/kegiatan" class="button-container w-1/4">
       <x-button color="light" text="Batal" />
-    </div>
+    </a>
   </div>
 </form>
 
 <script>
+const baseUrl = `${window.location.protocol}//${window.location.host}`;
+const fileInput = document.getElementById('dropzone-file');
+const previewContainer = document.getElementById('image-preview');
+const previewImg = document.getElementById('preview-img');
 const url = window.location.href;
 const id = url.split("/").pop();
 const userData = localStorage.getItem('user');
 const user = userData ? JSON.parse(userData) : null;
 const token = user ? user.token : null;
+let imagePreview;
 
 $.ajax({
   url: `/api/penugasan/${id}`,
@@ -114,6 +119,10 @@ $.ajax({
     data: {
       id_user,
       id_giat,
+      durasi,
+      detail,
+      status,
+      dokumen_lapangan,
       giats: {
         kegiatan,
         detail_kegiatan,
@@ -125,10 +134,18 @@ $.ajax({
       }
     }
   }) {
+    imagePreview = `${baseUrl}/${dokumen_lapangan.replace("public/", "")}`;
+    console.log(imagePreview);
+    if (imagePreview) {
+      previewImg.src = imagePreview // Set image source to the selected file
+      previewContainer.classList.remove('hidden'); // Show the preview container
+    }
+    $('#durasi').val(durasi);
+    $('#detail').val(detail);
     $('#kegiatan').text(kegiatan);
     $('#id_user').val(id_user);
     $('#id_giat').val(id_giat);
-    $('#detail').text(detail_kegiatan);
+    $('#detail_giat').text(detail_kegiatan);
     $('#tempat').text(tempat);
     $('#tanggal').text(`${tanggal_mulai} - ${tanggal_selesai}`);
     $('#petugas').text(jumlah_petugas);
@@ -138,9 +155,8 @@ $.ajax({
     console.error('Error:', error);
   }
 });
-const fileInput = document.getElementById('dropzone-file');
-const previewContainer = document.getElementById('image-preview');
-const previewImg = document.getElementById('preview-img');
+
+
 
 // When a file is selected
 fileInput.addEventListener('change', function(event) {
@@ -196,6 +212,8 @@ $('#form-kegiatan').submit(function(event) {
         icon: response.status ? 'success' : 'error',
         title: response.status ? 'Berhasil' : 'Gagal',
         text: response.message,
+      }).then(() => {
+        window.location.href = '/kegiatan'
       });
     },
     error: function(xhr) {

@@ -10,29 +10,68 @@
     const userData = localStorage.getItem('user');
     const user = userData ? JSON.parse(userData) : null;
     const token = user ? user.token : null;
+    let itemPenugasan = [];
+
     $.ajax({
-      url: '/api/items',
+      url: `/api/detail_items?id_penugasan=${id}`,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      success: function(
-        items
-      ) {
-        items.forEach(({
-          id,
-          deskripsi
-        }) => {
-          let itemElement = `<x-check-item id="${id}" deskripsi="${deskripsi}" />`;
-          $('#item-container').append(itemElement)
-        });
+      success: function({
+        data
+      }) {
+        itemPenugasan = data;
       },
       error: function(xhr, status, error) {
         console.error('Error:', error);
       }
+    }).then(() => {
+      $.ajax({
+        url: '/api/items',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        success: function(items) {
+          // Iterasi setiap item yang diterima dari respons
+          items.forEach(({
+            id,
+            deskripsi
+          }) => {
+            let checked = false;
+
+            // Periksa apakah id_item ada dalam itemPenugasan
+            itemPenugasan.some(({
+              item: {
+                id_item
+              }
+            }) => {
+              if (id === id_item) {
+                checked = true; // Set checked menjadi true jika cocok
+                return true; // Hentikan iterasi lebih lanjut
+              }
+            });
+            let itemElement =
+              `<x-check-item id="${id}" deskripsi="${deskripsi}" checked="" />`;
+            if (checked) {
+              itemElement =
+                `<x-check-item id="${id}" deskripsi="${deskripsi}" checked="checked" />`;
+            }
+            // // Buat elemen HTML dengan atribut checked sesuai kondisi
+
+            $('#item-container').append(itemElement);
+          });
+        },
+        error: function(xhr, status, error) {
+          console.error('Error:', error);
+        }
+      });
     });
-  });
+  })
   </script>
 </div>
