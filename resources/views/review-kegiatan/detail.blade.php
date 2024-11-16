@@ -123,21 +123,23 @@ $(document).ready(function() {
             data: 'status',
             render: function(data, type, row) {
               let buttons =
-                `<button class="bg-gray-700 text-white px-2 py-1 rounded mr-1">Detail</button>`;
+                `<button id="detail-${row.id}" class="bg-gray-700 text-white px-2 py-1 rounded mr-1">Detail</button>`;
               if (data === 'Bertugas') {
                 buttons += `
-                                <button class="bg-green-500 text-white px-2 py-1 rounded mr-1">Disetujui</button>
-                                <button class="bg-red-500 text-white px-2 py-1 rounded">Ditolak</button>
-                            `;
+                <button id="approve-${row.id}" class="bg-green-500 text-white px-2 py-1 rounded mr-1">Disetujui</button>
+                <button id="reject-${row.id}" class="bg-red-500 text-white px-2 py-1 rounded">Ditolak</button>
+            `;
               } else if (data === 'Disetujui') {
-                buttons += `<button class="bg-red-500 text-white px-2 py-1 rounded">Ditolak</button>`;
+                buttons +=
+                  `<button id="reject-${row.id}" class="bg-red-500 text-white px-2 py-1 rounded">Ditolak</button>`;
               } else if (data === 'Ditolak') {
                 buttons +=
-                  `<button class="bg-green-500 text-white px-2 py-1 rounded">Disetujui</button>`;
+                  `<button id="approve-${row.id}" class="bg-green-500 text-white px-2 py-1 rounded">Disetujui</button>`;
               }
               return buttons;
             }
           }
+
         ]
       });
     },
@@ -145,6 +147,51 @@ $(document).ready(function() {
       console.error('Error:', error);
     }
   });
+
+  $(document).on('click', '[id^="approve-"], [id^="reject-"], [id^="detail-"]', function() {
+    // Ambil ID tombol
+    const buttonId = $(this).attr('id');
+
+    // Ekstrak id_penugasan dan tindakan dari ID tombol
+    const [action, id_penugasan] = buttonId.split('-');
+
+    // Debugging
+    console.log('Action:', action, 'ID Penugasan:', id_penugasan);
+
+    // Tentukan URL dan method berdasarkan action
+    let url = `/api/review_kegiatan/${id_penugasan}`;
+    let status = '';
+    if (action === 'approve') {
+      status = 'Disetujui';
+    } else if (action === 'reject') {
+      status = 'Ditolak';
+    } else if (action === 'detail') {
+      alert(`Detail clicked for ID: ${id_penugasan}`);
+      return;
+    }
+
+    // AJAX Request
+    $.ajax({
+      url: url,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      data: JSON.stringify({
+        status: status
+      }),
+      success: function(response) {
+        alert(`Status updated to ${status} for ID: ${id_penugasan}`);
+        $('#pegawaiTable').DataTable().ajax.reload(); // Reload table
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+        alert(`Failed to update status for ID: ${id_penugasan}`);
+      }
+    });
+  });
+
 });
 </script>
 @endsection
