@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\DetailItemController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ReviewKegiatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +48,5 @@ Route::delete('/penugasan/{id}', [PenugasanController::class, 'destroy']);
 Route::get('/items', [ItemController::class, 'index']);
 
 Route::get('/detail_items', [DetailItemController::class, 'index']);
+
+Route::patch('/review_kegiatan/{id}', [ReviewKegiatanController::class, 'update']);
