@@ -16,7 +16,8 @@ class LaporanBidangController extends Controller
     public function show(Request $request){
         $tahun = $request->query('tahun');
         $bulan = $request->query('bulan');
-        $results = $this->laporanBidangServices->doShow($tahun, $bulan);
+        $userId = $request->query('id_user');
+        $results = $this->laporanBidangServices->doShow($tahun, $bulan, $userId);
         return $results;
     }
 }
