@@ -122,8 +122,11 @@ $(document).ready(function() {
           {
             data: 'status',
             render: function(data, type, row) {
-              let buttons =
-                `<button id="detail-${row.id}" class="bg-gray-700 text-white px-2 py-1 rounded mr-1">Detail</button>`;
+              let buttons = "";
+              if (data !== 'Ditugaskan') {
+                buttons +=
+                  `<button id="detail-${row.id}" class="bg-gray-700 text-white px-2 py-1 rounded mr-1">Detail</button>`;
+              }
               if (data === 'Bertugas') {
                 buttons += `
                 <button id="approve-${row.id}" class="bg-green-500 text-white px-2 py-1 rounded mr-1">Disetujui</button>
@@ -166,7 +169,8 @@ $(document).ready(function() {
     } else if (action === 'reject') {
       status = 'Ditolak';
     } else if (action === 'detail') {
-      alert(`Detail clicked for ID: ${id_penugasan}`);
+      window.location.href = `/review-kegiatan/detail/${id}/${id_penugasan}`
+
       return;
     }
 
@@ -182,12 +186,10 @@ $(document).ready(function() {
         status: status
       }),
       success: function(response) {
-        alert(`Status updated to ${status} for ID: ${id_penugasan}`);
-        $('#pegawaiTable').DataTable().ajax.reload(); // Reload table
+        window.location.reload();
       },
       error: function(xhr, status, error) {
         console.error('Error:', error);
-        alert(`Failed to update status for ID: ${id_penugasan}`);
       }
     });
   });

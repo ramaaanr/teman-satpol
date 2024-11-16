@@ -14,7 +14,8 @@ class CheckItem extends Component
     public function __construct(
         public string $id,
         public string $checked,
-        public string $deskripsi
+        public string $deskripsi,
+        public bool $disabled = false // Tambahkan parameter disabled
     ) {
         //
     }

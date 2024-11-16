@@ -6,10 +6,12 @@
   <script>
   $(document).ready(function() {
     const url = window.location.href;
+    const parts = url.split("/");
     const id = url.split("/").pop();
     const userData = localStorage.getItem('user');
     const user = userData ? JSON.parse(userData) : null;
     const token = user ? user.token : null;
+    const isReviewKegiatan = parts[3] === 'review-kegiatan';
     let itemPenugasan = [];
 
     $.ajax({
@@ -52,15 +54,24 @@
               }
             }) => {
               if (id === id_item) {
-                checked = true; // Set checked menjadi true jika cocok
+                checked =
+                  true; // Set checked menjadi true jika cocok
                 return true; // Hentikan iterasi lebih lanjut
               }
             });
             let itemElement =
-              `<x-check-item id="${id}" deskripsi="${deskripsi}" checked="" />`;
+              `<x-check-item  id="${id}" deskripsi="${deskripsi}" checked="" />`;
             if (checked) {
               itemElement =
-                `<x-check-item id="${id}" deskripsi="${deskripsi}" checked="checked" />`;
+                `<x-check-item  id="${id}" deskripsi="${deskripsi}" checked="checked" />`;
+            }
+            if (checked && isReviewKegiatan) {
+              itemElement =
+                `<x-check-item disabled="true"  id="${id}" deskripsi="${deskripsi}" checked="checked" />`;
+            }
+            if (!checked && isReviewKegiatan) {
+              itemElement =
+                `<x-check-item disabled="true"  id="${id}" deskripsi="${deskripsi}" checked="" />`;
             }
             // // Buat elemen HTML dengan atribut checked sesuai kondisi
 

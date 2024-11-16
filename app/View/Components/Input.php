@@ -16,6 +16,7 @@ class Input extends Component
         public string $label,
         public string $value,
         public string $type,
+        public ?bool $disabled = false,  // Tambahkan parameter disabled
     ) {}
 
     /**
