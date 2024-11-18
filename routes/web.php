@@ -58,6 +58,14 @@ Route::middleware('auth')->group(function () {
         return view('laporan-bidang.detail');
     })->name('detail-laporan-bidang');
 
+    Route::get('/laporan-kepegawaian', function () {
+        return view('laporan-kepegawaian.index');
+    })->name('laporan-kepegawaian');
+
+    Route::get('/laporan-kepegawaian/{id}', function () {
+        return view('laporan-kepegawaian.detail');
+    })->name('detail-laporan-kepegawaian');
+
     Route::get('/review-kegiatan/detail/{id}', function () {
         return view('review-kegiatan.detail');
     })->name('detail-review-kegiatan');
