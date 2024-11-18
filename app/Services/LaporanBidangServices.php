@@ -58,30 +58,59 @@ class LaporanBidangServices
                 'data' => new LaporanBidangResource($dataByYearAndMonths),
             ]);
         } elseif ($userId) {
+            $userData = User::with([
+                'penugasans' => function ($query) use ($filterPenugasan) {
+                    $query->with(['detailItems' => function ($q) {
+                        $q->select('id_item', 'id_penugasan');
+                    }]);
+                    $query->whereHas('detailItems');
+                },
+            ])->find($userId);
+
+            // Query untuk mendapatkan durasi berdasarkan user dan item
             $durasiByUser = Penugasan::query()
-                ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan') // Join ke detail_items
-                ->join('users', 'penugasans.id_user', '=', 'users.id') // Join ke users
+                ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan')
+                ->join('users', 'penugasans.id_user', '=', 'users.id')
+                ->join('items', 'detail_items.id_item', '=', 'items.id') // Pastikan join ke items
                 ->select(
-                    'penugasans.id_user as userId', // Alias userId
-                    'detail_items.id_item', // Ambil id_item
-                    'users.nama as nama', // Nama user
-                    DB::raw('SUM(TIME_TO_SEC(penugasans.durasi)) as total_durasi') // Total durasi dalam detik
+                    'penugasans.id_user as userId',
+                    'detail_items.id_item',
+                    'users.nama',
+                    'users.jabatan', // Pastikan jabatan diambil dengan benar
+                    'users.role', // Pastikan role diambil dengan benar
+                    'items.deskripsi', // Pastikan deskripsi diambil dari items
+                    DB::raw('SUM(TIME_TO_SEC(penugasans.durasi)) as total_durasi')
                 )
                 ->when($userId, function ($query) use ($userId) {
-                    $query->where('penugasans.id_user', $userId); // Tambahkan filter userId
+                    $query->where('penugasans.id_user', $userId); // Filter berdasarkan userId
                 })
-                ->groupBy('userId', 'detail_items.id_item', 'users.nama'); // Grouping data
+                ->groupBy('penugasans.id_user', 'detail_items.id_item', 'users.nama', 'users.jabatan', 'users.role', 'items.deskripsi')
+                ->get(); // Pastikan Anda memanggil get() untuk mendapatkan hasil query
+
+            $riwayatGiat = Penugasan::with(['giat'])
+                ->where('id_user', $userId)
+                ->where('status', 'disetujui')
+                ->get()
+                ->map(function ($penugasan) {
+                    return [
+                        'id_giat' => $penugasan->giat->id,
+                        'kegiatan' => $penugasan->giat->kegiatan,
+                        'tanggal' => $penugasan->created_at->format('d F Y, H:i').' WITA',
+                        'durasi' => gmdate("H:i", strtotime($penugasan->durasi)),
+                    ];
+                });
 
             $dataByUserId = [
                 'statistik_item' => $statistikItem,
-                'durasi_by_user' => $durasiByUser->get(),
+                'durasi_by_user' => $durasiByUser,
+                'riwayat_giat' => $riwayatGiat,
             ];
 
-            return ([
+            return [
                 'status' => true,
                 'message' => "Data Berhasil Ditampilkan!",
                 'data' => new LaporanBidangByIdUserResource($dataByUserId),
-            ]);
+            ];
         } elseif ($itemId) {
             $durasiByItem = Penugasan::query()
                 ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan') // Relasi ke detail_items

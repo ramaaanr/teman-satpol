@@ -7,10 +7,11 @@ use App\Http\Controllers\GiatController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\DetailItemController;
-use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\LaporanBidangController;
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ReviewKegiatanController;
 
 /*
@@ -53,3 +54,5 @@ Route::get('/detail_items', [DetailItemController::class, 'index']);
 Route::patch('/review_kegiatan/{id}', [ReviewKegiatanController::class, 'update']);
 
 Route::get('laporan_bidang', [LaporanBidangController::class, 'show']);
+
+Route::get('dashboard-staff/{id}', [DashboardController::class, 'showByIdUser']);
