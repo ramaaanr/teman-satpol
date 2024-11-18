@@ -15,6 +15,7 @@ class PenugasanServices
 {
     public function getAll($idGiat = null, $idUser = null)
     {
+        $currentDateTime = now()->setTimezone('Asia/Makassar');
         $query = Penugasan::with(['giats' => function ($query) {
             $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
                 $q->where('status', 'ditugaskan');
@@ -26,10 +27,14 @@ class PenugasanServices
             $query->where('id_giat', $idGiat);
         }
         if ($idUser) {
-            $query->where('id_user', $idUser);
+            $query->where('id_user', $idUser)
+                ->whereHas('giats', function ($query) use ($currentDateTime) {
+                    $query->where('akses_mulai', '<=', $currentDateTime)
+                        ->where('akses_selesai', '>=', $currentDateTime);
+                });
         }
-
         $penugasan = $query->get();
+
         if ($penugasan->isNotEmpty()) {
             return ([
                 'status' => true,
@@ -46,11 +51,18 @@ class PenugasanServices
     public function doShow($id)
     {
         try {
+            // Mendapatkan waktu saat ini di zona waktu Asia/Makassar (WITA)
+            $currentDateTime = now()->setTimezone('Asia/Makassar');
+
+            // Ambil penugasan berdasarkan ID
             $penugasan = Penugasan::with([
-                'giats' => function ($query) {
+                'giats' => function ($query) use ($currentDateTime) {
                     $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
                         $q->where('status', 'ditugaskan');
-                    }]);
+                    }])
+                        // Tambahkan pengecekan berdasarkan akses_mulai dan akses_selesai
+                        ->where('akses_mulai', '<=', $currentDateTime)
+                        ->where('akses_selesai', '>=', $currentDateTime);
                 }
             ])->findOrFail($id);
             if ($penugasan) {
@@ -100,7 +112,7 @@ class PenugasanServices
             'id_giat' => $id,
             'id_user' => $userId,
             'status' => 'Ditugaskan',
-            'created_at' => now(),
+            'created_at' =>  now()->setTimezone('Asia/Makassar')
         ];
         $penugasan = Penugasan::create($dataPenugasan);
         if ($penugasan) {
