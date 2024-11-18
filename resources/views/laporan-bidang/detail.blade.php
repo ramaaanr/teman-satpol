@@ -31,20 +31,18 @@
 
   <div class="flex flex-col w-1/3">
     <div
-      class="flex items-center w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-      <div class="flex p-2 bg-zinc-700 rounded-full w-fit h-fit mr-2">
-        <span class="material-symbols-outlined text-white " style="font-size: 36px;">
+      class="flex items-start w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="flex p-1 bg-zinc-700 rounded-full w-fit h-fit mr-2">
+        <span class="material-symbols-outlined text-white " style="font-size: 16px;">
           gavel
         </span>
       </div>
       <div class="">
         <p class="font-normal dark:text-gray-400 text-zinc-400">Deskripsi</p>
-        <h5 id="deskripsi" class="mb-2 text-5xl font-bold tracking-tight text-zinc-700 dark:text-white"></h5>
-        <p class="font-normal text-xs dark:text-gray-400 text-zinc-400 ml-2">Item Penugasan</p>
+        <h5 id="deskripsi" class="mb-2 text-lg font-bold tracking-tight text-zinc-700 dark:text-white"></h5>
       </div>
     </div>
-
-    <div class="w-full mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow">
+    <div class="w-full mt-2 p-4 bg-white border  border-gray-200 rounded-lg shadow">
       <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
         <span class="material-symbols-outlined text-white mr-2">
           pie_chart
@@ -71,7 +69,7 @@ $(document).ready(function() {
   // Fungsi untuk mengambil deskripsi
   const fetchDescription = () => {
     $.ajax({
-      url: `/samples/laporan_bidang.json?id_item=${id}`, // Endpoint untuk mendapatkan deskripsi
+      url: `/api/laporan_bidang?id_item=${id}`, // Endpoint untuk mendapatkan deskripsi
       method: 'GET',
       headers: {
         "Authorization": `Bearer ${token}`,
