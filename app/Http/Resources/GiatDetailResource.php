@@ -32,6 +32,8 @@ class GiatDetailResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'jumlah_ditugaskan' => $this->jumlah_ditugaskan,
             'jumlah_selesai' => $this->jumlah_selesai,
+            'jumlah_bertugas' => $this->jumlah_bertugas,
+            'jumlah_ditolak' => $this->jumlah_ditolak,
             'penugasans' => $this->penugasans->map(function ($penugasan) {
                 return [
                     'id' => $penugasan->id,

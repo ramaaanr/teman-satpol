@@ -20,6 +20,12 @@ class GiatServices
             // Menghitung jumlah penugasan dengan status "selesai"
             'penugasans as jumlah_selesai' => function ($query) {
                 $query->where('status', 'selesai');
+            },
+            'penugasans as jumlah_bertugas' => function ($query) {
+                $query->where('status', 'bertugas');
+            },
+            'penugasans as jumlah_ditolak' => function ($query) {
+                $query->where('status', 'ditolak');
             }
         ])->get();
         return ([
@@ -40,6 +46,12 @@ class GiatServices
                 // Menghitung jumlah penugasan dengan status "selesai"
                 'penugasans as jumlah_selesai' => function ($query) {
                     $query->where('status', 'selesai');
+                },
+                'penugasans as jumlah_bertugas' => function ($query) {
+                    $query->where('status', 'bertugas');
+                },
+                'penugasans as jumlah_ditolak' => function ($query) {
+                    $query->where('status', 'ditolak');
                 }
             ])->findOrFail($id);
         if ($giat) {
