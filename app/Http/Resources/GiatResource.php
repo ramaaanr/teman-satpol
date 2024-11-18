@@ -21,11 +21,13 @@ class GiatResource extends JsonResource
             'tempat' => $this->tempat,
             'kendaraan' => $this->kendaraan,
             'beban_biaya' => $this->beban_biaya,
-            'tanggal_mulai' => $this->tanggal_mulai ? \Carbon\Carbon::parse($this->tanggal_mulai)->format("d-m-Y H:i:s") : null,
-            'tanggal_selesai' => $this->tanggal_selesai ? \Carbon\Carbon::parse($this->tanggal_selesai)->format("d-m-Y H:i:s") : null,
-            'akses_mulai' => $this->akses_mulai ? \Carbon\Carbon::parse($this->akses_mulai)->format("d-m-Y H:i:s") : null,
-            'akses_selesai' => $this->akses_selesai ? \Carbon\Carbon::parse($this->akses_selesai)->format("d-m-Y H:i:s") : null,
-            'created_at' => $this->created_at
+            'tanggal_mulai' => $this->tanggal_mulai ? \Carbon\Carbon::parse($this->tanggal_mulai)->locale('id')->translatedFormat('d F Y H:i') . ' WITA' : null,
+            'tanggal_selesai' => $this->tanggal_selesai ? \Carbon\Carbon::parse($this->tanggal_selesai)->locale('id')->translatedFormat('d F Y H:i') . ' WITA' : null,
+            'akses_mulai' => $this->akses_mulai ? \Carbon\Carbon::parse($this->akses_mulai)->locale('id')->translatedFormat('d F Y H:i') . ' WITA' : null,
+            'akses_selesai' => $this->akses_selesai ? \Carbon\Carbon::parse($this->akses_selesai)->locale('id')->translatedFormat('d F Y H:i') . ' WITA' : null,
+            'deleted_at' => $this->deleted_at,
+            'jumlah_ditugaskan' => $this->jumlah_ditugaskan,
+            'jumlah_selesai' => $this->jumlah_selesai
         ];
     }
 }

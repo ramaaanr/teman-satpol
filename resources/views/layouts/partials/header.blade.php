@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </a>
 
       <a class="flex items-center px-6 py-2 mt-4 text-lime-50 font-semibold hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
-        href="/giat/show">
+        href="/data-giat">
         <span class="material-symbols-outlined">
           event
         </span>
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </a>
 
       <a class="flex items-center px-6 py-2 mt-4 text-lime-50 font-semibold hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
-        href="/giat/add">
+        href="/tambah-giat">
         <span class="material-symbols-outlined">
           add_circle
         </span>
@@ -79,11 +79,18 @@ document.addEventListener("DOMContentLoaded", function() {
       </a>
 
       <a class="flex items-center px-6 py-2 mt-4 text-lime-50 font-semibold hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
-        href="/laporan-kegiatan">
+        href="/laporan-kepegawaian">
         <span class="material-symbols-outlined">
           insert_chart
         </span>
-        <span class="mx-3">Laporan Kegiatan</span>
+        <span class="mx-3">Laporan Kepegawaian</span>
+      </a><a
+        class="flex items-center px-6 py-2 mt-4 text-lime-50 font-semibold hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+        href="/kegiatan">
+        <span class="material-symbols-outlined">
+          gavel
+        </span>
+        <span class="mx-3">Kegiatan</span>
       </a>
     </nav>
 
