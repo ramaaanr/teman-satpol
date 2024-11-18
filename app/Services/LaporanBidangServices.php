@@ -2,19 +2,20 @@
 
 namespace App\Services;
 
-use App\Http\Resources\LaporanBidangByIdUserResource;
 use App\Models\Giat;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Penugasan;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\LaporanBidangResource;
+use App\Http\Resources\LaporanBidangByIdItemResource;
+use App\Http\Resources\LaporanBidangByIdUserResource;
 
 class LaporanBidangServices
 {
-    public function doShow($tahun = null, $bulan = null, $userId = null)
+    public function doShow($tahun = null, $bulan = null, $userId = null, $itemId = null)
     {
-        $filterPenugasan = function ($query) use ($tahun, $bulan, $userId) {
+        $filterPenugasan = function ($query) use ($tahun, $bulan, $userId, $itemId) {
             if ($tahun) {
                 $query->whereYear('created_at', $tahun);
             }
@@ -23,6 +24,11 @@ class LaporanBidangServices
             }
             if ($userId) {
                 $query->where('id_user', $userId);
+            }
+            if ($itemId) {
+                $query->whereHas('detailItems', function ($q) use ($itemId) {
+                    $q->where('detail_items.id_item', $itemId); // Filter berdasarkan kolom di `detail_items`
+                });
             }
         };
 
@@ -39,7 +45,7 @@ class LaporanBidangServices
 
             // Hitung total kegiatan (penugasan) berdasarkan tahun dan bulan
             $totalKegiatan = Penugasan::where($filterPenugasan)->count();
-            
+
             $dataByYearAndMonths = [
                 'total_users' => $totalUsers,
                 'total_giat' => $totalGiat,
@@ -76,6 +82,38 @@ class LaporanBidangServices
                 'message' => "Data Berhasil Ditampilkan!",
                 'data' => new LaporanBidangByIdUserResource($dataByUserId),
             ]);
+        } elseif ($itemId) {
+            $durasiByItem = Penugasan::query()
+                ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan') // Relasi ke detail_items
+                ->join('users', 'penugasans.id_user', '=', 'users.id') // Relasi ke users
+                ->select(
+                    'detail_items.id_item as itemId',
+                    'users.id as userId',
+                    'users.nama as nama',
+                    DB::raw('SUM(TIME_TO_SEC(penugasans.durasi)) as total_durasi')
+                )
+                ->where('detail_items.id_item', $itemId) // Filter pada tabel detail_items
+                ->when($tahun, function ($query) use ($tahun) {
+                    $query->whereYear('penugasans.created_at', $tahun);
+                })
+                ->when($bulan, function ($query) use ($bulan) {
+                    $query->whereMonth('penugasans.created_at', $bulan);
+                })
+                ->when($userId, function ($query) use ($userId) {
+                    $query->where('penugasans.id_user', $userId);
+                })
+                ->groupBy('detail_items.id_item', 'users.id', 'users.nama');
+
+            $dataByItemId = [
+                'id_item' => $itemId,
+                'deskripsi' => Item::find($itemId)->deskripsi ?? 'Tidak Ditemukan',
+                'total_durasi_pengguna' => $durasiByItem->get(),
+            ];
+            return [
+                'status' => true,
+                'message' => "Data Berhasil Ditampilkan!",
+                'data' => new LaporanBidangByIdItemResource($dataByItemId),
+            ];
         }
     }
 }
