@@ -179,6 +179,7 @@ $(document).ready(function() {
         const allZeros = totalDurasi.every(value => value === 0);
         $('#table-body-item').html('')
         statistik_item.forEach(({
+          id,
           deskripsi,
           total_durasi
         }) => {
@@ -186,7 +187,7 @@ $(document).ready(function() {
           const tableRow = `
             <tr class="hover:bg-gray-50 border-b dark:border-gray-700">
           <td class="px-6 py-4 hover:underline">
-            <a href="">${deskripsi}</a>
+            <a href="laporan-bidang/${id}">${deskripsi}</a>
           </td>
           <td class="px-6 py-4">
           ${Math.round(total_durasi)}

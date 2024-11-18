@@ -54,6 +54,10 @@ Route::middleware('auth')->group(function () {
         return view('laporan-bidang.index');
     })->name('laporan-bidang');
 
+    Route::get('/laporan-bidang/{id}', function () {
+        return view('laporan-bidang.detail');
+    })->name('detail-laporan-bidang');
+
     Route::get('/review-kegiatan/detail/{id}', function () {
         return view('review-kegiatan.detail');
     })->name('detail-review-kegiatan');
