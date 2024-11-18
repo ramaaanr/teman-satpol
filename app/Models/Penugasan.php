@@ -20,14 +20,16 @@ class Penugasan extends Model
         'id_user'
     ];
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
-    public function giat(): BelongsTo {
+    public function giats(): BelongsTo
+    {
         return $this->belongsTo(Giat::class, 'id_giat', 'id');
     }
     public function detailItems()
-{
-    return $this->hasMany(DetailItem::class, 'id_penugasan', 'id');
-}
+    {
+        return $this->hasMany(DetailItem::class, 'id_penugasan', 'id');
+    }
 }
