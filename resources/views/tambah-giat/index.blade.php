@@ -10,7 +10,7 @@ $(document).ready(function() {
     event.preventDefault(); // Mencegah form dari pengiriman langsung
 
     // Mengambil semua nilai dari input dengan name dalam bentuk array
-    let formDataArray = $(this).serializeAarray();
+    let formDataArray = $("#form-giat").serializeArray();
 
     // Konversi array menjadi objek untuk payload
     let payload = {};
@@ -56,8 +56,9 @@ $(document).ready(function() {
           title: 'Berhasil!',
           text: 'Data giat berhasil diajukan.',
           confirmButtonText: 'OK'
+        }).then(() => {
+          window.location.href = '/data-giat'
         });
-        console.log("Response:", response); // Tampilkan response dari server di console
       },
       error: function(error) {
         Swal.fire({
@@ -66,7 +67,6 @@ $(document).ready(function() {
           text: 'Terjadi kesalahan saat mengajukan data giat.',
           confirmButtonText: 'Coba Lagi'
         });
-        console.error("Error:", error); // Tampilkan error jika ada
       }
     });
   });
