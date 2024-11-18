@@ -24,7 +24,7 @@ class LaporanBidangByIdUserResource extends JsonResource
                     'deskripsi' => $item->deskripsi,
                     'total_durasi_pengguna' => $durasiByUser->where('id_item', $item->id)->map(function ($durasi) {
                         return [
-                            'userId' => $durasi->userId, // Gunakan userId
+                            'id_user' => $durasi->userId, // Gunakan userId
                             'nama' => $durasi->nama,
                             'total_durasi' => round($durasi->total_durasi / 3600, 2), // Konversi ke jam
                         ];

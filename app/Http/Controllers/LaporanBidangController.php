@@ -17,7 +17,8 @@ class LaporanBidangController extends Controller
         $tahun = $request->query('tahun');
         $bulan = $request->query('bulan');
         $userId = $request->query('id_user');
-        $results = $this->laporanBidangServices->doShow($tahun, $bulan, $userId);
+        $itemId = $request->query('id_item');
+        $results = $this->laporanBidangServices->doShow($tahun, $bulan, $userId, $itemId);
         return $results;
     }
 }
