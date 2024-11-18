@@ -1,0 +1,28 @@
+{
+  "status": "true",
+  "message": "Data Berhasil Diambil",
+  "data": {
+    "user_id": 1,
+    "nama": "Burhanudin",
+    "jabatan": "Direktur",
+    "role": "super-admin",
+    "penugasan": {
+      "ditugaskan": 1,
+      "bertugas": 12,
+      "disetujui": 9,
+      "ditolak": 11
+    },
+    "durasi_item": [
+      {
+        "id_item": 1,
+        "deskripsi": "Menjadi saksi dalam proses penyidikan",
+        "total_durasi": 30.5
+      },
+      {
+        "id_item": 2,
+        "deskripsi": "Menjadi Super BBG",
+        "total_durasi": 12
+      }
+    ]
+  }
+}
