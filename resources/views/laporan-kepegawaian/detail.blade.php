@@ -1,183 +1,274 @@
 <!-- resources/views/home.blade.php -->
 @extends('layouts.user-app')
 
-@section('title', 'Laporan Bidang')
+@section('title', 'Laporan Kepegawaian')
 
 @section('content')
 
-<div class="w-full min-h-[550px] bg-white text-zinc-700 rounded-md p-6 flex items-start space-x-4">
-  <div
-    class="p-4 w-2/3 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-    <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-      <span class="material-symbols-outlined text-white mr-2">
-        event
-      </span>
-      <p>
-        Data Kepegawaian berdasarkan pengguna perjam
-      </p>
-    </div>
-    <table id="totalDurasiTable" class="table-auto w-full text-left text-sm">
-      <thead>
-        <tr class="bg-gray-100 text-gray-700">
-          <th class="px-4 py-2 w-3/4">Nama</th>
-          <th class="px-4 py-2 w-1/4">Total Durasi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Data akan dimuat melalui AJAX -->
-      </tbody>
-    </table>
-  </div>
-
-  <div class="flex flex-col w-1/3">
+<div class="w-full min-h-[550px]  text-zinc-700 rounded-md p-6 flex flex-col items-start bg-white">
+  <div class="flex w-full  space-x-3">
     <div
-      class="flex items-start w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-      <div class="flex p-1 bg-zinc-700 rounded-full w-fit h-fit mr-2">
-        <span class="material-symbols-outlined text-white " style="font-size: 16px;">
-          gavel
+      class="flex flex-col w-full items-start justify-center max-w-sm p-4 bg-zinc-700 text-white text-2xl font-bold border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="flex items-center space-x-1">
+        <span class="material-symbols-outlined text-white ">
+          person_celebrate
+        </span>
+        <p id="greetings"></p>
+      </div>
+      <p class="text-gray-500 dark:text-gray-400 text-sm"> <a href="/kegiatan"
+          class="inline-flex items-center font-medium text-yellow-200 dark:text-blue-500 hover:underline">
+          Isi Kegiatan Anda
+          <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M1 5h12m0 0L9 1m4 4L9 9" />
+          </svg>
+        </a></p>
+    </div>
+
+    <div
+      class="flex w-full min-h-[125px] items-center max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="flex p-2 bg-zinc-700 rounded-full w-fit h-fit mr-2">
+        <span class="material-symbols-outlined text-white " style="font-size: 36px;">
+          person
         </span>
       </div>
       <div class="">
-        <p class="font-normal dark:text-gray-400 text-zinc-400">Deskripsi</p>
-        <h5 id="deskripsi" class="mb-2 text-lg font-bold tracking-tight text-zinc-700 dark:text-white"></h5>
+        <p class="font-normal text-xs dark:text-gray-400 text-zinc-400">Nama</p>
+        <h5 id="nama" class="mb-2 text-md font-bold tracking-tight leading-none text-zinc-700 dark:text-white">
+        </h5>
       </div>
     </div>
-    <div class="w-full mt-2 p-4 bg-white border  border-gray-200 rounded-lg shadow">
-      <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-        <span class="material-symbols-outlined text-white mr-2">
-          pie_chart
+
+
+    <div
+      class="flex w-full min-h-[125px] items-center max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="flex p-2 bg-zinc-700 rounded-full w-fit h-fit mr-2">
+        <span class="material-symbols-outlined text-white " style="font-size: 36px;">
+          badge
         </span>
-        <p>
-          Statistik Durasi Pengguna
-        </p>
       </div>
-      <canvas id="durasiChart" width="400" height="200"></canvas>
+      <div class="">
+        <p class="font-normal text-xs dark:text-gray-400 text-zinc-400">Jabatan</p>
+        <h5 id="jabatan" class="mb-2 text-md font-bold tracking-tight leading-none text-zinc-700 dark:text-white">
+        </h5>
+      </div>
+    </div>
+
+
+    <div
+      class="flex w-full min-h-[125px] items-center max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="flex p-2 bg-zinc-700 rounded-full w-fit h-fit mr-2">
+        <span class="material-symbols-outlined text-white " style="font-size: 36px;">
+          key
+        </span>
+      </div>
+      <div class="">
+        <p class="font-normal text-xs dark:text-gray-400 text-zinc-400">Role</p>
+        <h5 id="role" class="mb-2 text-md font-bold tracking-tight leading-none text-zinc-700 dark:text-white">
+        </h5>
+      </div>
     </div>
   </div>
 
+  <div class="flex w-full mt-4  space-x-3">
+
+    <div
+      class="w-full h-full    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+        <span class="material-symbols-outlined text-white mr-2">
+          event
+        </span>
+        <p>
+          Data Item
+          Perjam
+        </p>
+      </div>
+      <div class="table-container  w-full px-8">
+        <table id="durasiTable">
+          <thead>
+            <tr>
+              <th>Deskripsi</th>
+              <th>Total Durasi (jam)</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="flex flex-col space-y-2">
+      <div
+        class="w-full h-full    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+          <span class="material-symbols-outlined text-white mr-2">
+            gavel
+          </span>
+          <p>
+            Jumlah Kegiatan
+          </p>
+        </div>
+        <div class="jumlah-kegiatan-container grid grid-cols-2 space-y-2  w-full ">
+          <div class="flex items-center">
+            <p class="w-20">Ditugaskan</p>
+            <p class="ml-2 rounded-md py-0.5 px-2 text-white bg-yellow-200" id="ditugaskan"></p>
+          </div>
+          <div class="flex items-center">
+            <p class="w-20">Bertugas</p>
+            <p class="ml-2 rounded-md py-0.5 px-2 text-white bg-blue-200" id="bertugas"></p>
+          </div>
+          <div class="flex items-center">
+            <p class="w-20">Disetujui</p>
+            <p class="ml-2 rounded-md py-0.5 px-2 text-white bg-green-200" id="disetujui"></p>
+          </div>
+          <div class="flex items-center">
+            <p class="w-20">Ditolak</p>
+            <p class="ml-2 rounded-md py-0.5 px-2 text-white bg-red-200" id="ditolak"></p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-full h-full  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+          <span class="material-symbols-outlined text-white mr-2">
+            pie_chart
+          </span>
+          <p>
+            Visualisasi Item
+            Perjam
+          </p>
+        </div>
+        <div class="chart-container  w-full px-8">
+          <canvas class="" id="myPieChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </div>
+
 <script type="module">
 $(document).ready(function() {
-  const url = window.location.href;
-  const id = url.split("/").pop();
   const userData = localStorage.getItem('user');
 
   const user = userData ? JSON.parse(userData) : null;
   const token = user ? user.token : null;
+  const url = window.location.href;
 
-  // Fungsi untuk mengambil deskripsi
-  const fetchDescription = () => {
-    $.ajax({
-      url: `/api/laporan_bidang?id_item=${id}`, // Endpoint untuk mendapatkan deskripsi
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      success: ({
-        data: {
-          deskripsi,
-          total_durasi_pengguna,
+  const id = url.split("/").pop();
+
+  $.ajax({
+    url: `/api/laporan_bidang?id_user=${id}`,
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    success: function({
+      data: {
+        jabatan,
+        nama,
+        riwayat_giat,
+        role,
+        data_item
+      }
+    }) {
+
+      const getGreeting = () => {
+        const now = new Date();
+        const hour = now.getHours(); // Mendapatkan jam saat ini
+
+        if (hour >= 5 && hour < 12) {
+          return "Selamat Pagi!";
+        } else if (hour >= 12 && hour < 15) {
+          return "Selamat Siang!";
+        } else if (hour >= 15 && hour < 18) {
+          return "Selamat Sore!";
+        } else {
+          return "Selamat Malam!";
         }
-      }) => {
-        // Memasukkan deskripsi ke dalam elemen dengan id "deskripsi"
-        $('#deskripsi').text(deskripsi);
+      };
 
-        const table = $('#totalDurasiTable').DataTable({
-          processing: true,
-          serverSide: false,
-          data: total_durasi_pengguna,
-          columns: [{
-              data: 'nama',
-              title: 'Nama',
-              className: 'px-4 py-2 w-3/4'
-            },
-            {
-              data: 'total_durasi',
-              title: 'Total Durasi (menit)',
-              className: 'px-4 py-2 w-1/4',
-              render: function(data) {
-                return `${data} Jam`; // Format durasi
-              }
-            }
-          ],
-        });
-        const sortedData = total_durasi_pengguna
-          .sort((a, b) => b.total_durasi - a.total_durasi); // Urutkan data berdasarkan total_durasi
-        const top10 = sortedData.slice(0, 10); // Ambil top 10
-        const otherTotal = sortedData.slice(10)
-          .reduce((sum, item) => sum + item.total_durasi, 0); // Jumlahkan sisanya
+      // Menentukan sapaan berdasarkan jam sekarang
+      const greetings = getGreeting();
+      $('#greetings').text(greetings);
+      $('#nama').text(nama);
+      $('#jabatan').text(jabatan);
+      $('#role').text(role);
 
-        const labels = top10.map(item => item.nama).concat('Lainnya');
-        const data = top10.map(item => item.total_durasi).concat(otherTotal);
-
-        // Inisialisasi Chart
-        const ctx = document.getElementById('durasiChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'pie', // Ubah ke pie chart
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Total Durasi (menit)',
-              data: data,
-              backgroundColor: [
-                'rgba(0, 0, 128, 0.8)', // Top 1 - Biru tua
-                'rgba(32, 32, 144, 0.8)',
-                'rgba(64, 64, 160, 0.8)',
-                'rgba(96, 96, 176, 0.8)',
-                'rgba(128, 128, 192, 0.8)',
-                'rgba(144, 144, 192, 0.8)',
-                'rgba(160, 160, 192, 0.8)',
-                'rgba(176, 176, 208, 0.8)',
-                'rgba(192, 192, 224, 0.8)',
-                'rgba(208, 208, 240, 0.8)', // Top 10 - Paling abu-abu biru
-                'rgba(255, 99, 132, 0.5)'
-              ],
-              borderColor: [
-                'rgba(0, 0, 128, 1)',
-                'rgba(32, 32, 144, 1)',
-                'rgba(64, 64, 160, 1)',
-                'rgba(96, 96, 176, 1)',
-                'rgba(128, 128, 192, 1)',
-                'rgba(144, 144, 192, 1)',
-                'rgba(160, 160, 192, 1)',
-                'rgba(176, 176, 208, 1)',
-                'rgba(192, 192, 224, 1)',
-                'rgba(208, 208, 240, 1)',
-                'rgba(255, 99, 132, 1)'
-              ],
-              borderWidth: 1
-            }]
+      $('#durasiTable').DataTable({
+        data: durasi_item,
+        columns: [{
+            data: 'deskripsi',
+            title: 'Deskripsi'
           },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top', // Menampilkan legend di atas chart
-              },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return `${context.label}: ${context.raw} Jam`;
-                  }
-                }
-              }
+          {
+            data: 'total_durasi',
+            title: 'Total Durasi (jam)'
+          }
+        ],
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        language: {
+          search: "Cari:",
+          lengthMenu: "Tampilkan _MENU_ data per halaman",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+          paginate: {
+            first: "Pertama",
+            last: "Terakhir",
+            next: "Berikutnya",
+            previous: "Sebelumnya"
+          }
+        }
+      });
+
+      const labels = durasi_item.map(item => item.deskripsi);
+      const data = durasi_item.map(item => item.total_durasi);
+      const canvas = document.getElementById("myPieChart");
+      const ctx = canvas.getContext("2d");
+      // Fungsi untuk membuat warna dinamis
+      const generateColors = (count) => {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+          const r = Math.floor(Math.random() * 256);
+          const g = Math.floor(Math.random() * 256);
+          const b = Math.floor(Math.random() * 256);
+          colors.push(`rgba(${r}, ${g}, ${b}, 0.7)`);
+        }
+        return colors;
+      };
+
+      const backgroundColors = generateColors(data.length);
+      const borderColors = backgroundColors.map(color => color.replace('0.7', '1'));
+
+      // Konfigurasi Chart.js Pie Chart
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Durasi Per Item (jam)',
+            data: data,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            },
+            tooltip: {
+              enabled: true,
             }
           }
-        });
-      },
-      error: (xhr, status, error) => {
-        console.error("Gagal mengambil deskripsi:", error);
-        $('#deskripsi').text('Gagal memuat deskripsi.');
-      }
-    });
-  };
-
-  // Panggil fungsi fetchDescription
-  fetchDescription();
-  // Inisialisasi DataTable
-
+        }
+      });
+    },
+  });
 });
 </script>
 
