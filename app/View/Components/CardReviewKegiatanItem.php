@@ -17,6 +17,10 @@ class CardReviewKegiatanItem extends Component
         public string $detailKegiatan,
         public string $tanggal,
         public string $tempat,
+        public string $jumlahDitugaskan,
+        public string $jumlahBertugas,
+        public string $jumlahSelesai,
+        public string $jumlahDitolak
     ) {
         //
     }

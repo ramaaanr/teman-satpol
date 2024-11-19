@@ -24,7 +24,7 @@ class Penugasan extends Model
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
-    public function giats(): BelongsTo
+    public function giat(): BelongsTo
     {
         return $this->belongsTo(Giat::class, 'id_giat', 'id');
     }

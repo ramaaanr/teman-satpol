@@ -134,7 +134,8 @@ $.ajax({
       }
     }
   }) {
-    imagePreview = `${baseUrl}/${dokumen_lapangan.replace("public/", "")}`;
+    console.log(dokumen_lapangan);
+    imagePreview = !dokumen_lapangan ? '' : `${baseUrl}/${dokumen_lapangan.replace("public/", "")}`;
     console.log(imagePreview);
     if (imagePreview) {
       previewImg.src = imagePreview // Set image source to the selected file

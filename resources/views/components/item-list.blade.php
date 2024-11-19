@@ -48,17 +48,20 @@
             let checked = false;
 
             // Periksa apakah id_item ada dalam itemPenugasan
-            itemPenugasan.some(({
-              item: {
-                id_item
-              }
-            }) => {
-              if (id === id_item) {
-                checked =
-                  true; // Set checked menjadi true jika cocok
-                return true; // Hentikan iterasi lebih lanjut
-              }
-            });
+            if (itemPenugasan) {
+              itemPenugasan.some(({
+                item: {
+                  id_item
+                }
+              }) => {
+                if (id === id_item) {
+                  checked =
+                    true; // Set checked menjadi true jika cocok
+                  return true; // Hentikan iterasi lebih lanjut
+                }
+              });
+            }
+
             let itemElement =
               `<x-check-item  id="${id}" deskripsi="${deskripsi}" checked="" />`;
             if (checked) {

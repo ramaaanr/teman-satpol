@@ -16,7 +16,7 @@ class PenugasanServices
     public function getAll($idGiat = null, $idUser = null)
     {
         $currentDateTime = now()->setTimezone('Asia/Makassar');
-        $query = Penugasan::with(['giats' => function ($query) {
+        $query = Penugasan::with(['giat' => function ($query) {
             $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
                 $q->where('status', 'ditugaskan');
             }]);
@@ -28,7 +28,7 @@ class PenugasanServices
         }
         if ($idUser) {
             $query->where('id_user', $idUser)
-                ->whereHas('giats', function ($query) use ($currentDateTime) {
+                ->whereHas('giat', function ($query) use ($currentDateTime) {
                     $query->where('akses_mulai', '<=', $currentDateTime)
                         ->where('akses_selesai', '>=', $currentDateTime);
                 });

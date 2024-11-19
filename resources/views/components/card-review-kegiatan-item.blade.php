@@ -8,19 +8,19 @@
     </div>
     <div class="actions-detail flex items-center space-x-4">
       <p class="flex space-x-1">
-        <span class="text-yellow-300 font-semibold">120</span>
+        <span class="text-yellow-300 font-semibold">{{$jumlahDitugaskan}}</span>
         <span class="text-zinc-700 font-semibold">Ditugaskan</span>
       </p>
       <p class="flex space-x-1">
-        <span class="text-blue-500 font-semibold">12</span>
+        <span class="text-blue-500 font-semibold">{{$jumlahBertugas}}</span>
         <span class="text-zinc-700 font-semibold">Mengajukan</span>
       </p>
       <p class="flex space-x-1">
-        <span class="text-green-500 font-semibold">5</span>
+        <span class="text-green-500 font-semibold">{{$jumlahSelesai}}</span>
         <span class="text-zinc-700 font-semibold">Diterima</span>
       </p>
       <p class="flex space-x-1">
-        <span class="text-red-500 font-semibold">2</span>
+        <span class="text-red-500 font-semibold">{{$jumlahDitolak}}</span>
         <span class="text-zinc-700 font-semibold">Ditolak</span>
       </p>
 

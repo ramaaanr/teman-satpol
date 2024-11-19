@@ -95,7 +95,7 @@ class LaporanBidangServices
                     return [
                         'id_giat' => $penugasan->giat->id,
                         'kegiatan' => $penugasan->giat->kegiatan,
-                        'tanggal' => $penugasan->created_at->format('d F Y, H:i').' WITA',
+                        'tanggal' => $penugasan->created_at->format('d F Y, H:i') . ' WITA',
                         'durasi' => gmdate("H:i", strtotime($penugasan->durasi)),
                     ];
                 });

@@ -68,6 +68,8 @@
           akses_mulai,
           akses_selesai,
           jumlah_ditugaskan,
+          jumlah_bertugas,
+          jumlah_ditolak,
           jumlah_selesai,
         }) => {
           const item = `
@@ -75,6 +77,10 @@
 id="${id}"
 kegiatan="${kegiatan}"
 detailKegiatan="${detail_kegiatan}"
+jumlah-ditugaskan="${jumlah_ditugaskan}"
+jumlah-bertugas="${jumlah_bertugas}"
+jumlah-selesai="${jumlah_selesai}"
+jumlah-ditolak="${jumlah_ditolak}"
 tempat="${tempat}"
 tanggal="${tanggal_mulai} - ${tanggal_selesai}"
             />
