@@ -77,5 +77,4 @@ class PenugasanController extends Controller
         $results = $this->penugasanServices->doDestroy($id);
         return $results;
     }
-
 }

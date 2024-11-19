@@ -131,11 +131,13 @@ class PenugasanServices
         try {
             $penugasan = Penugasan::findOrFail($id);
             if ($penugasan) {
-                $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
-                $destinationPath = public_path() . '/storage/images/';
-                $file->move($destinationPath, $fileName);
                 $insertData = $data;
-                $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+                if ($file) {
+                    $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
+                    $destinationPath = public_path() . '/storage/images/';
+                    $file->move($destinationPath, $fileName);
+                    $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+                }
                 $penugasan->update($insertData);
                 return $penugasan;
             }
