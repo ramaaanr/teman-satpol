@@ -89,14 +89,14 @@ class LaporanBidangServices
                 ->groupBy('penugasans.id_user', 'detail_items.id_item', 'users.nama', 'users.jabatan', 'users.role', 'items.deskripsi')
                 ->get();
 
-            $riwayatGiat = Penugasan::with(['giat'])
+            $riwayatGiat = Penugasan::with(['giats'])
                 ->where('id_user', $userId)
                 ->where('status', 'disetujui')
                 ->get()
                 ->map(function ($penugasan) {
                     return [
-                        'id_giat' => $penugasan->giat->id,
-                        'kegiatan' => $penugasan->giat->kegiatan,
+                        'id_giat' => $penugasan->giats->id,
+                        'kegiatan' => $penugasan->giats->kegiatan,
                         'tanggal' => $penugasan->created_at->format('d F Y, H:i') . ' WITA',
                         'durasi' => gmdate("H:i", strtotime($penugasan->durasi)),
                     ];
