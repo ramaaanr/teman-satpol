@@ -74,7 +74,7 @@
   <div class="flex w-full mt-4  space-x-3">
 
     <div
-      class="w-full h-full    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      class="w-full min-h-[500px]   p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
       <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
         <span class="material-symbols-outlined text-white mr-2">
           event
@@ -97,7 +97,7 @@
     </div>
     <div class="flex flex-col space-y-2">
       <div
-        class="w-full h-full    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        class="w-full min-h-40    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
         <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
           <span class="material-symbols-outlined text-white mr-2">
             gavel
@@ -126,7 +126,7 @@
         </div>
       </div>
       <div
-        class="w-full h-full  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        class="w-full h-fit  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
         <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
           <span class="material-symbols-outlined text-white mr-2">
             pie_chart
@@ -137,7 +137,13 @@
           </p>
         </div>
         <div class="chart-container  w-full px-8">
-          <canvas class="" id="myPieChart"></canvas>
+          <div class="no-data-alert">
+            <img class="mx-auto" width="430px" src="/pie_chart.svg" alt="">
+            <div class="text-center mt-4 text-zinc-700 font-bold">
+              <p>Data tidak tersedia untuk ditampilkan.</p>
+            </div>
+          </div>
+          <canvas class="hidden" id="myPieChart"></canvas>
         </div>
       </div>
     </div>
@@ -228,51 +234,56 @@ $(document).ready(function() {
           }
         }
       });
+      if (durasi_item.length !== 0) {
+        $('.no-data-alert').addClass('hidden')
+        $('#myPieChart').removeClass('hidden')
+        const labels = durasi_item.map(item => item.deskripsi);
+        const data = durasi_item.map(item => item.total_durasi);
+        const canvas = document.getElementById("myPieChart");
+        const ctx = canvas.getContext("2d");
+        // Fungsi untuk membuat warna dinamis
+        const generateColors = (count) => {
+          const colors = [];
+          for (let i = 0; i < count; i++) {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            colors.push(`rgba(${r}, ${g}, ${b}, 0.7)`);
+          }
+          return colors;
+        };
 
-      const labels = durasi_item.map(item => item.deskripsi);
-      const data = durasi_item.map(item => item.total_durasi);
-      const canvas = document.getElementById("myPieChart");
-      const ctx = canvas.getContext("2d");
-      // Fungsi untuk membuat warna dinamis
-      const generateColors = (count) => {
-        const colors = [];
-        for (let i = 0; i < count; i++) {
-          const r = Math.floor(Math.random() * 256);
-          const g = Math.floor(Math.random() * 256);
-          const b = Math.floor(Math.random() * 256);
-          colors.push(`rgba(${r}, ${g}, ${b}, 0.7)`);
-        }
-        return colors;
-      };
+        const backgroundColors = generateColors(data.length);
+        const borderColors = backgroundColors.map(color => color.replace('0.7', '1'));
 
-      const backgroundColors = generateColors(data.length);
-      const borderColors = backgroundColors.map(color => color.replace('0.7', '1'));
-
-      // Konfigurasi Chart.js Pie Chart
-      const chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Durasi Per Item (jam)',
-            data: data,
-            backgroundColor: backgroundColors,
-            borderColor: borderColors,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
-            },
-            tooltip: {
-              enabled: true,
+        // Konfigurasi Chart.js Pie Chart
+        const chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Durasi Per Item (jam)',
+              data: data,
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
+              },
+              tooltip: {
+                enabled: true,
+              }
             }
           }
-        }
-      });
+        });
+      }
+
+
     },
   });
 });
