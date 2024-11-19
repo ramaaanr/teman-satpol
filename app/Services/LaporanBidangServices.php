@@ -58,6 +58,8 @@ class LaporanBidangServices
                 'data' => new LaporanBidangResource($dataByYearAndMonths),
             ]);
         } elseif ($userId) {
+            $userInfo = User::select('id', 'nama', 'jabatan', 'role')->find($userId);
+
             $userData = User::with([
                 'penugasans' => function ($query) use ($filterPenugasan) {
                     $query->with(['detailItems' => function ($q) {
@@ -71,21 +73,21 @@ class LaporanBidangServices
             $durasiByUser = Penugasan::query()
                 ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan')
                 ->join('users', 'penugasans.id_user', '=', 'users.id')
-                ->join('items', 'detail_items.id_item', '=', 'items.id') // Pastikan join ke items
+                ->join('items', 'detail_items.id_item', '=', 'items.id')
                 ->select(
                     'penugasans.id_user as userId',
                     'detail_items.id_item',
                     'users.nama',
-                    'users.jabatan', // Pastikan jabatan diambil dengan benar
-                    'users.role', // Pastikan role diambil dengan benar
-                    'items.deskripsi', // Pastikan deskripsi diambil dari items
+                    'users.jabatan',
+                    'users.role',
+                    'items.deskripsi',
                     DB::raw('SUM(TIME_TO_SEC(penugasans.durasi)) as total_durasi')
                 )
                 ->when($userId, function ($query) use ($userId) {
-                    $query->where('penugasans.id_user', $userId); // Filter berdasarkan userId
+                    $query->where('penugasans.id_user', $userId);
                 })
                 ->groupBy('penugasans.id_user', 'detail_items.id_item', 'users.nama', 'users.jabatan', 'users.role', 'items.deskripsi')
-                ->get(); // Pastikan Anda memanggil get() untuk mendapatkan hasil query
+                ->get();
 
             $riwayatGiat = Penugasan::with(['giat'])
                 ->where('id_user', $userId)
@@ -101,7 +103,7 @@ class LaporanBidangServices
                 });
 
             $dataByUserId = [
-                'statistik_item' => $statistikItem,
+                'user_info' => $userInfo, // Tambahkan informasi user
                 'durasi_by_user' => $durasiByUser,
                 'riwayat_giat' => $riwayatGiat,
             ];
