@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\LaporanBidangResource;
 use App\Http\Resources\LaporanBidangByIdItemResource;
 use App\Http\Resources\LaporanBidangByIdUserResource;
+use App\Exports\LaporanBidangExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanBidangServices
 {
@@ -95,7 +97,7 @@ class LaporanBidangServices
                     return [
                         'id_giat' => $penugasan->giat->id,
                         'kegiatan' => $penugasan->giat->kegiatan,
-                        'tanggal' => $penugasan->created_at->format('d F Y, H:i').' WITA',
+                        'tanggal' => $penugasan->created_at->format('d F Y, H:i') . ' WITA',
                         'durasi' => gmdate("H:i", strtotime($penugasan->durasi)),
                     ];
                 });
@@ -144,5 +146,55 @@ class LaporanBidangServices
                 'data' => new LaporanBidangByIdItemResource($dataByItemId),
             ];
         }
+    }
+
+    public function exportLaporanBidang($tahun, $bulan)
+    {
+        $filterTahunDanBulan = function ($query) use ($tahun, $bulan) {
+            if ($tahun) {
+                $query->whereYear('created_at', $tahun);
+            }
+            if ($bulan) {
+                $query->whereMonth('created_at', $bulan);
+            }
+        };
+
+        $statistikItem = Item::query()
+            ->with(['detailItems.penugasan' => $filterTahunDanBulan])
+            ->get();
+
+        $data = $statistikItem->map(function ($item) {
+            $totalDurasi = $item->detailItems->reduce(function ($carry, $detailItem) {
+                return $carry + $this->parseDurationToHours($detailItem->penugasan->durasi ?? '00:00:00');
+            }, 0);
+
+            return [
+                $item->id, //column : nomor
+                $item->deskripsi ?? 'Tidak Ditemukan', // Column : Butir Kegiatan
+                $totalDurasi ?: 0,  // Column : Volume Kegiatan (jika kosong, isi dengan 0)
+            ];
+        })->toArray();
+
+        $export = new LaporanBidangExport($data);
+
+        // Simpan ke folder
+        $results =  $export->exportToFile();
+        if ($results){
+            return ([
+                'status' => true,
+                'message' => "Data Berhasil Diexport!",
+                'file_path' => $results
+            ]);
+        }
+    }
+
+    private function parseDurationToHours($time)
+    {
+        if (!$time) {
+            return 0;
+        }
+
+        sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
+        return $hours + ($minutes / 60) + ($seconds / 3600);
     }
 }
