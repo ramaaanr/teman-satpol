@@ -77,6 +77,7 @@
     </div>
   </div>
 </form>
+
 <script>
 const baseUrl = `${window.location.protocol}//${window.location.host}`;
 const fileInput = document.getElementById('dropzone-file');
@@ -85,7 +86,7 @@ const previewImg = document.getElementById('preview-img');
 const url = window.location.href;
 let parts = url.split('/');
 console.log(parts);
-let id = parts[6];
+let idPenugasan = parts[6];
 const userData = localStorage.getItem('user');
 const user = userData ? JSON.parse(userData) : null;
 const token = user ? user.token : null;
@@ -93,9 +94,10 @@ let imagePreview;
 $('#back-button').click(() => {
   window.history.back();
 });
+// console.log(idPenugasan);
 
 $.ajax({
-  url: `/api/penugasan/${id}`,
+  url: `/api/penugasan/${idPenugasan}`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

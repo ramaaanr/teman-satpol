@@ -101,14 +101,14 @@ const fileInput = document.getElementById('dropzone-file');
 const previewContainer = document.getElementById('image-preview');
 const previewImg = document.getElementById('preview-img');
 const url = window.location.href;
-const id = url.split("/").pop();
+const idPenugasan = url.split("/").pop();
 const userData = localStorage.getItem('user');
 const user = userData ? JSON.parse(userData) : null;
 const token = user ? user.token : null;
 let imagePreview;
-
+console.log(idPenugasan);
 $.ajax({
-  url: `/api/penugasan/${id}`,
+  url: `/api/penugasan/${idPenugasan}`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -203,7 +203,7 @@ $('#form-kegiatan').submit(function(event) {
 
   // Kirim data menggunakan AJAX
   $.ajax({
-    url: '/api/penugasan/' + id + '?_method=PATCH',
+    url: '/api/penugasan/' + idPenugasan + '?_method=PATCH',
     type: 'POST',
     data: formData,
     processData: false,

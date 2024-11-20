@@ -72,9 +72,8 @@
   </div>
 
   <div class="flex w-full mt-4  space-x-3">
-
     <div
-      class="w-full min-h-[500px]   p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      class="w-2/3 min-h-[500px]   p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
       <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
         <span class="material-symbols-outlined text-white mr-2">
           event
@@ -95,7 +94,7 @@
         </table>
       </div>
     </div>
-    <div class="flex flex-col space-y-2">
+    <div class="flex w-1/3 flex-col space-y-2">
       <div
         class="w-full min-h-40    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
         <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
