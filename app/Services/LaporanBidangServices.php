@@ -38,7 +38,7 @@ class LaporanBidangServices
 
         if ($tahun || $bulan) {
             // Hitung total users berdasarkan tahun dan bulan
-            $totalUsers = User::whereHas('penugasans', $filterPenugasan)->count();
+            $totalUsers = User::count();
 
             // Hitung total giat (kegiatan) berdasarkan tahun dan bulan
             $totalGiat = Giat::whereHas('penugasans', $filterPenugasan)->count();
