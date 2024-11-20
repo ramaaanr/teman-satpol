@@ -72,7 +72,7 @@ $(document).ready(function() {
       {
         data: null,
         render: function(data, type, row) {
-          return `
+          return row.role !== 'super-admin' ? `
             <div class="flex space-x-1">
               <a class="detail-btn bg-green-500 text-white px-2 py-1 rounded" href="/laporan-kepegawaian/${row.id}">
                 <span class="material-symbols-outlined">info</span>
@@ -86,7 +86,9 @@ data-role="${row.role}">
                 <span class="material-symbols-outlined">edit</span>
               </button>
               
-            </div>`;
+            </div>` : `<a class="detail-btn bg-green-500 text-white px-2 py-1 rounded" href="/laporan-kepegawaian/${row.id}">
+                <span class="material-symbols-outlined">info</span>
+              </a>`;
         }
       }
     ]

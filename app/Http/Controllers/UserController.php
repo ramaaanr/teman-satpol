@@ -71,7 +71,14 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccesstoken()->delete();
+        // $request->user()->currentAccesstoken()->delete();
+        // Logout the user
+
+        // Invalidate the user's session
+        $request->session()->invalidate();
+
+        // Regenerate CSRF token to avoid session fixation
+        $request->session()->regenerateToken();
         return response()->json([
             'status' => 200,
             'message' => 'token Has Been Revoke',

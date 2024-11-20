@@ -6,7 +6,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'My Application')</title>
+  <!-- <script src="{{ secure_asset('/build/assets/app-B4uPvtxE.js') }}"></script> -->
+  <!-- <link rel="stylesheet" href="{{ secure_asset('/build/assets/app-Ca10PD2B.css') }}"> -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+
   <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Include jQuery and DataTables JS -->

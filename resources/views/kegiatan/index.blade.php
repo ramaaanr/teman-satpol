@@ -45,7 +45,6 @@ $(document).ready(function() {
   const userData = localStorage.getItem('user');
   // Pastikan userData ada dan di-parse menjadi objek
   const user = userData ? JSON.parse(userData) : null;
-  console.log(user);
   const token = user ? user.token : null;
   const idUser = user.id;
 

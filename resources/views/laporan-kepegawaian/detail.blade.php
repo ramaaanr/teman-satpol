@@ -56,32 +56,56 @@
 
   <div class="flex w-full mt-4  space-x-3">
 
-    <div
-      class="w-full h-full    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-      <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-        <span class="material-symbols-outlined text-white mr-2">
-          event
-        </span>
-        <p>
-          Data Item
-          Perjam
-        </p>
+    <div class="space-y-4">
+      <div
+        class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+          <span class="material-symbols-outlined text-white mr-2">
+            event
+          </span>
+          <p>
+            Data Item
+            Perjam
+          </p>
+        </div>
+        <div class="table-container  w-full px-8">
+          <table id="durasiTable">
+            <thead>
+              <tr>
+                <th>Deskripsi</th>
+                <th>Total Durasi (jam)</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
-      <div class="table-container  w-full px-8">
-        <table id="durasiTable">
-          <thead>
-            <tr>
-              <th>Deskripsi</th>
-              <th>Total Durasi (jam)</th>
-            </tr>
-          </thead>
-        </table>
+      <div
+        class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+          <span class="material-symbols-outlined text-white mr-2">
+            gavel
+          </span>
+          <p>
+            Riwayat Giat
+          </p>
+        </div>
+        <div class="table-container  w-full px-8">
+          <table id="riwayatTable">
+            <thead>
+              <tr>
+                <th>Kegiatan</th>
+                <th>Tanggal</th>
+                <th>Durasi</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
     <div class="flex flex-col space-y-2">
 
       <div
-        class="w-full h-full  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+        class="w-full h-fit  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
         <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
           <span class="material-symbols-outlined text-white mr-2">
             pie_chart
@@ -159,6 +183,37 @@ $(document).ready(function() {
           {
             data: 'total_durasi',
             title: 'Total Durasi (jam)'
+          }
+        ],
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        language: {
+          search: "Cari:",
+          lengthMenu: "Tampilkan _MENU_ data per halaman",
+          info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+          paginate: {
+            first: "Pertama",
+            last: "Terakhir",
+            next: "Berikutnya",
+            previous: "Sebelumnya"
+          }
+        }
+      });
+      $('#riwayatTable').DataTable({
+        data: riwayat_giat,
+        columns: [{
+            data: 'kegiatan',
+            title: 'Kegiatan'
+          },
+          {
+            data: 'tanggal',
+            title: 'Tanggal'
+          },
+          {
+            data: 'durasi',
+            title: 'Durasi (/jam)'
           }
         ],
         paging: true,
