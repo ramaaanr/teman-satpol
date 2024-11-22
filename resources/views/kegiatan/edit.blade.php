@@ -115,6 +115,17 @@ $.ajax({
     'Accept': 'application/json',
     'Authorization': `Bearer ${token}`
   },
+  beforeSend: function() {
+    // Tampilkan spinner atau disable tombol saat proses pengiriman
+    Swal.fire({
+      title: 'Mohon Tunggu',
+      html: 'Sedang memproses data...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  },
   success: function({
     data: {
       id_user,
@@ -134,6 +145,7 @@ $.ajax({
       }
     }
   }) {
+    Swal.close();
     console.log(dokumen_lapangan);
     imagePreview = !dokumen_lapangan ? '' : `${baseUrl}/${dokumen_lapangan.replace("public/", "")}`;
     console.log(imagePreview);

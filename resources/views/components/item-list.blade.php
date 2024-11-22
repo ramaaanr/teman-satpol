@@ -1,7 +1,7 @@
 <div class="">
   <p class="text-gray-500 font-md mt-2 text-xs">Kegiatan</p>
   <div id="item-container" class="p-4 mt-2 border broder-gray-500  rounded-md ">
-
+    <x-alert loading title="Loading" info="Item sedang dimuat"></x-alert>
   </div>
   <script>
   $(document).ready(function() {
@@ -40,6 +40,7 @@
           'Authorization': `Bearer ${token}`
         },
         success: function(items) {
+          $('#item-container').html('');
           // Iterasi setiap item yang diterima dari respons
           items.forEach(({
             id,

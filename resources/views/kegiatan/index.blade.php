@@ -57,28 +57,40 @@ $(document).ready(function() {
       'Authorization': `Bearer ${token}`
     },
     dataType: 'json',
+    beforeSend: () => {
+      $('#card-kegiatan-container').html(`
+    <x-alert loading title="Loading" info="Data kegiatan sedang dimuat" />
+        `)
+    },
     success: function({
       data
     }) {
-      console.log(data);
-      // Loop untuk menampilkan data kegiatan
-      data.forEach(function({
-        id_penugasan,
-        status,
-        giats: {
-          kegiatan,
-          detail_kegiatan,
-          tempat,
-          tanggal_mulai,
-          tanggal_selesai,
-          jumlah_petugas,
-          kendaraan,
-        }
-      }) {
-        let kegiatanItem =
-          `<x-card-kegiatan-item id="${id_penugasan}" kegiatan="${kegiatan}" status="${status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
-        $('#card-kegiatan-container').append(kegiatanItem);
-      });
+      $('#card-kegiatan-container').html(``)
+      if (!data) {
+        $('#card-kegiatan-container').html(`
+    <x-alert title="Data Kosong" info="Tidak ada kegiatan yang diajukan" />
+        `);
+      } else {
+        // Loop untuk menampilkan data kegiatan
+        data.forEach(function({
+          id_penugasan,
+          status,
+          giats: {
+            kegiatan,
+            detail_kegiatan,
+            tempat,
+            tanggal_mulai,
+            tanggal_selesai,
+            jumlah_petugas,
+            kendaraan,
+          }
+        }) {
+          let kegiatanItem =
+            `<x-card-kegiatan-item id="${id_penugasan}" kegiatan="${kegiatan}" status="${status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
+          $('#card-kegiatan-container').append(kegiatanItem);
+        });
+      }
+
     },
     error: function() {
       console.error('Gagal mengambil data kegiatan.');
