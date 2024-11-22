@@ -50,6 +50,17 @@ $(document).ready(function() {
         'Authorization': 'Bearer ' + token
       },
       data: JSON.stringify(payload),
+      beforeSend: function() {
+        // Tampilkan spinner atau disable tombol saat proses pengiriman
+        Swal.fire({
+          title: 'Mohon Tunggu',
+          html: 'Sedang memproses data...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      },
       success: function(response) {
         Swal.fire({
           icon: 'success',
