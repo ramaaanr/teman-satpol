@@ -69,27 +69,29 @@ class LaporanBidangServices
                 },
             ])->find($userId);
 
-            // Query untuk mendapatkan durasi berdasarkan user dan item
-            $durasiByUser = Penugasan::query()
-                ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan')
-                ->join('users', 'penugasans.id_user', '=', 'users.id')
-                ->join('items', 'detail_items.id_item', '=', 'items.id')
-                ->select(
-                    'penugasans.id_user as userId',
-                    'detail_items.id_item',
-                    'users.nama',
-                    'users.jabatan',
-                    'users.role',
-                    'items.deskripsi',
-                    DB::raw('SUM(TIME_TO_SEC(penugasans.durasi)) as total_durasi')
-                )
-                ->when($userId, function ($query) use ($userId) {
-                    $query->where('penugasans.id_user', $userId);
+            $durasiByUser = Item::query()
+                ->leftJoin('detail_items', 'items.id', '=', 'detail_items.id_item')
+                ->leftJoin('penugasans', function ($join) use ($userId) {
+                    $join->on('detail_items.id_penugasan', '=', 'penugasans.id')
+                        ->where('penugasans.id_user', $userId); // Replace with your user ID
                 })
-                ->groupBy('penugasans.id_user', 'detail_items.id_item', 'users.nama', 'users.jabatan', 'users.role', 'items.deskripsi')
+                ->leftJoin('users', 'penugasans.id_user', '=', 'users.id')
+                ->select(
+                    'items.id as id_item',
+                    'items.deskripsi',
+                    DB::raw('COALESCE(SUM(TIME_TO_SEC(penugasans.durasi)), 0) as total_durasi'),
+                    DB::raw('COALESCE(MAX(penugasans.durasi), "00:00:00") as penugasans_durasi')
+                )
+                ->groupBy('items.id', 'items.deskripsi')
+
                 ->get();
 
-            $riwayatGiat = Penugasan::with(['giats'])
+
+
+            $riwayatGiat = Penugasan::whereHas('giats', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+                ->with(['giats'])
                 ->where('id_user', $userId)
                 ->where('status', 'disetujui')
                 ->get()

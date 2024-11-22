@@ -55,71 +55,71 @@
   </div>
 
   <div class="flex w-full mt-4  space-x-3">
-
-    <div class="space-y-4">
-      <div
-        class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-          <span class="material-symbols-outlined text-white mr-2">
-            event
-          </span>
-          <p>
-            Data Item
-            Perjam
-          </p>
-        </div>
-        <div class="table-container  w-full px-8">
-          <table id="durasiTable">
-            <thead>
-              <tr>
-                <th>Deskripsi</th>
-                <th>Total Durasi (jam)</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
+    <div
+      class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+      <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+        <span class="material-symbols-outlined text-white mr-2">
+          event
+        </span>
+        <p>
+          Data Item
+          Perjam
+        </p>
       </div>
-      <div
-        class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-          <span class="material-symbols-outlined text-white mr-2">
-            gavel
-          </span>
-          <p>
-            Riwayat Giat
-          </p>
-        </div>
-        <div class="table-container  w-full px-8">
-          <table id="riwayatTable">
-            <thead>
-              <tr>
-                <th>Kegiatan</th>
-                <th>Tanggal</th>
-                <th>Durasi</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
+      <div class="table-container  w-full px-8">
+        <table id="durasiTable">
+          <thead>
+            <tr>
+              <th>Deskripsi</th>
+              <th>Total Durasi (jam)</th>
+            </tr>
+          </thead>
+        </table>
       </div>
     </div>
-    <div class="flex flex-col space-y-2">
+    <div class="space-y-4 w-full">
+      <div class="w-full flex flex-col space-y-2">
+        <div
+          class="w-full h-fit  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+          <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+            <span class="material-symbols-outlined text-white mr-2">
+              pie_chart
+            </span>
+            <p>
+              Visualisasi Item
+              Perjam
+            </p>
+          </div>
+          <div class="chart-container  w-full px-8">
+            <canvas class="" id="myPieChart"></canvas>
+          </div>
+        </div>
+        <div
+          class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
+          <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+            <span class="material-symbols-outlined text-white mr-2">
+              gavel
+            </span>
+            <p>
+              Riwayat Giat
+            </p>
+          </div>
+          <div class="table-container  w-full px-8">
+            <table id="riwayatTable">
+              <thead>
+                <tr>
+                  <th>Kegiatan</th>
+                  <th>Tanggal</th>
+                  <th>Durasi</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
 
-      <div
-        class="w-full h-fit  p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-          <span class="material-symbols-outlined text-white mr-2">
-            pie_chart
-          </span>
-          <p>
-            Visualisasi Item
-            Perjam
-          </p>
-        </div>
-        <div class="chart-container  w-full px-8">
-          <canvas class="" id="myPieChart"></canvas>
-        </div>
       </div>
     </div>
+
 
   </div>
 
@@ -142,6 +142,17 @@ $(document).ready(function() {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json",
     },
+    beforeSend: function() {
+      // Tampilkan spinner atau disable tombol saat proses pengiriman
+      Swal.fire({
+        title: 'Mohon Tunggu',
+        html: 'Sedang memproses data...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    },
     success: function({
       data: {
         jabatan,
@@ -151,7 +162,7 @@ $(document).ready(function() {
         data_item
       }
     }) {
-
+      Swal.close();
       const getGreeting = () => {
         const now = new Date();
         const hour = now.getHours(); // Mendapatkan jam saat ini
@@ -269,12 +280,21 @@ $(document).ready(function() {
           responsive: true,
           plugins: {
             legend: {
-              position: 'bottom',
+              position: "bottom", // Letakkan legend di sebelah kiri
+              labels: {
+                font: {
+                  size: 10, // Ukuran font legend
+                },
+                boxWidth: 10, // Lebar kotak warna legend
+                boxHeight: 10, // Tinggi kotak warna legend
+                padding: 5, // Jarak antar label di legend
+              },
             },
             tooltip: {
-              enabled: true,
-            }
-          }
+              enabled: true, // Tooltip tetap aktif
+            },
+          },
+
         }
       });
     },

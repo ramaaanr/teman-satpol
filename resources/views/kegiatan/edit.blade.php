@@ -220,6 +220,17 @@ $('#form-kegiatan').submit(function(event) {
     data: formData,
     processData: false,
     contentType: false,
+    beforeSend: function() {
+      // Tampilkan spinner atau disable tombol saat proses pengiriman
+      Swal.fire({
+        title: 'Mohon Tunggu',
+        html: 'Sedang memproses data...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    },
     success: function(response) {
       Swal.fire({
         icon: response.status ? 'success' : 'error',
