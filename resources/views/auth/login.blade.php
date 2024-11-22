@@ -87,17 +87,32 @@ $(document).ready(function() {
         NIP: nip,
         password: password
       }),
-      success: function(response) {
+      beforeSend: function() {
+        // Tampilkan spinner atau disable tombol saat proses pengiriman
+        Swal.fire({
+          title: 'Mohon Tunggu',
+          html: 'Sedang memproses data...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      },
+      success: function({
+        status,
+        message,
+        data
+      }) {
         // Cek apakah login berhasil atau gagal
-        if (response.status) {
+        if (status) {
           // Jika berhasil
           Swal.fire({
             icon: 'success',
             title: 'Login Berhasil',
-            text: response.message,
+            text: message,
             confirmButtonText: 'OK'
           }).then(() => {
-            localStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('user', JSON.stringify(data));
             window.location.href = '/dashboard';
           });
         } else {
@@ -105,7 +120,7 @@ $(document).ready(function() {
           Swal.fire({
             icon: 'error',
             title: 'Login Gagal',
-            text: data.message,
+            text: message,
             confirmButtonText: 'Coba Lagi'
           });
         }
