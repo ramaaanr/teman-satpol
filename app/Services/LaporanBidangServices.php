@@ -40,7 +40,7 @@ class LaporanBidangServices
 
         if ($tahun || $bulan) {
             // Hitung total users berdasarkan tahun dan bulan
-            $totalUsers = User::whereHas('penugasans', $filterPenugasan)->count();
+            $totalUsers = User::count();
 
             // Hitung total giat (kegiatan) berdasarkan tahun dan bulan
             $totalGiat = Giat::whereHas('penugasans', $filterPenugasan)->count();
@@ -60,6 +60,8 @@ class LaporanBidangServices
                 'data' => new LaporanBidangResource($dataByYearAndMonths),
             ]);
         } elseif ($userId) {
+            $userInfo = User::select('id', 'nama', 'jabatan', 'role')->find($userId);
+
             $userData = User::with([
                 'penugasans' => function ($query) use ($filterPenugasan) {
                     $query->with(['detailItems' => function ($q) {
@@ -69,41 +71,43 @@ class LaporanBidangServices
                 },
             ])->find($userId);
 
-            // Query untuk mendapatkan durasi berdasarkan user dan item
-            $durasiByUser = Penugasan::query()
-                ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan')
-                ->join('users', 'penugasans.id_user', '=', 'users.id')
-                ->join('items', 'detail_items.id_item', '=', 'items.id') // Pastikan join ke items
-                ->select(
-                    'penugasans.id_user as userId',
-                    'detail_items.id_item',
-                    'users.nama',
-                    'users.jabatan', // Pastikan jabatan diambil dengan benar
-                    'users.role', // Pastikan role diambil dengan benar
-                    'items.deskripsi', // Pastikan deskripsi diambil dari items
-                    DB::raw('SUM(TIME_TO_SEC(penugasans.durasi)) as total_durasi')
-                )
-                ->when($userId, function ($query) use ($userId) {
-                    $query->where('penugasans.id_user', $userId); // Filter berdasarkan userId
+            $durasiByUser = Item::query()
+                ->leftJoin('detail_items', 'items.id', '=', 'detail_items.id_item')
+                ->leftJoin('penugasans', function ($join) use ($userId) {
+                    $join->on('detail_items.id_penugasan', '=', 'penugasans.id')
+                        ->where('penugasans.id_user', $userId); // Replace with your user ID
                 })
-                ->groupBy('penugasans.id_user', 'detail_items.id_item', 'users.nama', 'users.jabatan', 'users.role', 'items.deskripsi')
-                ->get(); // Pastikan Anda memanggil get() untuk mendapatkan hasil query
+                ->leftJoin('users', 'penugasans.id_user', '=', 'users.id')
+                ->select(
+                    'items.id as id_item',
+                    'items.deskripsi',
+                    DB::raw('COALESCE(SUM(TIME_TO_SEC(penugasans.durasi)), 0) as total_durasi'),
+                    DB::raw('COALESCE(MAX(penugasans.durasi), "00:00:00") as penugasans_durasi')
+                )
+                ->groupBy('items.id', 'items.deskripsi')
 
-            $riwayatGiat = Penugasan::with(['giat'])
+                ->get();
+
+
+
+            $riwayatGiat = Penugasan::whereHas('giats', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+                ->with(['giats'])
                 ->where('id_user', $userId)
                 ->where('status', 'disetujui')
                 ->get()
                 ->map(function ($penugasan) {
                     return [
-                        'id_giat' => $penugasan->giat->id,
-                        'kegiatan' => $penugasan->giat->kegiatan,
+                        'id_giat' => $penugasan->giats->id,
+                        'kegiatan' => $penugasan->giats->kegiatan,
                         'tanggal' => $penugasan->created_at->format('d F Y, H:i') . ' WITA',
                         'durasi' => gmdate("H:i", strtotime($penugasan->durasi)),
                     ];
                 });
 
             $dataByUserId = [
-                'statistik_item' => $statistikItem,
+                'user_info' => $userInfo, // Tambahkan informasi user
                 'durasi_by_user' => $durasiByUser,
                 'riwayat_giat' => $riwayatGiat,
             ];

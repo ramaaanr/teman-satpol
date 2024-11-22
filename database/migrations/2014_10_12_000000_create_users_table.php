@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 255);
             $table->string('NIP', 255)->unique;
-            $table->string('jabatan', 50);
+            $table->string('jabatan', 255);
             $table->string('role', 20);
             $table->string('password');
             $table->timestamps();

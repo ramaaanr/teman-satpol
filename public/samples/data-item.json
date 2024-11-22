@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "deskripsi": "Patroli dan pengawasan ketertiban umum."
+  },
+  {
+    "id": 2,
+    "deskripsi": "Pemeriksaan izin usaha di area publik."
+  },
+  {
+    "id": 3,
+    "deskripsi": "Penertiban bangunan tanpa izin."
+  },
+  {
+    "id": 4,
+    "deskripsi": "Pengawasan protokol kesehatan."
+  },
+  {
+    "id": 5,
+    "deskripsi": "Penertiban reklame ilegal."
+  },
+  {
+    "id": 6,
+    "deskripsi": "Pengawasan aktivitas pedagang di terminal."
+  },
+  {
+    "id": 7,
+    "deskripsi": "Pendampingan penggusuran bangunan."
+  },
+  {
+    "id": 8,
+    "deskripsi": "Sosialisasi peraturan daerah."
+  },
+  {
+    "id": 9,
+    "deskripsi": "Pemeriksaan izin tempat hiburan."
+  },
+  {
+    "id": 10,
+    "deskripsi": "Penertiban parkir liar."
+  },
+  {
+    "id": 11,
+    "deskripsi": "Patroli malam untuk ketertiban umum."
+  },
+  {
+    "id": 12,
+    "deskripsi": "Penertiban pemukiman liar."
+  },
+  {
+    "id": 13,
+    "deskripsi": "Operasi penegakan peraturan daerah."
+  },
+  {
+    "id": 14,
+    "deskripsi": "Pemeriksaan kebersihan tempat usaha."
+  },
+  {
+    "id": 15,
+    "deskripsi": "Pengawasan kawasan bebas rokok."
+  }
+]

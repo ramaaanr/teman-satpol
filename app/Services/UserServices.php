@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
@@ -19,19 +20,32 @@ class UserServices
     public function doLogin($NIP, $password)
     {
         $user = User::where('NIP', $NIP)->first();
+
         if (! $user || ! Hash::check($password, $user->password)) {
-            return ([
+            return [
                 'status' => false,
                 'message' => 'NIP atau Password Salah!',
-            ]);
+            ];
         }
+        Auth::login($user);
+
+        // Membuat token
         $token = $user->createToken('Login User')->plainTextToken;
-        return ([
+
+        return [
             'status' => true,
-            'message' => "Login Berhasil",
-            'token' => $token
-        ]);
+            'message' => 'Login Berhasil',
+            'data' => [
+                'id' => $user->id,
+                'NIP' => $user->NIP,
+                "jabatan" => $user->jabatan,
+                "nama" => $user->nama,
+                "role" => $user->role,
+                'token' => $token
+            ],
+        ];
     }
+
 
     public function doStore($data)
     {
@@ -40,14 +54,14 @@ class UserServices
             $data['password'] = $password;
             $user = User::create($data);
             // return $user;
-            if ($user){
+            if ($user) {
                 return ([
                     'status' => true,
                     'message' => 'Data Berhasil Disimpan!'
                 ]);
             }
         } catch (QueryException $th) {
-            if ($th->errorInfo[1] == 1062){
+            if ($th->errorInfo[1] == 1062) {
                 return ([
                     'status' => false,
                     'message' => "NIP sudah terdaftar!"

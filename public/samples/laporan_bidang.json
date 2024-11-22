@@ -1,0 +1,70 @@
+{
+  "status": true,
+  "message": "Berhasil Mengambil Data",
+  "data": {
+    "id_item": 1,
+    "deskripsi": "Salto",
+    "total_durasi_pengguna": [
+      {
+        "id_user": 1,
+        "nama": "Andry",
+        "total_durasi": 30
+      },
+      {
+        "id_user": 2,
+        "nama": "Udin",
+        "total_durasi": 50
+      },
+      {
+        "id_user": 3,
+        "nama": "Budi",
+        "total_durasi": 40
+      },
+      {
+        "id_user": 4,
+        "nama": "Siti",
+        "total_durasi": 60
+      },
+      {
+        "id_user": 5,
+        "nama": "Aisyah",
+        "total_durasi": 25
+      },
+      {
+        "id_user": 6,
+        "nama": "Rahmat",
+        "total_durasi": 45
+      },
+      {
+        "id_user": 7,
+        "nama": "Dina",
+        "total_durasi": 55
+      },
+      {
+        "id_user": 8,
+        "nama": "Bayu",
+        "total_durasi": 35
+      },
+      {
+        "id_user": 9,
+        "nama": "Joko",
+        "total_durasi": 20
+      },
+      {
+        "id_user": 10,
+        "nama": "Tini",
+        "total_durasi": 70
+      },
+      {
+        "id_user": 11,
+        "nama": "Usup",
+        "total_durasi": 3
+      },
+      {
+        "id_user": 10,
+        "nama": "Kinci",
+        "total_durasi": 2
+      }
+    ]
+  }
+}

@@ -19,7 +19,13 @@ class GiatServices
             },
             // Menghitung jumlah penugasan dengan status "selesai"
             'penugasans as jumlah_selesai' => function ($query) {
-                $query->where('status', 'selesai');
+                $query->where('status', 'disetujui');
+            },
+            'penugasans as jumlah_bertugas' => function ($query) {
+                $query->where('status', 'bertugas');
+            },
+            'penugasans as jumlah_ditolak' => function ($query) {
+                $query->where('status', 'ditolak');
             }
         ])->get();
         return ([
@@ -40,6 +46,12 @@ class GiatServices
                 // Menghitung jumlah penugasan dengan status "selesai"
                 'penugasans as jumlah_selesai' => function ($query) {
                     $query->where('status', 'selesai');
+                },
+                'penugasans as jumlah_bertugas' => function ($query) {
+                    $query->where('status', 'bertugas');
+                },
+                'penugasans as jumlah_ditolak' => function ($query) {
+                    $query->where('status', 'ditolak');
                 }
             ])->findOrFail($id);
         if ($giat) {
@@ -57,10 +69,10 @@ class GiatServices
 
     public function doStore($data)
     {
-        $data['tanggal_mulai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['tanggal_mulai'])->format('Y-m-d H:i:s');
-        $data['tanggal_selesai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['tanggal_selesai'])->format('Y-m-d H:i:s');
-        $data['akses_mulai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['akses_mulai'])->format('Y-m-d H:i:s');
-        $data['akses_selesai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['akses_selesai'])->format('Y-m-d H:i:s');
+        $data['tanggal_mulai'] = Carbon::parse($data['tanggal_mulai'])->format('Y-m-d H:i:s');
+        $data['tanggal_selesai'] = Carbon::parse($data['tanggal_selesai'])->format('Y-m-d H:i:s');
+        $data['akses_mulai'] = Carbon::parse($data['akses_mulai'])->format('Y-m-d H:i:s');
+        $data['akses_selesai'] = Carbon::parse($data['akses_selesai'])->format('Y-m-d H:i:s');
         $giat = Giat::create($data);
         if ($giat) {
             return $giat;
@@ -75,14 +87,14 @@ class GiatServices
     {
         $giat = Giat::findOrFail($id);
         if ($giat) {
-            $data['tanggal_mulai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['tanggal_mulai'])->format('Y-m-d H:i:s');
-            $data['tanggal_selesai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['tanggal_selesai'])->format('Y-m-d H:i:s');
-            $data['akses_mulai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['akses_mulai'])->format('Y-m-d H:i:s');
-            $data['akses_selesai'] = Carbon::createFromFormat('d-m-Y H:i:s', $data['akses_selesai'])->format('Y-m-d H:i:s');
-            $giat->update($data);
+            $data['tanggal_mulai'] = Carbon::parse($data['tanggal_mulai'])->format('Y-m-d H:i:s');
+            $data['tanggal_selesai'] = Carbon::parse($data['tanggal_selesai'])->format('Y-m-d H:i:s');
+            $data['akses_mulai'] = Carbon::parse($data['akses_mulai'])->format('Y-m-d H:i:s');
+            $data['akses_selesai'] = Carbon::parse($data['akses_selesai'])->format('Y-m-d H:i:s');
+            $results = $giat->update($data);
             return $giat;
         }
-        return response()->json([
+        return ([
             'status' => false,
             'message' => "Data Gagal Disimpan!"
         ]);

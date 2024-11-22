@@ -14,21 +14,25 @@ class LaporanBidangByIdUserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $userInfo = $this->resource['user_info'];
+
         return [
-            'nama' => $this->resource['durasi_by_user']->first()->nama ?? 'Tidak Ditemukan',
-            'jabatan' => $this->resource['durasi_by_user']->first()->jabatan ?? 'Tidak Ditemukan',
-            'role' => $this->resource['durasi_by_user']->first()->role ?? 'Tidak Ditemukan',
-    
-            'data_item' => isset($this->resource['durasi_by_user']) ? 
-                $this->resource['durasi_by_user']->map(function ($durasi) {
-                    return [
-                        'id_item' => $durasi->id_item,
-                        'deskripsi' => $durasi->deskripsi ?? 'Tidak Ditemukan', // Pastikan deskripsi diambil
-                        'total_durasi' => round($durasi->total_durasi / 3600, 2), // Durasi dalam jam
-                    ];
-                }) : [],
-    
-            'riwayat_giat' => isset($this->resource['riwayat_giat']) ? 
+            'nama' => $userInfo->nama ?? 'Tidak Ditemukan',
+            'jabatan' => $userInfo->jabatan ?? 'Tidak Ditemukan',
+            'role' => $userInfo->role ?? 'Tidak Ditemukan',
+
+            'data_item' => $this->resource['durasi_by_user']->map(function ($durasi) {
+                return [
+                    'id_item' => $durasi->id_item,
+                    'deskripsi' => $durasi->deskripsi ?? 'Tidak Ditemukan',
+                    'total_durasi' => $durasi->total_durasi > 0
+                        ? round($durasi->total_durasi / 3600, 2)
+                        : 0, // Durasi dalam jam atau default 0
+                ];
+            }),
+
+
+            'riwayat_giat' => isset($this->resource['riwayat_giat']) ?
                 $this->resource['riwayat_giat'] : [],
         ];
     }
