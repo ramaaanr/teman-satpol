@@ -17,19 +17,14 @@ document.addEventListener("DOMContentLoaded", function() {
   } else {
     $('#backButton').addClass('hidden')
   }
-
-
-
   navLinks.forEach(link => {
     // Remove any existing active class
     link.classList.remove('text-gray-100', 'bg-gray-700', 'bg-opacity-25');
     // Get the current URL path
     // Check if the link's href matches the current path
-    if (link.getAttribute('href').includes(pathParts[1])) {
-      // Add the active class
+    if (link.getAttribute('href').split('/').pop() === pathParts[1]) {
       link.classList.add('text-gray-100', 'bg-gray-900', 'font-bold', 'bg-opacity-25');
     } else {
-      // Ensure other links are not active
       link.classList.add('font-semibold', 'hover:bg-gray-700', 'hover:bg-opacity-25',
         'hover:text-gray-100');
     }
@@ -46,12 +41,9 @@ document.addEventListener("DOMContentLoaded", function() {
         'Authorization': `Bearer ${token}`
       },
       success: () => {
-        console.log("sukses");
         window.location.reload();
       },
-      error: () => {
-        console.log("gagal");
-      }
+      error: () => {}
     })
   })
 });
