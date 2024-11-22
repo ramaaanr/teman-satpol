@@ -13,22 +13,21 @@
     </div>
     <div class="actions-detail flex items-center space-x-4">
       <p class="flex space-x-1">
-        <span class="text-yellow-300 font-semibold">120</span>
+        <span id="jumlah_ditugaskan" class="text-yellow-300 font-semibold"></span>
         <span class="text-zinc-700 font-semibold">Ditugaskan</span>
       </p>
       <p class="flex space-x-1">
-        <span class="text-blue-500 font-semibold">12</span>
-        <span class="text-zinc-700 font-semibold">Mengajukan</span>
+        <span id="jumlah_bertugas" class="text-blue-500 font-semibold"></span>
+        <span class="text-zinc-700 font-semibold">Bertugas</span>
       </p>
       <p class="flex space-x-1">
-        <span class="text-green-500 font-semibold">5</span>
-        <span class="text-zinc-700 font-semibold">Diterima</span>
+        <span id="jumlah_disetujui" class="text-green-500 font-semibold"></span>
+        <span class="text-zinc-700 font-semibold">Disetujui</span>
       </p>
       <p class="flex space-x-1">
-        <span class="text-red-500 font-semibold">2</span>
+        <span id="jumlah_ditolak" class="text-red-500 font-semibold"></span>
         <span class="text-zinc-700 font-semibold">Ditolak</span>
       </p>
-
     </div>
   </div>
 
@@ -68,6 +67,17 @@ $(document).ready(function() {
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     },
+    beforeSend: function() {
+      // Tampilkan spinner atau disable tombol saat proses pengiriman
+      Swal.fire({
+        title: 'Mohon Tunggu',
+        html: 'Sedang memproses data...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+    },
     success: function({
       Data: {
         kegiatan,
@@ -78,14 +88,24 @@ $(document).ready(function() {
         jumlah_petugas,
         kendaraan,
         penugasans,
+        jumlah_ditugaskan,
+        jumlah_selesai: jumlah_disetujui,
+        jumlah_ditolak,
+        jumlah_bertugas,
       }
     }) {
+      Swal.close();
+
       $('#kegiatan').text(kegiatan);
       $('#detail').text(detail_kegiatan);
       $('#tempat').text(tempat);
       $('#tanggal').text(`${tanggal_mulai} - ${tanggal_selesai}`);
       $('#petugas').text(jumlah_petugas);
       $('#kendaraan').text(kendaraan);
+      $('#jumlah_ditugaskan').text(jumlah_ditugaskan);
+      $('#jumlah_bertugas').text(jumlah_bertugas);
+      $('#jumlah_ditolak').text(jumlah_ditolak);
+      $('#jumlah_disetujui').text(jumlah_disetujui);
 
       $('#pegawaiTable').DataTable({
         data: penugasans,

@@ -35,6 +35,7 @@
 
   </div>
   <div class="card-review-kegiatan-container w-full p-2 space-y-4">
+
   </div>
   <script>
   $(document).ready(function() {
@@ -53,26 +54,39 @@
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       },
+      beforeSend: () => {
+        $('.card-review-kegiatan-container').html(`
+    <x-alert loading title="Loading" info="Data Review Kegiatan sedang dimuat" />
+        
+        `)
+      },
       success: function({
         data
       }) {
-        data.forEach(({
-          id,
-          kegiatan,
-          detail_kegiatan,
-          tempat,
-          kendaraan,
-          beban_biaya,
-          tanggal_mulai,
-          tanggal_selesai,
-          akses_mulai,
-          akses_selesai,
-          jumlah_ditugaskan,
-          jumlah_bertugas,
-          jumlah_ditolak,
-          jumlah_selesai,
-        }) => {
-          const item = `
+        $('.card-review-kegiatan-container').html(``)
+        if (data.length === 0) {
+          $('.card-review-kegiatan-container').html(`
+    <x-alert title="Data Kosong" info="Tidak ada giat yang diajukan" />
+        `);
+        } else {
+
+          data.forEach(({
+            id,
+            kegiatan,
+            detail_kegiatan,
+            tempat,
+            kendaraan,
+            beban_biaya,
+            tanggal_mulai,
+            tanggal_selesai,
+            akses_mulai,
+            akses_selesai,
+            jumlah_ditugaskan,
+            jumlah_bertugas,
+            jumlah_ditolak,
+            jumlah_selesai,
+          }) => {
+            const item = `
             <x-card-review-kegiatan-item 
 id="${id}"
 kegiatan="${kegiatan}"
@@ -85,8 +99,10 @@ tempat="${tempat}"
 tanggal="${tanggal_mulai} - ${tanggal_selesai}"
             />
             `
-          $('.card-review-kegiatan-container').append(item);
-        });
+            $('.card-review-kegiatan-container').append(item);
+          });
+        }
+
       },
       error: function(xhr, status, error) {
         console.error('Error:', error);

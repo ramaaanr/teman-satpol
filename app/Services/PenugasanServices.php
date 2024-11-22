@@ -59,10 +59,7 @@ class PenugasanServices
                 'giats' => function ($query) use ($currentDateTime) {
                     $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
                         $q->where('status', 'ditugaskan');
-                    }])
-                        // Tambahkan pengecekan berdasarkan akses_mulai dan akses_selesai
-                        ->where('akses_mulai', '<=', $currentDateTime)
-                        ->where('akses_selesai', '>=', $currentDateTime);
+                    }]);
                 }
             ])->findOrFail($id);
             if ($penugasan) {

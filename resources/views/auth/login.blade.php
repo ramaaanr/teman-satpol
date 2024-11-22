@@ -103,7 +103,6 @@ $(document).ready(function() {
         message,
         data
       }) {
-        // Cek apakah login berhasil atau gagal
         if (status) {
           // Jika berhasil
           Swal.fire({
