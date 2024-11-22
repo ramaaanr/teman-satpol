@@ -37,6 +37,8 @@
 
   </div>
   <div class="card-giat-container w-full p-2 space-y-4">
+
+
   </div>
   <script>
   $(document).ready(function() {
@@ -55,41 +57,54 @@
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       },
+      beforeSend: () => {
+        $('.card-giat-container').html(`
+    <x-alert loading title="Loading" info="Data Giat sedang dimuat" />
+        
+        `)
+      },
       success: function({
         data
       }) {
-        data.forEach(({
-          id,
-          kegiatan,
-          detail_kegiatan,
-          tempat,
-          kendaraan,
-          beban_biaya,
-          tanggal_mulai,
-          tanggal_selesai,
-          akses_mulai,
-          akses_selesai,
-          jumlah_ditugaskan,
-          jumlah_selesai,
-        }) => {
-          const item = `
-            <x-card-giat-item 
-id="${id}"
-kegiatan="${kegiatan}"
-detailKegiatan="${detail_kegiatan}"
-tempat="${tempat}"
-kendaraan="${kendaraan}"
-bebanBiaya="${beban_biaya}"
-tanggalMulai="${tanggal_mulai}"
-tanggalSelesai="${tanggal_selesai}"
-aksesMulai="${akses_mulai}"
-aksesSelesai="${akses_selesai}"
-jumlahDitugaskan="${jumlah_ditugaskan}"
-jumlahSelesai="${jumlah_selesai}"
-            />
-            `
-          $('.card-giat-container').append(item);
-        });
+        $('.card-giat-container').html(``)
+        if (data.length === 0) {
+          $('.card-giat-container').html(`
+    <x-alert title="Data Kosong" info="Tidak ada giat yang diajukan" />
+        `);
+        } else {
+          data.forEach(({
+            id,
+            kegiatan,
+            detail_kegiatan,
+            tempat,
+            kendaraan,
+            beban_biaya,
+            tanggal_mulai,
+            tanggal_selesai,
+            akses_mulai,
+            akses_selesai,
+            jumlah_ditugaskan,
+            jumlah_selesai,
+          }) => {
+            const item = `
+                      <x-card-giat-item 
+          id="${id}"
+          kegiatan="${kegiatan}"
+          detailKegiatan="${detail_kegiatan}"
+          tempat="${tempat}"
+          kendaraan="${kendaraan}"
+          bebanBiaya="${beban_biaya}"
+          tanggalMulai="${tanggal_mulai}"
+          tanggalSelesai="${tanggal_selesai}"
+          aksesMulai="${akses_mulai}"
+          aksesSelesai="${akses_selesai}"
+          jumlahDitugaskan="${jumlah_ditugaskan}"
+          jumlahSelesai="${jumlah_selesai}"
+                      />
+                      `
+            $('.card-giat-container').append(item);
+          });
+        }
       },
       error: function(xhr, status, error) {
         console.error('Error:', error);
