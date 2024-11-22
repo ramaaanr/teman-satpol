@@ -51,7 +51,11 @@ $(document).ready(function() {
         "Content-Type": "application/json",
       },
       success: function(data) {
+
+        $('.alert-container').addClass('hidden');
+        $('#form-giat').removeClass('hidden');
         if (data.status) {
+
           // Fill in the form fields with existing data
           $("#kegiatan").val(data.Data.kegiatan);
           $("#tempat").val(data.Data.tempat);
@@ -111,6 +115,17 @@ $(document).ready(function() {
           'Authorization': 'Bearer ' + token
         },
         data: JSON.stringify(payload),
+        beforeSend: function() {
+          // Tampilkan spinner atau disable tombol saat proses pengiriman
+          Swal.fire({
+            title: 'Mohon Tunggu',
+            html: 'Sedang memproses data...',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
+        },
         success: function(response) {
           Swal.fire({
             icon: 'success',
@@ -182,7 +197,10 @@ $(document).ready(function() {
 <div class="w-full min-h-[550px] bg-white text-zinc-700 rounded-md p-4 flex flex-col items-start">
   <h1 class="font-bold text-4xl W-full">Edit Data Giat</h1>
   <p class="text-lg text-zinc-400 W-full">Ubah data giat yang diinginkan</p>
-  <form id="form-giat" class="mt-2 space-y-4 w-full">
+  <div class="alert-container w-1/2 mt-2">
+    <x-alert loading title="Loading" info="Sedang Memuat Data! Mohon ditunggu"></x-alert>
+  </div>
+  <form id="form-giat" class="mt-2 space-y-4 w-full hidden">
     <div class="form-row-1 flex w-full space-x-4">
       <x-input value="" type="text" name="kegiatan" id="kegiatan" label="Nama Kegiatan" />
       <x-input value="" type="text" name="tempat" id="tempat" label="Tempat" />

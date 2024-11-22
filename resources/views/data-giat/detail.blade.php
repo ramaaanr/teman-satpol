@@ -8,7 +8,10 @@
 <div class="w-full min-h-[550px] bg-white text-zinc-700 rounded-md p-4 flex flex-col items-start">
   <h1 class="font-bold text-4xl W-full">Detail Giat</h1>
   <p class="text-lg text-zinc-400 W-full">detail dari giat yang dilakukan</p>
-  <form id="form-giat" class="mt-2 space-y-4 w-full">
+  <div class="alert-container w-1/2 mt-2">
+    <x-alert loading title="Loading" info="Sedang Memuat Data! Mohon ditunggu"></x-alert>
+  </div>
+  <form id="form-giat" class="mt-2 space-y-4 w-full hidden">
     <div class="form-row-1 flex w-full space-x-4 ">
       <x-detail-item id="kegiatan" value="" label="Nama Kegiatan" />
       <x-detail-item id="tempat" value="" label="Tempat" />
@@ -75,7 +78,8 @@ $(document).ready(function() {
       "Content-Type": "application/json",
     },
     success: function(data) {
-      console.log(data);
+      $('.alert-container').addClass('hidden');
+      $('#form-giat').removeClass('hidden');
       if (data.status) {
         // Update values inside each detail-item component
         $("#kegiatan .value-display").text(data.Data.kegiatan);
