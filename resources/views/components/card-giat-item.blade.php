@@ -1,5 +1,5 @@
 <div
-  class="w-full cursor-pointer text-zinc-700 bg-white rounded-lg shadow-md border border-gray-100 p-6 transition-all ease-in-out hover:-translate-y-0.5 hover:ring-1 hover:ring-yellow-100 hover:shadow-yellow-100 ">
+  class="w-full cursor-pointer text-zinc-700 bg-white rounded-lg shadow-md border border-gray-100 p-6 transition-all ease-in-out hover:-translate-x-0.5  hover:shadow-lg ">
 
   <div class="detail-1 flex">
     <div class="header-detail w-full">
