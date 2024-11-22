@@ -161,6 +161,17 @@ $(document).ready(function() {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      beforeSend: function() {
+        // Tampilkan spinner atau disable tombol saat proses pengiriman
+        Swal.fire({
+          title: 'Mohon Tunggu',
+          html: 'Sedang memproses data...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      },
       success: function({
         data: {
           total_giat,
@@ -169,6 +180,7 @@ $(document).ready(function() {
           statistik_item
         }
       }) {
+        Swal.close();
         $('#total-giat').text(total_giat);
         $('#total-user').text(total_users);
         $('#total-kegiatan').text(total_kegiatan);

@@ -75,12 +75,24 @@ $(document).ready(function() {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+      beforeSend: function() {
+        // Tampilkan spinner atau disable tombol saat proses pengiriman
+        Swal.fire({
+          title: 'Mohon Tunggu',
+          html: 'Sedang memproses data...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      },
       success: ({
         data: {
           deskripsi,
           total_durasi_pengguna,
         }
       }) => {
+        Swal.close();
         // Memasukkan deskripsi ke dalam elemen dengan id "deskripsi"
         $('#deskripsi').text(deskripsi);
 
