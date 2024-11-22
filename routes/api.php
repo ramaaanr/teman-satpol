@@ -54,5 +54,6 @@ Route::get('/detail_items', [DetailItemController::class, 'index']);
 Route::patch('/review_kegiatan/{id}', [ReviewKegiatanController::class, 'update']);
 
 Route::get('laporan_bidang', [LaporanBidangController::class, 'show']);
+Route::get('/laporan_bidang/export', [LaporanBidangController::class, 'export']);
 
 Route::get('dashboard-staff/{id}', [DashboardController::class, 'showByIdUser']);
