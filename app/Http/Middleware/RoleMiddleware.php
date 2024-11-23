@@ -16,10 +16,10 @@ class RoleMiddleware
      * @param  string  $role
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, string $role = null)
     {
         // Cek apakah pengguna sudah login dan memiliki role yang sesuai
-        if (Auth::check() && Auth::user()->role === $role) {
+        if (Auth::check() && ($role === null || Auth::user()->role === $role)) {
             return $next($request);
         }
 
