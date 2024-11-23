@@ -57,6 +57,7 @@ $(document).ready(function() {
       url: '/api/users', // URL to fetch data from
       dataSrc: 'data' // Indicate that data is a flat array
     },
+    pageLength: 100,
     columns: [{
         data: 'nama'
       },
