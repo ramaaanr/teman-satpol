@@ -81,6 +81,7 @@ class LaporanBidangServices
                 ->select(
                     'items.id as id_item',
                     'items.deskripsi',
+                    DB::raw('COALESCE(COUNT(penugasans.durasi), 0) as volume'),
                     DB::raw('COALESCE(SUM(TIME_TO_SEC(penugasans.durasi)), 0) as total_durasi'),
                     DB::raw('COALESCE(MAX(penugasans.durasi), "00:00:00") as penugasans_durasi')
                 )
@@ -152,45 +153,45 @@ class LaporanBidangServices
         }
     }
 
-    public function exportLaporanBidang($tahun, $bulan)
-    {
-        $filterTahunDanBulan = function ($query) use ($tahun, $bulan) {
-            if ($tahun) {
-                $query->whereYear('created_at', $tahun);
-            }
-            if ($bulan) {
-                $query->whereMonth('created_at', $bulan);
-            }
-        };
+    // public function exportLaporanBidang($tahun, $bulan)
+    // {
+    //     $filterTahunDanBulan = function ($query) use ($tahun, $bulan) {
+    //         if ($tahun) {
+    //             $query->whereYear('created_at', $tahun);
+    //         }
+    //         if ($bulan) {
+    //             $query->whereMonth('created_at', $bulan);
+    //         }
+    //     };
 
-        $statistikItem = Item::query()
-            ->with(['detailItems.penugasan' => $filterTahunDanBulan])
-            ->get();
+    //     $statistikItem = Item::query()
+    //         ->with(['detailItems.penugasan' => $filterTahunDanBulan])
+    //         ->get();
 
-        $data = $statistikItem->map(function ($item) {
-            $totalDurasi = $item->detailItems->reduce(function ($carry, $detailItem) {
-                return $carry + $this->parseDurationToHours($detailItem->penugasan->durasi ?? '00:00:00');
-            }, 0);
+    //     $data = $statistikItem->map(function ($item) {
+    //         $totalDurasi = $item->detailItems->reduce(function ($carry, $detailItem) {
+    //             return $carry + $this->parseDurationToHours($detailItem->penugasan->durasi ?? '00:00:00');
+    //         }, 0);
 
-            return [
-                $item->id, //column : nomor
-                $item->deskripsi ?? 'Tidak Ditemukan', // Column : Butir Kegiatan
-                $totalDurasi ?: 0,  // Column : Volume Kegiatan (jika kosong, isi dengan 0)
-            ];
-        })->toArray();
+    //         return [
+    //             $item->id, //column : nomor
+    //             $item->deskripsi ?? 'Tidak Ditemukan', // Column : Butir Kegiatan
+    //             $totalDurasi ?: 0,  // Column : Volume Kegiatan (jika kosong, isi dengan 0)
+    //         ];
+    //     })->toArray();
 
-        $export = new LaporanBidangExport($data);
+    //     $export = new LaporanBidangExport($data);
 
-        // Simpan ke folder
-        $results =  $export->exportToFile();
-        if ($results){
-            return ([
-                'status' => true,
-                'message' => "Data Berhasil Diexport!",
-                'file_path' => $results
-            ]);
-        }
-    }
+    //     // Simpan ke folder
+    //     $results =  $export->exportToFile();
+    //     if ($results){
+    //         return ([
+    //             'status' => true,
+    //             'message' => "Data Berhasil Diexport!",
+    //             'file_path' => $results
+    //         ]);
+    //     }
+    // }
 
     private function parseDurationToHours($time)
     {

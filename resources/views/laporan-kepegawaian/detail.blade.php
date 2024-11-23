@@ -57,20 +57,31 @@
   <div class="flex w-full mt-4  space-x-3">
     <div
       class="w-full h-fit    p-4 bg-white border border-gray-200 rounded-lg shadow hover:-translate-x-1 hover:shadow-lg hover:border-gray-300 transition-all ease-in-out">
-      <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
-        <span class="material-symbols-outlined text-white mr-2">
-          event
-        </span>
-        <p>
-          Data Item
-          Perjam
-        </p>
+      <div class="flex space-x-2">
+        <div class="font-normal flex dark:text-gray-400 text-white bg-zinc-700 rounded-md w-fit py-2 px-4 mb-4">
+          <span class="material-symbols-outlined text-white mr-2">
+            event
+          </span>
+          <p>
+            Data Item
+            Perjam
+          </p>
+        </div>
+        <button id="print-button"
+          class="text-white w-[170px]  bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-zinc-300 font-medium rounded-lg text-sm px-2 h-fit py-2 text-center inline-flex items-center dark:bg-zinc-600 dark:hover:bg-zinc-700 dark:focus:ring-zinc-800"
+          type="button">
+          <span class='material-symbols-outlined text-zinc-700 mr-2'>
+            print
+          </span>
+          <span class="text-zinc-700 font-medium">Cetak Data </span>
+        </button>
       </div>
       <div class="table-container  w-full px-8">
         <table id="durasiTable">
           <thead>
             <tr>
               <th>Deskripsi</th>
+              <th>Volume Kegiatan</th>
               <th>Total Durasi (jam)</th>
             </tr>
           </thead>
@@ -124,9 +135,14 @@
   </div>
 
 </div>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
 <script type="module">
 $(document).ready(function() {
+  document.getElementById("print-button").addEventListener('click', function() {
+    var wb = XLSX.utils.table_to_book(document.getElementById("durasiTable"));
+    XLSX.writeFile(wb, "DurasiPerItem.xlsx");
+  });
   const userData = localStorage.getItem('user');
 
   const user = userData ? JSON.parse(userData) : null;
@@ -192,10 +208,15 @@ $(document).ready(function() {
             title: 'Deskripsi'
           },
           {
+            data: 'volume',
+            title: 'Volume Kegiatan'
+          },
+          {
             data: 'total_durasi',
             title: 'Total Durasi (jam)'
           }
         ],
+        pageLength: 25,
         paging: true,
         searching: true,
         ordering: true,

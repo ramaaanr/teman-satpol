@@ -32,6 +32,16 @@
       </svg>
     </button>
 
+    <button id="print-button"
+      class="text-white w-[170px]  bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-zinc-300 font-medium rounded-lg text-sm px-2 py-0 text-center inline-flex items-center dark:bg-zinc-600 dark:hover:bg-zinc-700 dark:focus:ring-zinc-800"
+      type="button">
+      <span class='material-symbols-outlined text-zinc-700 mr-2'>
+        print
+      </span>
+      <span class="text-zinc-700 font-medium">Cetak Data </span>
+    </button>
+
+
     <!-- Dropdown menu -->
     <div id="dropDownMonth"
       class="z-10 hidden bg-white divide-y border border-gray-300 divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
@@ -106,7 +116,7 @@
 
 
   <div class="relative mt-4 overflow-x-auto  sm:rounded-lg w-full bg-white border border-gray-200 rounded-lg shadow  ">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table id="TableToExport" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="px-6 py-3 w-3/4">
@@ -122,9 +132,14 @@
     </table>
   </div>
 </div>
-
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script type="module">
 $(document).ready(function() {
+
+  document.getElementById("print-button").addEventListener('click', function() {
+    var wb = XLSX.utils.table_to_book(document.getElementById("TableToExport"));
+    XLSX.writeFile(wb, "DurasiPerItem.xlsx");
+  });
 
   const monthNames = [
     "Semuanya", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -197,32 +212,32 @@ $(document).ready(function() {
         }) => {
 
           const tableRow = `
-            <tr class="hover:bg-gray-50 border-b dark:border-gray-700">
-          <td class="px-6 py-4 hover:underline">
-            <a href="laporan-bidang/${id}">${deskripsi}</a>
-          </td>
-          <td class="px-6 py-4">
-          ${Math.round(total_durasi)}
-          </td>
-        </tr>
-          `
+<tr class="hover:bg-gray-50 border-b dark:border-gray-700">
+  <td class="px-6 py-4 hover:underline">
+    <a href="laporan-bidang/${id}">${deskripsi}</a>
+  </td>
+  <td class="px-6 py-4">
+    ${Math.round(total_durasi)}
+  </td>
+</tr>
+`
           $('#table-body-item').append(tableRow);
         });
 
         if (allZeros) {
           // Hilangkan elemen chart
           $('.chart-container').html(`
-      <img class="mx-auto" width="430px" src="/pie_chart.svg" alt="">
-          <div class="text-center mt-4 text-zinc-700 font-bold">
-            <p>Data tidak tersedia untuk ditampilkan.</p>
-          </div>
-        `);
+<img class="mx-auto" width="430px" src="/pie_chart.svg" alt="">
+<div class="text-center mt-4 text-zinc-700 font-bold">
+  <p>Data tidak tersedia untuk ditampilkan.</p>
+</div>
+`);
           // Tampilkan alert
         } else {
           // Kosongkan canvas sebelum membuat chart baru
           $('.chart-container').html(`
-        <canvas class="" id="myPieChart"></canvas>
-        `);;
+<canvas class="" id="myPieChart"></canvas>
+`);;
           const canvas = document.getElementById("myPieChart");
           const ctx = canvas.getContext("2d");
 
@@ -342,8 +357,7 @@ $(document).ready(function() {
     const listItem = document.createElement("li");
     const link = document.createElement("a");
     link.href = "#";
-    link.className =
-      `block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white `;
+    link.className = `block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white `;
     link.textContent = monthNames[month];
 
     // Add event listener to update button text and perform AJAX

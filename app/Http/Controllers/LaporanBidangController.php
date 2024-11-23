@@ -24,20 +24,20 @@ class LaporanBidangController extends Controller
         return $results;
     }
 
-    public function export(Request $request)
-    {
-        $tahun = $request->query('tahun'); // Ambil query param tahun
-        $bulan = $request->query('bulan'); // Ambil query param bulan
-        try {
-            // Panggil services untuk proses export dan penyimpanan file
-            $results = $this->laporanBidangServices->exportLaporanBidang($tahun, $bulan);
-            return $results;
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Terjadi kesalahan saat mengekspor laporan.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
+    // public function export(Request $request)
+    // {
+    //     $tahun = $request->query('tahun'); // Ambil query param tahun
+    //     $bulan = $request->query('bulan'); // Ambil query param bulan
+    //     try {
+    //         // Panggil services untuk proses export dan penyimpanan file
+    //         $results = $this->laporanBidangServices->exportLaporanBidang($tahun, $bulan);
+    //         return $results;
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Terjadi kesalahan saat mengekspor laporan.',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
 }
