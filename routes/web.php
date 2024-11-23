@@ -12,12 +12,11 @@ Route::get('/', function () {
 
 // Mengelompokkan rute yang menggunakan middleware 'auth'
 Route::middleware('auth')->group(function () {
-
     // Rute untuk dashboard
     Route::get('/dashboard', function () {
         return view('dashboard.index');
     })->name('dashboard');
-
+    Route::middleware('auth')->group(function () {});
     // Rute untuk data kegiatan
     Route::get('/data-giat', function () {
         return view('data-giat.index');
