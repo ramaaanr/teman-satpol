@@ -80,13 +80,12 @@ $(document).ready(function() {
               <button class="edit-btn bg-blue-500 text-white px-2 py-1 rounded" data-id="${row.id}"
 data-NIP="${row.NIP}"
 data-nama="${row.nama}"
-
 data-jabatan="${row.jabatan}"
 data-role="${row.role}">
                 <span class="material-symbols-outlined">edit</span>
               </button>
               
-            </div>` : `<a class="detail-btn bg-green-500 text-white px-2 py-1 rounded" href="/laporan-kepegawaian/${row.id}">
+            </div>` : `<a class="detail-btn bg-green-500 text-white px-2 py-1 flex items-center w-fit rounded" href="/laporan-kepegawaian/${row.id}">
                 <span class="material-symbols-outlined">info</span>
               </a>`;
         }
