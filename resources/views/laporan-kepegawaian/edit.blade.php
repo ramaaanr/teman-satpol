@@ -13,7 +13,7 @@
 
       <div class="mb-4">
         <label for="editNIP" class="block text-sm font-medium text-gray-700">Nomor Induk Pegawai (NIP)</label>
-        <input type="text" id="editNIP" name="nip" required
+        <input type="text" id="editNIP" name="NIP" required
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
       </div>
 
@@ -81,6 +81,20 @@
       </div>
 
 
+      <div class="mb-4">
+        <label for="editPassword" class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" id="editPassword" name="password"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
+      </div>
+
+
+      <div class="mb-4">
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+        <input type="password" id="confirmPassword"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
+      </div>
+
+
 
       <div class="flex justify-end">
         <button type="button" id="editModalClose" class="bg-gray-500 text-white px-4 py-2 rounded-md">Tutup</button>
@@ -112,10 +126,22 @@ $('#editModalClose').on('click', function() {
 // Submit Edit Form via AJAX
 $('#editForm').on('submit', function(e) {
   e.preventDefault();
+  const password = $('#editPassword').val();
+  const confirmPassword = $('#confirmPassword').val();
+  if (password) {
+    if (password !== confirmPassword) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Password Tidak Sama!'
+      });
+      return;
+    }
+  }
 
   $.ajax({
-    url: '/api/users/' + $('#editId').val(),
-    method: 'PUT',
+    url: `/api/users/${$('#editId').val()}?_method=PATCH`,
+    method: 'POST',
     data: $(this).serialize(),
     success: function(response) {
       Swal.fire({

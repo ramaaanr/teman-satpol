@@ -43,7 +43,6 @@ class UserController extends Controller
             'NIP' => 'required',
             'jabatan' => 'required',
             'role' => 'required',
-            'password' => 'required',
         ]);
         $result = $this->userServices->doUpdate($request->all(), $id);
         return response()->json($result);

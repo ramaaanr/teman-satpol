@@ -87,6 +87,13 @@ class UserServices
                         ];
                     }
                 }
+
+                if ($data['password']) {
+                    $password = Hash::make($data['password']);
+                    $data['password'] = $password;
+                } else {
+                    unset($data['password']);
+                }
                 $user->update($data);
                 return ([
                     'status' => true,
