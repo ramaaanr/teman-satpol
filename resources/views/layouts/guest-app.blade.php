@@ -6,8 +6,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'My Application')</title>
-  <!-- <script src="/build/assets/app-B4uPvtxE.js"></script> -->
-  <!-- <link rel="stylesheet" href="/build/assets/app-DnB_b2nK.css"> -->
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>

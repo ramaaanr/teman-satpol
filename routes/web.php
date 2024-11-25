@@ -50,8 +50,12 @@ Route::middleware('auth')->group(function () {
         })->name('detail-review-kegiatan');
     });
 
+    Route::middleware('role:staff')->group(function () {
+        Route::get('/e-learning', function () {
+            return view('e-learning.index');
+        })->name('e-learning');
+    });
     Route::middleware('role:super-admin')->group(function () {
-
         Route::get('/laporan-bidang', function () {
             return view('laporan-bidang.index');
         })->name('laporan-bidang');
@@ -82,8 +86,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/kegiatan/edit/{id}', function () {
         return view('kegiatan.edit');
     })->name('edit-kegiatan');
-
-    // Rute untuk tambah kegiatan
-
-
 });
