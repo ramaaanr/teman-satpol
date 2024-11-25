@@ -55,7 +55,7 @@ class PenugasanAllResource extends JsonResource
                         ->translatedFormat('d F Y H:i') . ' WITA'
                         : null,
                     'deleted_at' => $this->giats->deleted_at,
-                    'jumlah_petugas' => $this->giats->jumlah_petugas, // Menampilkan jumlah petugas
+                    'jumlah_petugas' => $this->giats->jumlah_petugas ?? 0, // Menampilkan jumlah petugas
                 ];
             }),
         ];

@@ -12,10 +12,12 @@ class PenugasanController extends Controller
     function __construct(){
         $this->penugasanServices = new PenugasanServices;
     }
+    
     public function index (Request $request){
         $idGiat = $request->query('id_giat');
         $idUser = $request->query('id_user');
-        $results = $this->penugasanServices->getAll($idGiat, $idUser);
+        $status = $request->query('status');
+        $results = $this->penugasanServices->getAll($idGiat, $idUser, $status);
         return $results;
     }
 
