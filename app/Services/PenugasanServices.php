@@ -150,11 +150,22 @@ class PenugasanServices
         try {
             $penugasan = Penugasan::findOrFail($id);
             if ($penugasan) {
-                $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
-                $destinationPath = public_path() . '/storage/images/';
-                $file->move($destinationPath, $fileName);
+                if ($file){
+                    $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
+                    $destinationPath = public_path() . '/storage/images/';
+                    $file->move($destinationPath, $fileName);
+                    $insertData = $data;
+                    $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+                    $results = $penugasan->update($insertData);
+                    if ($results) {
+                        return ([
+                            'status' => true,
+                            'message' => 'Data Berhasil Diubah'
+                        ]);
+                    }
+                }
                 $insertData = $data;
-                $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+                $insertData['dokumen_lapangan'] = $file;
                 $results = $penugasan->update($insertData);
                 if ($results) {
                     return ([
