@@ -10,14 +10,12 @@ use App\Http\Resources\GiatDetailResource;
 
 class GiatServices
 {
-    public function getAll()
+    public function getAll($status = null)
     {
-        $giat = Giat::withCount([
-            // Menghitung jumlah penugasan dengan status "mengajukan"
+        $giatQuery = Giat::withCount([
             'penugasans as jumlah_ditugaskan' => function ($query) {
                 $query->where('status', 'ditugaskan');
             },
-            // Menghitung jumlah penugasan dengan status "selesai"
             'penugasans as jumlah_selesai' => function ($query) {
                 $query->where('status', 'disetujui');
             },
@@ -27,12 +25,28 @@ class GiatServices
             'penugasans as jumlah_ditolak' => function ($query) {
                 $query->where('status', 'ditolak');
             }
-        ])->get();
-        return ([
+        ])->with('penugasans'); // Include relasi penugasans
+
+        // Jika query params `status` diberikan, tambahkan filter
+        if ($status === 'selesai') {
+            $giatQuery = $giatQuery->whereHas('penugasans', function ($query) {
+                $query->where('status', 'disetujui');
+            }, '=', function ($query) {
+                $query->selectRaw('count(*)')
+                    ->from('penugasans')
+                    ->whereColumn('penugasans.id_giat', 'giats.id');
+            });
+        } elseif ($status === 'dibatalkan') {
+            $giatQuery = $giatQuery->onlyTrashed(); // Mengambil giat yang memiliki `deleted_at` tidak null
+        }
+
+        $giat = $giatQuery->get();
+
+        return [
             'status' => true,
             'message' => "Berhasil Mengambil Data",
-            'data' => GiatResource::collection($giat)
-        ]);
+            'data' => GiatResource::collection($giat),
+        ];
     }
 
     public function doShow($id)

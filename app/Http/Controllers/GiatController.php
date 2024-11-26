@@ -17,9 +17,10 @@ class GiatController extends Controller
         $this->penugasanServices = new PenugasanServices();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $result = $this->giatServices->getAll();
+        $status = $request->query('status');
+        $result = $this->giatServices->getAll($status);
         return $result;
     }
 
