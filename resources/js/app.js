@@ -18,5 +18,3 @@ new DataTable("#myTable");
 // Ekspos Chart.js ke window agar bisa diakses dari luar
 window.Chart = Chart;
 window.XLSX = XLSX;
-
-// Mendapatkan key dari backend
