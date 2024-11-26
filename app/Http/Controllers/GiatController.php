@@ -17,9 +17,10 @@ class GiatController extends Controller
         $this->penugasanServices = new PenugasanServices();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $result = $this->giatServices->getAll();
+        $status = $request->query('status');
+        $result = $this->giatServices->getAll($status);
         return $result;
     }
 
@@ -80,7 +81,10 @@ class GiatController extends Controller
             foreach ($usersToRemove as $userId) {
                 $this->penugasanServices->doDelete($giat->id, $userId);
             }
-            return $giat;
+            return ([
+                'status' => true,
+                'message' => "Data Berhasil Diubah!"
+            ]);
         }
         // $results = $this->giatServices->doUpdate($request->all(), $id);
         // return $results;

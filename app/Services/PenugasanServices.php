@@ -78,10 +78,7 @@ class PenugasanServices
                 'giats' => function ($query) use ($currentDateTime) {
                     $query->withCount(['penugasans as jumlah_petugas' => function ($q) {
                         $q->where('status', 'ditugaskan');
-                    }])
-                        // Tambahkan pengecekan berdasarkan akses_mulai dan akses_selesai
-                        ->where('akses_mulai', '<=', $currentDateTime)
-                        ->where('akses_selesai', '>=', $currentDateTime);
+                    }]);
                 }
             ])->findOrFail($id);
             if ($penugasan) {
@@ -150,29 +147,16 @@ class PenugasanServices
         try {
             $penugasan = Penugasan::findOrFail($id);
             if ($penugasan) {
-                if ($file){
+                $insertData = $data;
+                if ($file) {
                     $fileName = Str::random(16) . '.' . $file->getClientOriginalExtension();
                     $destinationPath = public_path() . '/storage/images/';
                     $file->move($destinationPath, $fileName);
-                    $insertData = $data;
                     $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
-                    $results = $penugasan->update($insertData);
-                    if ($results) {
-                        return ([
-                            'status' => true,
-                            'message' => 'Data Berhasil Diubah'
-                        ]);
-                    }
+
                 }
-                $insertData = $data;
-                $insertData['dokumen_lapangan'] = $file;
-                $results = $penugasan->update($insertData);
-                if ($results) {
-                    return ([
-                        'status' => true,
-                        'message' => 'Data Berhasil Diubah'
-                    ]);
-                }
+                $penugasan->update($insertData);
+                return $penugasan;
             }
             return ([
                 'status' => false,
