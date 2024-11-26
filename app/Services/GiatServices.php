@@ -25,7 +25,10 @@ class GiatServices
             'penugasans as jumlah_ditolak' => function ($query) {
                 $query->where('status', 'ditolak');
             }
-        ])->with('penugasans'); // Include relasi penugasans
+        ])
+            ->with('penugasans') // Include relasi penugasans
+            ->orderBy('tanggal_mulai', 'desc'); // Sorting berdasarkan tanggal_mulai terbaru
+
 
         // Jika query params `status` diberikan, tambahkan filter
         if ($status === 'selesai') {
@@ -35,9 +38,9 @@ class GiatServices
                 $query->selectRaw('count(*)')
                     ->from('penugasans')
                     ->whereColumn('penugasans.id_giat', 'giats.id');
-            });
+            })->orderBy('tanggal_mulai', 'desc');;
         } elseif ($status === 'dibatalkan') {
-            $giatQuery = $giatQuery->onlyTrashed(); // Mengambil giat yang memiliki `deleted_at` tidak null
+            $giatQuery = $giatQuery->onlyTrashed()->orderBy('tanggal_mulai', 'desc');; // Mengambil giat yang memiliki `deleted_at` tidak null
         }
 
         $giat = $giatQuery->get();
