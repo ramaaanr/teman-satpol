@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\PenugasanDetailResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Crypt;
 
 class PenugasanServices
 {
@@ -24,10 +25,12 @@ class PenugasanServices
 
         // Filter berdasarkan $idGiat
         if ($idGiat) {
+            $idGiat = Crypt::decrypt($idGiat);
             $query->where('id_giat', $idGiat);
         }
         // Filter berdasarkan $idUser
         if ($idUser && !$status) {
+            $idUser = Crypt::decrypt($idUser);
             $query->where('id_user', $idUser)
                 ->whereHas('giats', function ($query) use ($currentDateTime) {
                     $query->where('akses_mulai', '<=', $currentDateTime)
@@ -37,11 +40,13 @@ class PenugasanServices
 
         // Filter berdasarkan status
         if ($idUser && $status === 'selesai') {
+            $idUser = Crypt::decrypt($idUser);
             // Penugasan selesai jika waktu sekarang melebihi akses_selesai
             $query->where('id_user', $idUser)->whereHas('giats', function ($query) use ($currentDateTime) {
                 $query->where('akses_selesai', '<', $currentDateTime);
             });
         } elseif ($idUser && $status === 'dibatalkan') {
+            $idUser = Crypt::decrypt($idUser);
             $query->withTrashed()->where('id_user', $idUser) // Sertakan penugasan yang sudah dihapus
                 ->where(function ($query) {
                     $query->whereNotNull('deleted_at') // Penugasan dihapus
@@ -73,6 +78,7 @@ class PenugasanServices
     public function doShow($id)
     {
         try {
+            $id = Crypt::decrypt($id);
             // Mendapatkan waktu saat ini di zona waktu Asia/Makassar (WITA)
             $currentDateTime = now()->setTimezone('Asia/Makassar');
 
@@ -148,6 +154,7 @@ class PenugasanServices
     public function doUpdate($data, $id, $file)
     {
         try {
+            $id = Crypt::decrypt($id);
             $penugasan = Penugasan::findOrFail($id);
             if ($penugasan) {
                 $insertData = $data;

@@ -1,13 +1,15 @@
 <?php
 namespace App\Services;
 
-use App\Http\Resources\DashboardByIdUserResource;
 use App\Models\User;
 use App\Models\Penugasan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use App\Http\Resources\DashboardByIdUserResource;
 
 class DashboardServices {
     public function doShowByIdUser ($userId){
+        $userId = Crypt::decrypt($userId);
         // Ambil data user
         $user = User::find($userId);
 
