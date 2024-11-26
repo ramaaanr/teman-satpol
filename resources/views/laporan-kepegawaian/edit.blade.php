@@ -82,15 +82,15 @@
 
 
       <div class="mb-4">
-        <label for="editPassword" class="block text-sm font-medium text-gray-700">Password</label>
+        <label for="editPassword" class="block text-sm font-medium text-gray-700">Password<span
+            class="text-[8px] text-red-500">*Password Tidak Perlu Diisi Jika Tidak Ada Perubahan!</span> </label>
         <input type="password" id="editPassword" name="password"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
       </div>
 
 
       <div class="mb-4">
-        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Konfirmasi Password <span
-            class="text-[8px] text-red-500">*Password Tidak Perlu Diisi Jika Tidak Ada Perubahan!</span> </label>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Konfirmasi Password </label>
         <input type="password" id="confirmPassword"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
       </div>

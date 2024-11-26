@@ -30,7 +30,7 @@ $(document).ready(function() {
 
   const fetchingData = (status) => {
     $.ajax({
-      url: `/api/penugasan?id_user=${idUser}&status${status}`, // Sesuaikan URL JSON
+      url: `/api/penugasan?id_user=${idUser}&status=${status}`, // Sesuaikan URL JSON
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

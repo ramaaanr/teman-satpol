@@ -26,20 +26,23 @@ class PenugasanServices
         if ($idGiat) {
             $query->where('id_giat', $idGiat);
         }
-
         // Filter berdasarkan $idUser
-        if ($idUser) {
-            $query->where('id_user', $idUser);
+        if ($idUser && !$status) {
+            $query->where('id_user', $idUser)
+                ->whereHas('giats', function ($query) use ($currentDateTime) {
+                    $query->where('akses_mulai', '<=', $currentDateTime)
+                        ->where('akses_selesai', '>=', $currentDateTime);
+                });
         }
 
         // Filter berdasarkan status
-        if ($status === 'selesai') {
+        if ($idUser && $status === 'selesai') {
             // Penugasan selesai jika waktu sekarang melebihi akses_selesai
-            $query->whereHas('giats', function ($query) use ($currentDateTime) {
+            $query->where('id_user', $idUser)->whereHas('giats', function ($query) use ($currentDateTime) {
                 $query->where('akses_selesai', '<', $currentDateTime);
             });
-        } elseif ($status === 'dibatalkan') {
-            $query->withTrashed() // Sertakan penugasan yang sudah dihapus
+        } elseif ($idUser && $status === 'dibatalkan') {
+            $query->withTrashed()->where('id_user', $idUser) // Sertakan penugasan yang sudah dihapus
                 ->where(function ($query) {
                     $query->whereNotNull('deleted_at') // Penugasan dihapus
                         ->orWhereHas('giats', function ($query) {
@@ -153,7 +156,6 @@ class PenugasanServices
                     $destinationPath = public_path() . '/storage/images/';
                     $file->move($destinationPath, $fileName);
                     $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
-
                 }
                 $penugasan->update($insertData);
                 return $penugasan;

@@ -13,6 +13,8 @@ use App\Http\Controllers\DetailItemController;
 use App\Http\Controllers\LaporanBidangController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ReviewKegiatanController;
+use Illuminate\Support\Facades\Crypt;
+
 
 /*
 |--------------------------------------------------------------------------
