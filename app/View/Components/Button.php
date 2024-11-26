@@ -10,18 +10,20 @@ class Button extends Component
     public $color;
     public $text;
     public $width;
+    public $disabled;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type = 'button', $color = 'blue', $text = 'Button', $width = "full")
+    public function __construct($type = 'button', $color = 'blue', $text = 'Button', $width = 'full', $disabled = false)
     {
         $this->type = $type;
         $this->color = $color;
         $this->text = $text;
         $this->width = $width;
+        $this->disabled = $disabled;
     }
 
     /**

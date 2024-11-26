@@ -85,8 +85,15 @@ $(document).ready(function() {
             kendaraan,
           }
         }) {
+          const colors = {
+            "Bertugas": 'blue',
+            "Ditugaskan": 'yellow',
+            "Disetujui": 'green',
+            "Ditolak": 'red',
+          }
+          const color = colors[status];
           let kegiatanItem =
-            `<x-card-kegiatan-item id="${id_penugasan}" kegiatan="${kegiatan}" status="${status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
+            `<x-card-kegiatan-item id="${id_penugasan}" color="${color}" kegiatan="${kegiatan}" status="${status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
           $('#card-kegiatan-container').append(kegiatanItem);
         });
       }

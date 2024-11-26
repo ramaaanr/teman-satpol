@@ -19,7 +19,7 @@ $sizes = [
 'lg' => 'text-lg px-5 py-2',
 ];
 
-$colorClass = $colors[$color] ?? $colors['blue']; // Default ke 'blue' jika tidak ditemukan
+$colorClass = $colors[$color]; // Default ke 'blue' jika tidak ditemukan
 $sizeClass = $sizes[$size] ?? $sizes['xs']; // Default ke 'xs' jika tidak ditemukan
 @endphp
 

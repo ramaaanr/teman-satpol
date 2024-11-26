@@ -14,8 +14,9 @@ class CardKegiatanItem extends Component
     public $tanggal;
     public $petugas;
     public $kendaraan;
+    public $color;
 
-    public function __construct($id, $kegiatan, $detail, $tempat, $tanggal, $status, $petugas, $kendaraan)
+    public function __construct($id, $kegiatan, $detail, $tempat, $tanggal, $status, $petugas, $kendaraan, $color)
     {
         $this->id = $id;
         $this->kegiatan = $kegiatan;
@@ -25,6 +26,7 @@ class CardKegiatanItem extends Component
         $this->tanggal = $tanggal;
         $this->petugas = $petugas;
         $this->kendaraan = $kendaraan;
+        $this->color = $color;
     }
 
     public function render()

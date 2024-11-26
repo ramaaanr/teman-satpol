@@ -5,7 +5,9 @@
     <div class="header-detail w-full">
       <div class="flex items-center">
         <p class="font-bold text-3xl mr-2 ">{{ $kegiatan }}</p>
-        <x-badge size="sm" color="blue">{{ $status }}</x-badge>
+        <span class="font-medium me-2 rounded-full h-fit bg-{{$color}}-100 text-{{$color}}-800 text-xs mt-1 py-1 px-3">
+          {{ $status }}
+        </span>
       </div>
       <p class=" text-md text-zinc-500">{{ $detail }}</p>
     </div>
@@ -27,6 +29,7 @@
   </div>
   <div class="detail-3 mt-2 flex items-center">
     <a href="/kegiatan/edit/{{ $id }}" class="w-1/2 pr-4">
+
       <x-button text="Isi Kegiatan" color='gray' width="full" />
     </a>
     <div class="detail-content flex items-start w-1/4">
