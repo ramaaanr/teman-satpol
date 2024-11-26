@@ -16,11 +16,14 @@ class PenugasanController extends Controller
         $this->penugasanServices = new PenugasanServices;
         $this->detailItemServices = new DetailItemServices;
     }
-    public function index(Request $request)
-    {
+
+    
+    public function index (Request $request){
+
         $idGiat = $request->query('id_giat');
         $idUser = $request->query('id_user');
-        $results = $this->penugasanServices->getAll($idGiat, $idUser);
+        $status = $request->query('status');
+        $results = $this->penugasanServices->getAll($idGiat, $idUser, $status);
         return $results;
     }
 
@@ -35,7 +38,7 @@ class PenugasanController extends Controller
         $request->validate([
             'durasi' => 'required',
             'detail' => 'required',
-            'dokumen_lapangan' => 'file|mimes:jpg,jpeg,png',
+            'dokumen_lapangan' => 'file|mimes:jpg,jpeg,png|max:2048',
             'status' => 'required',
             'id_giat' => 'required',
             'id_user' => 'required',

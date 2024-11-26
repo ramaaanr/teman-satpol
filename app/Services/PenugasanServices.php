@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PenugasanServices
 {
-    public function getAll($idGiat = null, $idUser = null)
+    public function getAll($idGiat = null, $idUser = null, $status = null)
     {
         $currentDateTime = now()->setTimezone('Asia/Makassar');
         $query = Penugasan::with(['giats' => function ($query) {
@@ -22,30 +22,49 @@ class PenugasanServices
             }]);
         }]);
 
-        // Filter berdasarkan $idGiat dan $idUser jika ada
+        // Filter berdasarkan $idGiat
         if ($idGiat) {
             $query->where('id_giat', $idGiat);
         }
+
+        // Filter berdasarkan $idUser
         if ($idUser) {
-            $query->where('id_user', $idUser)
-                ->whereHas('giats', function ($query) use ($currentDateTime) {
-                    $query->where('akses_mulai', '<=', $currentDateTime)
-                        ->where('akses_selesai', '>=', $currentDateTime);
-                });
+            $query->where('id_user', $idUser);
         }
+
+        // Filter berdasarkan status
+        if ($status === 'selesai') {
+            // Penugasan selesai jika waktu sekarang melebihi akses_selesai
+            $query->whereHas('giats', function ($query) use ($currentDateTime) {
+                $query->where('akses_selesai', '<', $currentDateTime);
+            });
+        } elseif ($status === 'dibatalkan') {
+            $query->withTrashed() // Sertakan penugasan yang sudah dihapus
+                ->where(function ($query) {
+                    $query->whereNotNull('deleted_at') // Penugasan dihapus
+                        ->orWhereHas('giats', function ($query) {
+                            $query->onlyTrashed(); // Giat dihapus
+                        });
+                })
+                ->with(['giats' => function ($query) {
+                    $query->withTrashed(); // Sertakan giats yang sudah dihapus
+                }]);
+        }
+
         $penugasan = $query->get();
 
         if ($penugasan->isNotEmpty()) {
-            return ([
+            return [
                 'status' => true,
                 'message' => 'Berhasil Mengambil Data',
-                'data' => PenugasanAllResource::collection($penugasan)
-            ]);
+                'data' => PenugasanAllResource::collection($penugasan),
+            ];
         }
-        return ([
+
+        return [
             'status' => false,
-            'message' => 'Data Tidak Ditemukan'
-        ]);
+            'message' => 'Data Tidak Ditemukan',
+        ];
     }
 
     public function doShow($id)
@@ -134,6 +153,7 @@ class PenugasanServices
                     $destinationPath = public_path() . '/storage/images/';
                     $file->move($destinationPath, $fileName);
                     $insertData['dokumen_lapangan'] = 'public/storage/images/' . $fileName;
+
                 }
                 $penugasan->update($insertData);
                 return $penugasan;
