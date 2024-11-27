@@ -55,7 +55,7 @@ $(document).ready(function() {
           // Loop untuk menampilkan data kegiatan
           data.forEach(function({
             id_penugasan,
-            status,
+            status: penugasan_status,
             giats: {
               kegiatan,
               detail_kegiatan,
@@ -72,9 +72,12 @@ $(document).ready(function() {
               "Disetujui": 'green',
               "Ditolak": 'red',
             }
-            const color = colors[status];
+            const color = colors[penugasan_status];
             let kegiatanItem =
-              `<x-card-kegiatan-item id="${id_penugasan}" color="${color}" kegiatan="${kegiatan}" status="${status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
+              status === 'selesai' || status === 'dibatalkan' || penugasan_status === 'selesai' ||
+              penugasan_status === 'bertugas' ?
+              `<x-card-kegiatan-item-disabled id="${id_penugasan}" color="${color}" kegiatan="${kegiatan}" status="${penugasan_status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />` :
+              `<x-card-kegiatan-item id="${id_penugasan}" color="${color}" kegiatan="${kegiatan}" status="${penugasan_status}" detail="${detail_kegiatan}" tempat="${tempat}" tanggal="${tanggal_mulai} - ${tanggal_selesai}" petugas="${jumlah_petugas}" kendaraan="${kendaraan}" />`
             $('#card-kegiatan-container').append(kegiatanItem);
           });
         }
