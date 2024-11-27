@@ -15,6 +15,8 @@
         <label for="editNIP" class="block text-sm font-medium text-gray-700">Nomor Induk Pegawai (NIP)</label>
         <input type="text" id="editNIP" name="NIP" required
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
+        <p id="edit-nip-error" class="text-sm text-red-500 mt-2 hidden">NIP hanya boleh berisi angka dan titik.</p>
+
       </div>
 
       <div class="mb-4">
@@ -88,6 +90,16 @@
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50">
       </div>
 
+      <div id="edit-password-errors" class="text-red-500 text-sm mt-2 space-y-1 hidden">
+        <ul>
+          <li id="edit-error-length">Minimal 8 karakter</li>
+          <li id="edit-error-uppercase">Mengandung huruf besar</li>
+          <li id="edit-error-lowercase">Mengandung huruf kecil</li>
+          <li id="edit-error-number">Mengandung angka</li>
+          <li id="edit-error-special">Mengandung karakter khusus</li>
+        </ul>
+      </div>
+
 
       <div class="mb-4">
         <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Konfirmasi Password </label>
@@ -106,10 +118,66 @@
 </div>
 
 <script>
+$('#editNIP').on('input', function() {
+  const nipValue = $(this).val();
+  const nipError = $('#edit-nip-error');
+
+  // Cek apakah input hanya berisi angka dan titik
+  if (/^[0-9.]*$/.test(nipValue)) {
+    nipError.addClass('hidden'); // Sembunyikan pesan error
+    $(this).removeClass('border-red-500');
+    $(this).addClass('border-gray-300');
+  } else {
+    nipError.removeClass('hidden'); // Tampilkan pesan error
+    $(this).removeClass('border-gray-300');
+    $(this).addClass('border-red-500');
+  }
+});
+$('#editPassword').on('input', function() {
+  const password = $(this).val();
+
+  // Reset semua error
+  $('#edit-password-errors ul li').addClass('hidden');
+  $('#edit-password-errors').removeClass('hidden');
+
+  // Validasi panjang minimal 8 karakter
+  if (password.length < 8) {
+    $('#edit-error-length').removeClass('hidden');
+  }
+
+  // Validasi adanya huruf besar
+  if (!/[A-Z]/.test(password)) {
+    $('#edit-error-uppercase').removeClass('hidden');
+  }
+
+  // Validasi adanya huruf kecil
+  if (!/[a-z]/.test(password)) {
+    $('#edit-error-lowercase').removeClass('hidden');
+  }
+
+  // Validasi adanya angka
+  if (!/\d/.test(password)) {
+    $('#edit-error-number').removeClass('hidden');
+  }
+
+  // Validasi adanya karakter khusus
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    $('#edit-error-special').removeClass('hidden');
+  }
+
+  // Jika tidak ada error, sembunyikan error container
+  if (
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /\d/.test(password) &&
+    /[!@#$%^&*(),.?":{}|<>]/.test(password)
+  ) {
+    $('#password-errors').addClass('hidden');
+  }
+});
 // Show Edit Modal
 $('#usersTable tbody').on('click', '.edit-btn', function() {
-
-
   $('#editId').val($(this).data('id'));
   $('#editNama').val($(this).data('nama'));
   $('#editNIP').val($(this).data('nip'));
@@ -138,6 +206,29 @@ $('#editForm').on('submit', function(e) {
       });
       return;
     }
+    if (
+      !(password.length >= 8 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /\d/.test(password) &&
+        /[!@#$%^&*(),.?":{}|<>]/.test(password))
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Password Tidak Memenuhi!'
+      });
+      return;
+    }
+  }
+
+  if (!/^[0-9.]*$/.test($('#editNIP').val())) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal',
+      text: 'NIP Tidak Memenuhi!'
+    });
+    return;
   }
 
   $.ajax({

@@ -5,6 +5,8 @@
     <form id="addForm" class="space-y-2">
       <x-input type="text" name="nama" value="" label="Nama Pegawai" />
       <x-input type="text" name="NIP" value="" label="Nomor Induk Pegawai (NIP)" />
+      <p id="nip-error" class="text-sm text-red-500 mt-2 hidden">NIP hanya boleh berisi angka dan titik.</p>
+
       <label for="jabatan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jabatan</label>
       <select id="jabatan" name="jabatan"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -35,7 +37,8 @@
         <option value="PETUGAS PENINDAKAN">PETUGAS PENINDAKAN</option>
         <option value="BENDAHARA">BENDAHARA</option>
         <option value="POL PP PERTAMA">POL PP PERTAMA</option>
-        <option value="PENYUSUN RENCANA KEBUTUHAN RUMAH TANGGA DAN PERLENGKAPAN">PENYUSUN RENCANA KEBUTUHAN RUMAH TANGGA
+        <option value="PENYUSUN RENCANA KEBUTUHAN RUMAH TANGGA DAN PERLENGKAPAN">PENYUSUN RENCANA KEBUTUHAN RUMAH
+          TANGGA
           DAN PERLENGKAPAN</option>
         <option value="PENGENDALI TEKNIS KEAMANAN">PENGENDALI TEKNIS KEAMANAN</option>
         <option value="ANALIS PENGEMBANGAN SUMBER DAYA MANUSIA APARATUR">ANALIS PENGEMBANGAN SUMBER DAYA MANUSIA
@@ -63,6 +66,15 @@
         <option value="staff">Staff</option>
       </select>
       <x-input type="password" name="password" value="" label="Password" />
+      <div id="password-errors" class="text-red-500 text-sm mt-2 space-y-1 hidden">
+        <ul>
+          <li id="error-length">Minimal 8 karakter</li>
+          <li id="error-uppercase">Mengandung huruf besar</li>
+          <li id="error-lowercase">Mengandung huruf kecil</li>
+          <li id="error-number">Mengandung angka</li>
+          <li id="error-special">Mengandung karakter khusus</li>
+        </ul>
+      </div>
 
       <div class="flex justify-end">
         <button type="button" id="addModalClose" class="bg-gray-500 text-white px-4 py-2 rounded-md">Tutup</button>
@@ -76,44 +88,162 @@
 <!-- (Add a button to trigger the modal in your main HTML) -->
 
 <script>
-// Show Modal on Button Click
-$('#btn-add').on('click', function() {
-  $('#addModal').removeClass('hidden');
-});
+$(document).ready(function() {
+  $('#NIP').on('input', function() {
+    const nipValue = $(this).val();
+    const nipError = $('#nip-error');
 
-// Close Modal
-$('#addModalClose').on('click', function() {
-  $('#addModal').addClass('hidden');
-});
-
-// AJAX Form Submission
-$('#addForm').on('submit', function(e) {
-  e.preventDefault(); // Prevent default form submission
-
-  $.ajax({
-    url: '/api/users',
-    method: 'POST',
-    data: $(this).serialize(),
-    success: function(response) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        showCloseButton: true,
-        text: 'Data berhasil ditambahkan!'
-      }).then(() => {
-        $('#addModal').addClass('hidden'); // Close modal
-        $('#addForm')[0].reset(); // Reset form fields
-        // Refresh the data table (use your specific table refresh function here)
-        location.reload(); // Refresh the page to show the updated data
-      });
-    },
-    error: function() {
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal',
-        text: 'Terjadi kesalahan saat menambahkan data!'
-      });
+    // Cek apakah input hanya berisi angka dan titik
+    if (/^[0-9.]*$/.test(nipValue)) {
+      nipError.addClass('hidden'); // Sembunyikan pesan error
+      $(this).removeClass('border-red-500');
+      $(this).addClass('border-gray-300');
+    } else {
+      nipError.removeClass('hidden'); // Tampilkan pesan error
+      $(this).removeClass('border-gray-300');
+      $(this).addClass('border-red-500');
     }
   });
+  // Validasi Password Saat Input
+  $('#password').on('input', function() {
+    const password = $(this).val();
+
+    // Reset semua error
+    $('#password-errors ul li').addClass('hidden');
+    $('#password-errors').removeClass('hidden');
+
+    // Validasi panjang minimal 8 karakter
+    if (password.length < 8) {
+      $('#error-length').removeClass('hidden');
+    }
+
+    // Validasi adanya huruf besar
+    if (!/[A-Z]/.test(password)) {
+      $('#error-uppercase').removeClass('hidden');
+    }
+
+    // Validasi adanya huruf kecil
+    if (!/[a-z]/.test(password)) {
+      $('#error-lowercase').removeClass('hidden');
+    }
+
+    // Validasi adanya angka
+    if (!/\d/.test(password)) {
+      $('#error-number').removeClass('hidden');
+    }
+
+    // Validasi adanya karakter khusus
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      $('#error-special').removeClass('hidden');
+    }
+
+    // Jika tidak ada error, sembunyikan error container
+    if (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /\d/.test(password) &&
+      /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      $('#password-errors').addClass('hidden');
+    }
+  });
+
+  // Handle Pengiriman Form
+  $('#addForm').on('submit', function(e) {
+    e.preventDefault(); // Mencegah pengiriman form default
+
+    // Validasi ulang password sebelum mengirim
+    const password = $('#password').val();
+    let isValid = true;
+
+    // Validasi panjang minimal 8 karakter
+    if (password.length < 8) {
+      $('#error-length').removeClass('hidden');
+      isValid = false;
+    }
+
+    // Validasi adanya huruf besar
+    if (!/[A-Z]/.test(password)) {
+      $('#error-uppercase').removeClass('hidden');
+      isValid = false;
+    }
+
+    // Validasi adanya huruf kecil
+    if (!/[a-z]/.test(password)) {
+      $('#error-lowercase').removeClass('hidden');
+      isValid = false;
+    }
+
+    // Validasi adanya angka
+    if (!/\d/.test(password)) {
+      $('#error-number').removeClass('hidden');
+      isValid = false;
+    }
+
+    // Validasi adanya karakter khusus
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      $('#error-special').removeClass('hidden');
+      isValid = false;
+    }
+
+    // Jika validasi gagal, hentikan pengiriman
+    if (!isValid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validasi Gagal',
+        text: 'Periksa kembali password Anda!'
+      });
+      return;
+    }
+
+    if (!/^[0-9.]*$/.test($('#NIP').val())) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validasi Gagal',
+        text: 'Periksa NIP anda kembali!'
+      });
+      return;
+    }
+
+    // Jika validasi berhasil, lakukan AJAX request
+    $.ajax({
+      url: '/api/users',
+      method: 'POST',
+      data: $(this).serialize(),
+      success: function(response) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          showCloseButton: true,
+          text: 'Data berhasil ditambahkan!'
+        }).then(() => {
+          $('#addModal').addClass('hidden'); // Close modal
+          $('#addForm')[0].reset(); // Reset form fields
+          location.reload(); // Refresh the page to show the updated data
+        });
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal',
+          text: 'Terjadi kesalahan saat menambahkan data!'
+        });
+      }
+    });
+  });
+
+  // Show Modal
+  $('#btn-add').on('click', function() {
+    $('#addModal').removeClass('hidden');
+  });
+
+  // Close Modal
+  $('#addModalClose').on('click', function() {
+    $('#addModal').addClass('hidden');
+  });
 });
+
+
+// Show Modal on Button Click
 </script>
