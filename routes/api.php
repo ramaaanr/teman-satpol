@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Crypt;
 |
 */
 
-Route::post('/users/login', [UserController::class, 'login']);
+Route::post('/users/login', [UserController::class, 'login'])->middleware('throttle:10,1');
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/logout', [UserController::class, 'logout']);

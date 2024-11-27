@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\GiatServices;
 use App\Services\PenugasanServices;
 use App\Http\Resources\GiatResource;
+use Illuminate\Support\Facades\Crypt;
 
 class GiatController extends Controller
 {

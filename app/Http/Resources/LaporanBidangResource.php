@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class LaporanBidangResource extends JsonResource
@@ -31,7 +32,7 @@ class LaporanBidangResource extends JsonResource
                 }, 0);
 
             return [
-                'id' => $item->id,
+                'id' => Crypt::encrypt($item->id),
                 'deskripsi' => $item->deskripsi,
                 'total_durasi' => $totalDurasi,
             ];

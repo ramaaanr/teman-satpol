@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Giat;
 use App\Services\PenugasanServices;
 use App\Http\Resources\GiatResource;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\GiatDetailResource;
 
 class GiatServices
@@ -54,6 +55,7 @@ class GiatServices
 
     public function doShow($id)
     {
+        $id = Crypt::decrypt($id);
         $giat = Giat::with(['penugasans.user'])
             ->withCount([
                 // Menghitung jumlah penugasan dengan status "mengajukan"
@@ -102,6 +104,7 @@ class GiatServices
 
     public function doUpdate($data, $id)
     {
+        $id = Crypt::decrypt($id);
         $giat = Giat::findOrFail($id);
         if ($giat) {
             $data['tanggal_mulai'] = Carbon::parse($data['tanggal_mulai'])->format('Y-m-d H:i:s');
@@ -119,6 +122,7 @@ class GiatServices
 
     public function doDestroy($id)
     {
+        $id = Crypt::decrypt($id);
         $giat = Giat::findOrFail($id);
         if ($giat) {
             $giat->destroy($id);

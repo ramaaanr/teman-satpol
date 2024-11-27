@@ -7,16 +7,19 @@ use App\Models\Item;
 use App\Models\User;
 use App\Models\Penugasan;
 use Illuminate\Support\Facades\DB;
+use App\Exports\LaporanBidangExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\LaporanBidangResource;
 use App\Http\Resources\LaporanBidangByIdItemResource;
 use App\Http\Resources\LaporanBidangByIdUserResource;
-use App\Exports\LaporanBidangExport;
-use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanBidangServices
 {
     public function doShow($tahun = null, $bulan = null, $userId = null, $itemId = null)
     {
+        // $userId = Crypt::decrypt($userId);
+        // return $itemId;
         $filterPenugasan = function ($query) use ($tahun, $bulan, $userId, $itemId) {
             if ($tahun) {
                 $query->whereYear('created_at', $tahun);
@@ -60,6 +63,7 @@ class LaporanBidangServices
                 'data' => new LaporanBidangResource($dataByYearAndMonths),
             ]);
         } elseif ($userId) {
+            $userId = Crypt::decrypt($userId);
             $userInfo = User::select('id', 'nama', 'jabatan', 'role')->find($userId);
 
             $userData = User::with([
@@ -100,7 +104,7 @@ class LaporanBidangServices
                 ->get()
                 ->map(function ($penugasan) {
                     return [
-                        'id_giat' => $penugasan->giats->id,
+                        'id_giat' => Crypt::encrypt($penugasan->giats->id),
                         'kegiatan' => $penugasan->giats->kegiatan,
                         'tanggal' => $penugasan->created_at->format('d F Y, H:i') . ' WITA',
                         'durasi' => gmdate("H:i", strtotime($penugasan->durasi)),
@@ -119,6 +123,7 @@ class LaporanBidangServices
                 'data' => new LaporanBidangByIdUserResource($dataByUserId),
             ];
         } elseif ($itemId) {
+            $itemId = Crypt::decrypt($itemId);
             $durasiByItem = Penugasan::query()
                 ->join('detail_items', 'penugasans.id', '=', 'detail_items.id_penugasan') // Relasi ke detail_items
                 ->join('users', 'penugasans.id_user', '=', 'users.id') // Relasi ke users

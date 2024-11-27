@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Penugasan;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ReviewKegiatanServices
@@ -10,6 +11,7 @@ class ReviewKegiatanServices
     public function doUpdate($status, $id)
     {
         try {
+            $id = Crypt::decrypt($id);
             $penugasan = Penugasan::findOrFail($id);
             if ($penugasan) {
                 $penugasan->update(['status' => $status]);

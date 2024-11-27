@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -36,7 +37,7 @@ class UserServices
             'status' => true,
             'message' => 'Login Berhasil',
             'data' => [
-                'id' => $user->id,
+                'id' => Crypt::encyrpt($user->id),
                 'NIP' => $user->NIP,
                 "jabatan" => $user->jabatan,
                 "nama" => $user->nama,
@@ -77,6 +78,7 @@ class UserServices
     public function doUpdate($data, $id)
     {
         try {
+            $id = Crypt::decrypt($id);
             $user = User::findOrFail($id);
             if ($user) {
                 if (isset($data['NIP']) && $data['NIP'] != $user->NIP) {
@@ -111,6 +113,7 @@ class UserServices
     public function doDestroy($id)
     {
         try {
+            $id = Crypt::decrypt($id);
             $user = User::findOrFail($id);
             if ($user) {
                 $user->delete();

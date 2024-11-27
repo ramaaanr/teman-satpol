@@ -2,11 +2,13 @@
 
 namespace App\Services;
 use App\Models\DetailItem;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\DetailItemByPenugasanResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DetailItemServices {
     public function getAll($idPenugasan){
+        $idPenugasan = Crypt::decrypt($idPenugasan);
         $detailItem = DetailItem::with(['penugasan', 'item'])
         ->where('id_penugasan', $idPenugasan)
         ->get();

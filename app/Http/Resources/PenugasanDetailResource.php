@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PenugasanDetailResource extends JsonResource
@@ -15,17 +16,17 @@ class PenugasanDetailResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id_penugasan' => $this->id,
+            'id_penugasan' => Crypt::encrypt($this->id),
             'durasi' => $this->durasi,
             'detail' => $this->detail,
             'dokumen_lapangan' => $this->dokumen_lapangan,
             'status' => $this->status,
-            'id_giat' => $this->id_giat,
-            'id_user' => $this->id_user,
+            'id_giat' => Crypt::encrypt($this->id_giat),
+            'id_user' => Crypt::encrypt($this->id_user),
             'deleted_at' => $this->deleted_at,
             'giats' => $this->whenLoaded('giats', function () {
                 return [
-                    'id_giat' => $this->giats->id,
+                    'id_giat' => Crypt::encrypt($this->giats->id),
                     'kegiatan' => $this->giats->kegiatan,
                     'detail_kegiatan' => $this->giats->detail_kegiatan,
                     'tempat' => $this->giats->tempat,

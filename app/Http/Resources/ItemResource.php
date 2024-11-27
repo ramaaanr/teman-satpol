@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class ItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,7 @@ class UserResource extends JsonResource
     {
         return [
             'id' => Crypt::encrypt($this->id),
-            'nama' => $this->nama,
-            'NIP' => $this->NIP,
-            'jabatan' => $this->jabatan,
-            'role' => $this->role
+            'deskripsi' => $this->deskripsi
         ];
     }
 }
