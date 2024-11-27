@@ -72,7 +72,7 @@ $(document).ready(function() {
             user
           }) => {
             // Ensure the checkbox for the user is checked by matching the user id with the checkbox id
-            $("#check-ditugaskan-" + user.id).prop('checked', "true");
+            $("#check-ditugaskan-" + user.NIP).prop('checked', "true");
           });
 
           // Populate any additional table or fields as needed
@@ -92,20 +92,15 @@ $(document).ready(function() {
       // Gather form data
       let formDataArray = $(this).serializeArray();
       let payload = {};
+      payload.ditugaskan = [];
       formDataArray.forEach(function(item) {
-        payload[item.name] = item.value;
+        if (item.name.startsWith('check')) {
+          payload.ditugaskan.push(item.value);
+        } else {
+          payload[item.name] = item.value;
+        }
       });
 
-      // Handle selected ID fields
-      let idArray = [];
-      for (const key in payload) {
-        if (key.startsWith("check-")) {
-          const id = key.split("-")[1];
-          idArray.push(parseInt(id, 10));
-          delete payload[key];
-        }
-      }
-      payload.ditugaskan = idArray;
 
       $.ajax({
         url: `/api/giat/${id}`, // Update URL

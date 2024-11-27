@@ -10,34 +10,16 @@ $(document).ready(function() {
     event.preventDefault(); // Mencegah form dari pengiriman langsung
 
     // Mengambil semua nilai dari input dengan name dalam bentuk array
-    let formDataArray = $("#form-giat").serializeArray();
-
-    // Konversi array menjadi objek untuk payload
+    let formDataArray = $(this).serializeArray();
     let payload = {};
+    payload.ditugaskan = [];
     formDataArray.forEach(function(item) {
-      payload[item.name] = item.value;
-    });
-
-    // Array untuk menampung ID hasil ekstraksi dari input "check-"
-    let idArray = [];
-
-    // Loop untuk mengekstrak ID dari properti yang diawali dengan "check-" dan menghapusnya dari payload
-    for (const key in payload) {
-      if (key.startsWith("check-")) {
-        // Ambil angka setelah "check-" dan tambahkan ke array
-        const id = key.split("-")[1];
-        idArray.push(parseInt(id, 10)); // Parse to integer
-
-        // Hapus key dari payload
-        delete payload[key];
+      if (item.name.startsWith('check')) {
+        payload.ditugaskan.push(item.value);
+      } else {
+        payload[item.name] = item.value;
       }
-    }
-
-    // Tambahkan array ID ke payload dengan key "ditugaskan"
-    payload.ditugaskan = idArray;
-    console.log(payload);
-
-    // Menambahkan data tambahan ke payload
+    }); // Menambahkan data tambahan ke payload
 
     // Mendapatkan token dari localStorage
     const token = JSON.parse(localStorage.getItem('user')).token;

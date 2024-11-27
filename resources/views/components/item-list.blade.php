@@ -39,7 +39,9 @@
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        success: function(items) {
+        success: function({
+          data: items
+        }) {
           $('#item-container').html('');
           // Iterasi setiap item yang diterima dari respons
           items.forEach(({
@@ -52,10 +54,11 @@
             if (itemPenugasan) {
               itemPenugasan.some(({
                 item: {
-                  id_item
+                  id_item,
+                  deskripsi: item_deskripsi
                 }
               }) => {
-                if (id === id_item) {
+                if (deskripsi === item_deskripsi) {
                   checked =
                     true; // Set checked menjadi true jika cocok
                   return true; // Hentikan iterasi lebih lanjut

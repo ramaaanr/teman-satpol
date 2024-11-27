@@ -133,13 +133,16 @@ class PenugasanServices
 
     public function doAdd($id, $userId)
     {
+
+
         $dataPenugasan = [
             'id_giat' => $id,
-            'id_user' => $userId,
+            'id_user' => Crypt::decrypt($userId),
             'status' => 'Ditugaskan',
             'created_at' =>  now()->setTimezone('Asia/Makassar')
         ];
         $penugasan = Penugasan::create($dataPenugasan);
+
         if ($penugasan) {
             return ([
                 'status' => true,
@@ -156,6 +159,8 @@ class PenugasanServices
         try {
             $id = Crypt::decrypt($id);
             $penugasan = Penugasan::findOrFail($id);
+            $data["id_giat"] = Crypt::decrypt($data["id_giat"]);
+            $data["id_user"] = Crypt::decrypt($data["id_user"]);
             if ($penugasan) {
                 $insertData = $data;
                 if ($file) {

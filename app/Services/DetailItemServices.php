@@ -1,18 +1,21 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\DetailItem;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\DetailItemByPenugasanResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class DetailItemServices {
-    public function getAll($idPenugasan){
+class DetailItemServices
+{
+    public function getAll($idPenugasan)
+    {
         $idPenugasan = Crypt::decrypt($idPenugasan);
         $detailItem = DetailItem::with(['penugasan', 'item'])
-        ->where('id_penugasan', $idPenugasan)
-        ->get();
-        if ($detailItem->isNotEmpty()){
+            ->where('id_penugasan', $idPenugasan)
+            ->get();
+        if ($detailItem->isNotEmpty()) {
             return ([
                 'status' => true,
                 'message' => "Data Berhasil Ditampilkan!",
@@ -25,14 +28,16 @@ class DetailItemServices {
         ]);
     }
 
-    public function doAdd($idPenugasan, $itemId){
+    public function doAdd($idPenugasan, $itemId)
+    {
         $dataDetailItem = [
-            'id_item' => $itemId,
-            'id_penugasan' => $idPenugasan
+            'id_item' =>
+            Crypt::decrypt($itemId),
+            'id_penugasan' => $idPenugasan,
         ];
         $detailItem = DetailItem::create($dataDetailItem);
 
-        if ($detailItem){
+        if ($detailItem) {
             return ([
                 'status' => true,
                 'message' => "Data Berhasil Disimpan!"
@@ -40,12 +45,13 @@ class DetailItemServices {
         }
     }
 
-    public function doDelete($penugasanId, $itemId){
+    public function doDelete($penugasanId, $itemId)
+    {
         try {
             $detailItem = DetailItem::where('id_penugasan', $penugasanId)
-            ->where('id_item', $itemId)
-            ->first();
-            if ($detailItem){
+                ->where('id_item', $itemId)
+                ->first();
+            if ($detailItem) {
                 $detailItem->delete($itemId);
                 return ([
                     'status' => true,

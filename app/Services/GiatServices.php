@@ -64,7 +64,7 @@ class GiatServices
                 },
                 // Menghitung jumlah penugasan dengan status "selesai"
                 'penugasans as jumlah_selesai' => function ($query) {
-                    $query->where('status', 'selesai');
+                    $query->where('status', 'disetujui');
                 },
                 'penugasans as jumlah_bertugas' => function ($query) {
                     $query->where('status', 'bertugas');

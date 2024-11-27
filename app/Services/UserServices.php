@@ -37,7 +37,7 @@ class UserServices
             'status' => true,
             'message' => 'Login Berhasil',
             'data' => [
-                'id' => Crypt::encyrpt($user->id),
+                'id' => Crypt::encrypt($user->id),
                 'NIP' => $user->NIP,
                 "jabatan" => $user->jabatan,
                 "nama" => $user->nama,
