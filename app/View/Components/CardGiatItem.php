@@ -24,6 +24,7 @@ class CardGiatItem extends Component
         public string $aksesSelesai,
         public string $jumlahDitugaskan,
         public string $jumlahSelesai,
+        public bool $disabled = false,
     ) {
         //
     }

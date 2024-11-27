@@ -67,7 +67,27 @@
               jumlah_ditugaskan,
               jumlah_selesai,
             }) => {
-              const item = `
+              if (status === 'selesai' || status === 'dibatalkan') {
+                const item = `
+                      <x-card-giat-item 
+                      disabled
+          id="${id}"
+          kegiatan="${kegiatan}"
+          detailKegiatan="${detail_kegiatan}"
+          tempat="${tempat}"
+          kendaraan="${kendaraan}"
+          bebanBiaya="${beban_biaya}"
+          tanggalMulai="${tanggal_mulai}"
+          tanggalSelesai="${tanggal_selesai}"
+          aksesMulai="${akses_mulai}"
+          aksesSelesai="${akses_selesai}"
+          jumlahDitugaskan="${jumlah_ditugaskan}"
+          jumlahSelesai="${jumlah_selesai}"
+                      />
+                      `
+                $('.card-giat-container').append(item);
+              } else {
+                const item = `
                       <x-card-giat-item 
           id="${id}"
           kegiatan="${kegiatan}"
@@ -83,7 +103,9 @@
           jumlahSelesai="${jumlah_selesai}"
                       />
                       `
-              $('.card-giat-container').append(item);
+                $('.card-giat-container').append(item);
+              }
+
             });
           }
         },

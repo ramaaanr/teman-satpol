@@ -42,6 +42,14 @@ class GiatServices
             })->orderBy('tanggal_mulai', 'desc');;
         } elseif ($status === 'dibatalkan') {
             $giatQuery = $giatQuery->onlyTrashed()->orderBy('tanggal_mulai', 'desc');; // Mengambil giat yang memiliki `deleted_at` tidak null
+        } else {
+            $giatQuery = $giatQuery->whereHas('penugasans', function ($query) {
+                $query->where('status', 'disetujui');
+            }, '!=', function ($query) {
+                $query->selectRaw('count(*)')
+                    ->from('penugasans')
+                    ->whereColumn('penugasans.id_giat', 'giats.id');
+            });
         }
 
         $giat = $giatQuery->get();

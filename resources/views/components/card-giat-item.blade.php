@@ -15,9 +15,13 @@
       </div>
       <a href="/data-giat/{{$id}}" class="mr-2">
         <x-button text="Detail" color='gray' />
-      </a> <a href="/data-giat/edit/{{$id}}">
+      </a>
+      @if (!$disabled)
+
+      <a href="/data-giat/edit/{{$id}}">
         <x-button text="Edit" color='light' />
       </a>
+      @endif
     </div>
   </div>
 
