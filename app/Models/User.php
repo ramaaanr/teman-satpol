@@ -18,10 +18,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'nama',
+        'NIP',
+        'jabatan',
+        'role',
+        'password'
     ];
+    public function penugasans()
+    {
+        return $this->hasMany(Penugasan::class, 'id_user', 'id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
